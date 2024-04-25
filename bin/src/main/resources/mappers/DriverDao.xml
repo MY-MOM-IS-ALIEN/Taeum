@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.icia.Taeumproject.Dao.DriverDao">
+
+	<!-- driverMain 관련 쿼리 -->
+	<select id="getDriverInfo" parameterType="Integer"
+		resultType="DriverDto">
+		SELECT dt.*, mt.*
+		FROM drivertbl dt, membertbl mt
+		WHERE mt.m_id
+		= #{m_id}
+	</select>
+
+	<select id="getTodayTraffic" parameterType="Integer"
+		resultType="Integer">
+		SELECT count(D_ID)
+		FROM dispatchtbl, membertbl mt
+		WHERE
+		DATE(D_SELECT) = CURDATE()
+		AND D_SELECT &lt; CURDATE()
+		AND D_STATUS !=
+		'취소'
+		AND mt.m_id = #{m_id}
+	</select>
+
+	<select id="getMonthTraffic" parameterType="Integer"
+		resultType="Integer">
+		SELECT count(D_ID)
+		FROM dispatchtbl, membertbl mt
+		WHERE
+		YEAR(D_SELECT) =
+		YEAR(CURDATE())
+		AND MONTH(D_SELECT) = MONTH(CURDATE())
+		AND D_SELECT &lt; CURDATE()
+		AND D_STATUS != '취소'
+		AND mt.m_id =
+		#{m_id}
+	</select>
+
+	<select id="getTotalTraffic" parameterType="Integer"
+		resultType="Integer">
+		SELECT count(D_ID)
+		FROM dispatchtbl dt, membertbl mt
+		WHERE
+		D_SELECT &lt; CURDATE()
+		AND D_STATUS != '취소'
+		AND mt.m_id =
+		#{m_id}
+	</select>
+
+
+	<!-- standBy 관련 쿼리 -->
+	<select id="getPassengerList" parameterType="Integer"
+		resultType="ApplyDto">
+		SELECT at.*
+		FROM applytbl at
+		INNER JOIN membertbl mt ON
+		at.M_ID = mt.M_ID
+		WHERE mt.M_ID = #{m_id}
+	</select>
+
+	<select id="getInfo" parameterType="Integer"
+		resultType="DriverDto">
+		SELECT dt.*
+		FROM drivertbl dt, membertbl mt
+		WHERE mt.m_id
+		= #{m_id}
+	</select>
+
+	<!-- routeCheck 관련 쿼리 -->
+	<select id="getRouteList" parameterType="Integer"
+		resultType="ApplyDto">
+		SELECT at.*
+		FROM applytbl at, membertbl mt
+		WHERE mt.M_ID =
+		#{m_id}
+	</select>
+
+
+	<!-- getDriverImage 관련 쿼리 -->
+	<!-- <select id="getDriverImage" parameterType="String"
+		resultType="String">
+		SELECT DR_IMAGE
+		FROM drivertbl
+		WHERE username = #{username}
+	</select> -->
+
+	<insert id="insertDriver" parameterType="DriverDto">
+    INSERT INTO drivertbl
+    VALUES(NULL,#{DR_ADDRESS},#{DR_CARNUM},#{DR_AREA},#{DR_M_ID})
+</insert>
+
+<insert id="insertFile" parameterType="DriverFileDto">
+    INSERT INTO driverprofile
+    VALUES(NULL,#{df_oriname},#{df_sysname},#{DR_M_ID})
+  </insert>
+
+</mapper>

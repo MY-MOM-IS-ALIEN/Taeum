@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Taeum</title>
+    <script src="js/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <script th:inline="javascript">
+        $(function () {
+            let m = /*[[${msg}]]*/ null;
+            if (m != null) {
+                alert(m);
+            }
+        });
+    </script>
+    <th:block th:insert="~{fragments :: header}" />
+</head>
+<body>
+<section>
+    <div class="box-layout">
+        <fieldset class="profile">
+            <div class="driverInfo-1">
+                <div class="driver-image">
+                    <img alt="프로필 이미지" src="">
+                </div>
+                <p>
+                    <span th:text="${driver.m_name}"></span>
+                </p>
+            </div>
+            <div class="driverInfo">
+                <p>
+                    <span th:text="${driver.m_phone}"></span>
+                </p>
+                <p>
+                    <span th:text="${driver.dr_carNum}"></span>
+                </p>
+                <p>
+                    <span th:text="${driver.dr_address}"></span>
+                </p>
+                <button>운행시작</button>
+            </div>
+        </fieldset>
+        <fieldset class="raceInfo">
+            <div class="traffic-area">
+                <p>
+                    <span class="span-1" th:text="${todayTraffic}"></span> <br>
+                    오늘 운행
+                </p>
+
+                <p>
+                    <span class="span-1" th:text="${monthTraffic}"></span> <br>
+                    이번 달 운행
+                </p>
+
+                <p>
+                    <span class="span-1" th:text="${totalTraffic}"></span> <br> 총
+                    운행
+                </p>
+            </div>
+            <input type="button" id="moveToStandBy" value="운행정보">
+        </fieldset>
+    </div>
+</section>
+</body>
+<script th:inline="javascript">
+    // 파일 제목 처리
+    $("#file").on("change", function () {
+        let files = $("#file")[0].files;
+        console.log(files);
+
+        let fileName = ""; // 출력할 문장 저장 변수
+
+        if (files.length > 1) {
+            fileName = `${files[0].name} 외 ${files.length - 1}개`;
+        } else if (files.length === 1) {
+            fileName = files[0].name;
+        } else {
+            fileName = "파일선택";
+        }
+        $(".upload-name").val(fileName);
+    });
+
+
+    $("#moveToStandBy").click(function(){
+        location.href = `/standBy`;
+    });
+</script>
+</html>
