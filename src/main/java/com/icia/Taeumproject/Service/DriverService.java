@@ -13,9 +13,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.icia.Taeumproject.Dao.DriverDao;
+import com.icia.Taeumproject.Dao.MemberDao;
 import com.icia.Taeumproject.Dto.ApplyDto;
 import com.icia.Taeumproject.Dto.DriverDto;
 import com.icia.Taeumproject.Dto.DriverFileDto;
+import com.icia.Taeumproject.Dto.MemberDto;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +31,8 @@ public class DriverService {
 	private TransactionDefinition definition;
 	@Autowired
 	private DriverDao drDao;
+	@Autowired
+	private MemberDao mDao;
 
 	public void getDriverInfo(int m_id, Model model) {
 		log.info("getDriverInfo()");
@@ -93,6 +97,9 @@ public class DriverService {
 			System.out.println(driver);
 			drDao.insertDriver(driver);
 			
+			int mid = driver.getM_ID();
+			mDao.updateRole(mid);
+			
 			//파일 저장
 			if(!files.get(0).isEmpty()) {//업로드 파일이 있다면
 				fileUpload(files, session, driver.getM_ID()); // 여기는 컬럼을 어떻게할지 정해야함
@@ -117,7 +124,7 @@ public class DriverService {
 		return view;
 	}
 	
-	private void fileUpload(List<MultipartFile> files, HttpSession session, int DR_M_ID) throws Exception {
+	private void fileUpload(List<MultipartFile> files, HttpSession session, int M_ID) throws Exception {
 //파일 저장 실패 시 데이터베이스 롤백작업이 이루어지도록 예외를 throws 할 것.
 		log.info("fileUpload()");
 
@@ -138,7 +145,7 @@ public class DriverService {
 
 			DriverFileDto dfd = new DriverFileDto();
 			dfd.setDf_oriname(oriname);
-			dfd.setDR_M_ID(DR_M_ID);
+			dfd.setM_ID(M_ID);
 			String sysname = System.currentTimeMillis() + oriname.substring(oriname.lastIndexOf("."));
 			//확장자 : 파일을 구분하기 위한 식별 체계. (예. xxxx.jpg)
 			dfd.setDf_sysname(sysname);

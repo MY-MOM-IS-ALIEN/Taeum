@@ -5,12 +5,12 @@
 
 	<!-- driverMain 관련 쿼리 -->
 	<select id="getDriverInfo" parameterType="Integer"
-		resultType="DriverDto">
-		SELECT dt.*, mt.*
-		FROM drivertbl dt, membertbl mt
-		WHERE mt.m_id
-		= #{m_id}
-	</select>
+	resultType="DriverDto">
+	SELECT dt.*, mt.*
+	FROM drivertbl dt, membertbl mt
+	WHERE mt.m_id = #{m_id}
+	LIMIT 1
+</select>
 
 	<select id="getTodayTraffic" parameterType="Integer"
 		resultType="Integer">
@@ -88,12 +88,12 @@
 
 	<insert id="insertDriver" parameterType="DriverDto">
     INSERT INTO drivertbl
-    VALUES(NULL,#{DR_ADDRESS},#{DR_CARNUM},#{DR_AREA},#{DR_M_ID})
+    VALUES(NULL,#{DR_ADDRESS},#{DR_CARNUM},#{DR_AREA},#{M_ID})
 </insert>
 
 <insert id="insertFile" parameterType="DriverFileDto">
     INSERT INTO driverprofile
-    VALUES(NULL,#{df_oriname},#{df_sysname},#{DR_M_ID})
+    VALUES(NULL,#{df_oriname},#{df_sysname},#{M_ID})
   </insert>
 
 </mapper>

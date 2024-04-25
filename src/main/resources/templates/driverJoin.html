@@ -18,7 +18,7 @@
             <h2 class="login-header">기사 등록</h2>
             <!-- 작성자(로그인 한 id), 제목, 내용, 파일  -->
             <div class="apply-content">
-            <input type="hidden" name="DR_M_ID" th:value="${#authentication.principal != null ? #authentication.principal.M_ID : ''}">
+            <input type="hidden" name="M_ID" th:value="${#authentication.principal != null ? #authentication.principal.M_ID : ''}">
             성함:<input class = "write-input"  name="M_NAME"
                    th:value="${#authentication.principal != null ? #authentication.principal.M_NAME : ''}" readonly> 
             연락처:<input class = "write-input"  name="M_PHONE"
@@ -133,18 +133,26 @@ $("#file").on("change", function () {
                 document.getElementById("A_STARTADRESS").value = addr;
                 // 커서를 상세주소 필드로 이동한다.
                 document.getElementById("A_STARTDADRESS").focus();
+                //팝업 닫기
+                closePopup();
             }
         }).open();
     }
     
-    $(function () {
-        let msg = /*[[${msg}]]*/ null;
-        if(msg != null){
-            alert(msg);
-        }
-    });
-    
-    </script>
+ 
+	// 팝업을 닫는 함수
+	function closePopup() {
+		var layer = document.getElementById('postcode_layer');
+		layer.style.display = 'none';
+	}
+
+	$(function() {
+		let msg = /*[[${msg}]]*/null;
+		if (msg != null) {
+			alert(msg);
+		}
+	});
+</script>
 </html>
 
 
