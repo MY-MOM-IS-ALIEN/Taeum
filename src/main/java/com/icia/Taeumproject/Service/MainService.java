@@ -26,7 +26,7 @@ public class MainService {
     mDao.updateDelivery(ride, nodeId, cycle);
   }
   
-  public void insertServ(int m_id,String fromAddress,Point startPoint,int sOrE,RedirectAttributes rttr, Timestamp A_DATE) {
+  public void insertServ(int m_id,String fromAddress,Point startPoint,int sOrE,RedirectAttributes rttr, Timestamp A_DATE, LocalDateTime A_DateTime) {
       log.info("insertServ()");
       Node node = new Node();
       
@@ -38,7 +38,7 @@ public class MainService {
       node.setAddress(fromAddress);
       node.setKind(sOrE);
       node.setA_DATE(A_DATE);
-      
+      node.setA_LOCALDATE(A_DateTime);
       mDao.insert(node);
       
       
@@ -83,6 +83,11 @@ public class MainService {
     
     return rideNodeList;
     
+  }
+
+  public List<Node> selectLocaldate(String date) {
+   List<Node> selectLocaldate = mDao.selectLocaldate(date);
+    return selectLocaldate;
   }
 
 

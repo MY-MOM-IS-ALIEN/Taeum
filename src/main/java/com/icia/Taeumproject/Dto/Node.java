@@ -21,4 +21,5 @@ public class Node {
 	private int kind;
 	private int cycle;
 	private Timestamp A_DATE;
+	private LocalDateTime A_LOCALDATE;
 }

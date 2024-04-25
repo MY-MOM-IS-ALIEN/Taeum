@@ -27,5 +27,4 @@ public class ApplyDto {
   private LocalDateTime A_DATE;
   private Timestamp A_LOCALDATE;
   private String A_CONTENTS;
-  
 }

@@ -27,4 +27,8 @@ public interface MainDao {
 
 
   public List<Node> selectRideList(int ride);
+
+
+
+  public List<Node> selectLocaldate(String A_LOCALDATE);
 }
