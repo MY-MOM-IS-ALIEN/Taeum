@@ -93,7 +93,7 @@ public class SecurityConfig {
       .requestMatchers("/selectNodeList").permitAll()
       .requestMatchers("/selectRideList").permitAll()
       .requestMatchers("/selectLocaldate").permitAll()
-      
+      .requestMatchers("/selectedLocal").permitAll()
       
       
       

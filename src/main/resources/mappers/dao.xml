@@ -30,7 +30,13 @@ FROM NodeTbl ORDER BY distance ASC;
   
   <select id="selectLocaldate" resultType="Node">
     <![CDATA[
-    select * from nodetbl WHERE A_LOCALDATE LIKE CONCAT('%', #{A_LOCALDATE}, '%');
+    select * from nodetbl WHERE A_DATE LIKE CONCAT('%', #{A_DATE}, '%');
+  ]]>
+  </select>
+  
+  <select id="selectDriverList" resultType="DriverDto">
+      <![CDATA[
+    select * from drivertbl WHERE DR_AREA LIKE CONCAT('%', #{DR_AREA}, '%');
   ]]>
   </select>
 </mapper>

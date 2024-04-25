@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.icia.Taeumproject.Dto.DriverDto;
 import com.icia.Taeumproject.Dto.Node;
 
 @Mapper
@@ -30,5 +31,9 @@ public interface MainDao {
 
 
 
-  public List<Node> selectLocaldate(String A_LOCALDATE);
+  public List<Node> selectLocaldate(String A_DATE);
+
+
+
+  public List<DriverDto> selectDriverList(String DR_AREA);
 }

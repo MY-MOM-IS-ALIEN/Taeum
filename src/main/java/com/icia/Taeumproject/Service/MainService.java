@@ -10,6 +10,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.icia.Taeumproject.Dao.MainDao;
 import com.icia.Taeumproject.Dto.ApplyDto;
+import com.icia.Taeumproject.Dto.DriverDto;
 import com.icia.Taeumproject.Dto.Node;
 import com.icia.Taeumproject.util.KakaoApiUtil.Point;
 
@@ -88,6 +89,11 @@ public class MainService {
   public List<Node> selectLocaldate(String date) {
    List<Node> selectLocaldate = mDao.selectLocaldate(date);
     return selectLocaldate;
+  }
+
+  public List<DriverDto> selectDriverList(String local) {
+    List<DriverDto> selectDriverList = mDao.selectDriverList(local);
+    return selectDriverList;
   }
 
 

@@ -33,7 +33,7 @@
     }
 </style>
 
-</head>
+<head>
 
     <link rel="stylesheet" href="css/style.css">
      <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9c49835d1348562532a0d8a13f2f7bf3&libraries=clusterer"></script>
@@ -47,7 +47,7 @@
       <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="#4ae39c" viewBox="0 0 256 256" class="me-2">
         <path d="M232,128A104,104,0,1,1,128,24,104.13,104.13,0,0,1,232,128Z" fill="#3F7EFC"></path>
       </svg>
-      <span class="fs-5 fw-semibold">접수 현황</span>
+      <span class="fs-5 fw-semibold">접 수 현 황</span>
     </div>
       <div
       class="d-flex flex-wrap py-3 px-2 gap-3 align-items-center justify-content-center border-bottom">
@@ -63,7 +63,7 @@
       <div class="border-start border-2 h-50"></div>
       <div class="d-flex flex-column align-items-center">
         <div id="Count">0</div>
-        <div class="fw-light" style="font-size: 0.8rem">접수 현황</div>
+        <div class="fw-light" style="font-size: 0.8rem">접 수 현 황</div>
       </div>
       <div class="border-start border-2 h-50"></div>
     
@@ -75,34 +75,34 @@
         </div>
          <a href="driverJoin" class="list-group-item list-group-item-action py-3 lh-sm mt-3 border rounded-2" style="background-color: #f0f8ff;">
         <div class="d-flex w-100 align-items-center justify-content-start mb-1" style="margin-top: 8%; ">
-          <span class="badge text-bg-secondary" style=" margin-bottom: 6%; margin-right:25%;">등록</span><strong class="ms-1" style="margin-bottom: 6%;">기사 등록</strong>
-          <input type="hidden" value="${node.id}" id="node_id">
+          <span class="badge text-bg-secondary" style=" margin-bottom: 6%; margin-right:25%;">등록</span><strong class="ms-1" style="margin-bottom: 6%;">기 사 등 록</strong>
+      
         </div>
       </a>
-        <a href="mainCenter" class="list-group-item list-group-item-action py-3 lh-sm mt-3 border rounded-2" style="background-color: #f0f8ff;">
+        <a href="adminDriverList" class="list-group-item list-group-item-action py-3 lh-sm mt-3 border rounded-2" style="background-color: #f0f8ff;">
         <div class="d-flex w-100 align-items-center justify-content-start mb-1" style="margin-top: 8%">
-          <span class="badge text-bg-secondary" style=" margin-bottom: 6%;  margin-right:25%;">배정</span><strong class="ms-1" style=" margin-bottom: 6%;">기사 배정</strong>
-          <input type="hidden" value="${node.id}" id="node_id">
+          <span class="badge text-bg-secondary" style=" margin-bottom: 6%;  margin-right:25%;">배정</span><strong class="ms-1" style=" margin-bottom: 6%;">기 사 배 정</strong>
+    
         </div>
       </a>
       
          <a href="adminMain" class="list-group-item list-group-item-action py-3 lh-sm mt-3 border rounded-2" style="background-color: #f0f8ff;">
         <div class="d-flex w-100 align-items-center justify-content-start mb-1" style="margin-top: 8%">
-          <span class="badge text-bg-secondary" style=" margin-bottom: 6%; margin-right:25%;">접수</span><strong class="ms-1" style=" margin-bottom: 6%;">접수 현황</strong>
-          <input type="hidden" value="${node.id}" id="node_id">
+          <span class="badge text-bg-secondary" style=" margin-bottom: 6%; margin-right:25%;">관리</span><strong class="ms-1" style=" margin-bottom: 6%;">기 사 관 리</strong>
+      
         </div>
       </a>
       <a href="(미정)" class="list-group-item list-group-item-action py-3 lh-sm mt-3 border rounded-2" style="background-color: #f0f8ff;">
         <div class="d-flex w-100 align-items-center justify-content-start mb-1" style="margin-top: 8%">
           <span class="badge text-bg-secondary" style=" margin-bottom: 6%; margin-right:18%;">몰라</span><strong class="ms-1" style=" margin-bottom: 6%;">현황 및 특이사항</strong>
-          <input type="hidden" value="${node.id}" id="node_id">
+       
         </div>
       </a>
       
       <a href="(미정)" class="list-group-item list-group-item-action py-3 lh-sm mt-3 border rounded-2" style="background-color: #f0f8ff;">
         <div class="d-flex w-100 align-items-center justify-content-start mb-1" style="margin-top: 8%">
-          <span class="badge text-bg-secondary" style=" margin-bottom: 6%; margin-right:25%;">문의</span><strong class="ms-1" style=" margin-bottom: 6%;">문의 내역</strong>
-          <input type="hidden" value="${node.id}" id="node_id">
+          <span class="badge text-bg-secondary" style=" margin-bottom: 6%; margin-right:25%;">문의</span><strong class="ms-1" style=" margin-bottom: 6%;">문 의 내 역</strong>
+    
         </div>
       </a>
     </div>
@@ -158,7 +158,8 @@ function addMarker(node) {
     var marker = new kakao.maps.Marker({
         position: markerPosition
     });
-    markers.push(marker); // 마커를 markers 배열에 추가합니다.
+    markers.push(marker);
+    updateCount();// 마커를 markers 배열에 추가합니다.
 }
 
 //#Count 업데이트 함수

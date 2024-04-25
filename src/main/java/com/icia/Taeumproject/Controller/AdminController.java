@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.icia.Taeumproject.Dto.DriverDto;
 import com.icia.Taeumproject.Dto.Node;
 import com.icia.Taeumproject.Dto.NodeCost;
 import com.icia.Taeumproject.Dto.TourActivity;
@@ -76,7 +77,11 @@ public class AdminController {
 		
 	}
 	
-
+@GetMapping("adminDriverList")
+  public String adminDriverList() {
+  log.info("adminDriverList()");
+  return "adminDriverList";
+}
 	  
 	  @GetMapping("/mainCenter")
 	  public String test(Model model) {
@@ -499,14 +504,21 @@ public class AdminController {
 	  
 	  @PostMapping("selectLocaldate")
 	  @ResponseBody
-	  public List<Node> selectLocaldate(String date, Model model) {
+	  public List<Node> selectLocaldate(String date) {
 	    log.info("selectLocaldate()");
 	  List<Node> selectLocaldate =  maServ.selectLocaldate(date);
-	  //    model.addAttribute("selectLocaldate", selectLocaldate);
-	  //    System.out.println("selectLocaldate = " + selectLocaldate);
 	    return selectLocaldate;
 	  }
 	  
-	  
+    
+      @PostMapping("selectedLocal")
+      @ResponseBody 
+      public List<DriverDto> selectedLocal(String selectedValue, Model model) {
+      List<DriverDto> driverDtoList = maServ.selectDriverList(selectedValue);
+      System.out.println("local = " + selectedValue);
+      model.addAttribute("driverDtoList", driverDtoList);
+      return driverDtoList;
+          }
+     
 	  
 }
