@@ -1,0 +1,556 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<link
+  href="https://getbootstrap.com/docs/5.3/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+  crossorigin="anonymous">
+<script
+  src="https://getbootstrap.com/docs/5.3/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+  crossorigin="anonymous"></script>
+<link
+  href="https://getbootstrap.com/docs/5.3/examples/sidebars/sidebars.css"
+  rel="stylesheet">
+<script type="text/javascript"
+  src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9c49835d1348562532a0d8a13f2f7bf3"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+  integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+  crossorigin="anonymous"></script>
+  <script src="js/jquery-3.7.1.min.js"></script>
+<link rel="stylesheet" href="css/style.css">
+ 
+  
+<th:block th:insert="~{fragments::header}" />
+<main class="d-flex flex-nowrap">
+  <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-body-tertiary border border-r-1" style="width: 380px;">
+    <div class="d-flex align-items-center flex-shrink-0 p-3 link-body-emphasis text-decoration-none">
+      <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="#4ae39c" viewBox="0 0 256 256" class="me-2">
+        <path d="M232,128A104,104,0,1,1,128,24,104.13,104.13,0,0,1,232,128Z"></path>
+      </svg>
+      <span class="fs-5 fw-semibold">금일 배차</span>
+    </div>
+    	<div
+			class="d-flex flex-wrap py-3 px-2 gap-3 align-items-center justify-content-center border-bottom">
+			<div class="d-flex flex-column align-items-center">
+				<div id="totalVisit">0곳</div>
+				<div class="fw-light" style="font-size: .75rem">경유지</div>
+			</div>
+			<div class="border-start border-2 h-50"></div>
+			<div class="d-flex flex-column align-items-center">
+				<div id="totalDistance">0km</div>
+				<div class="fw-light" style="font-size: .75rem">이동거리</div>
+			</div>
+			<div class="border-start border-2 h-50"></div>
+			<div class="d-flex flex-column align-items-center">
+				<div id="totalDuration">0분</div>
+				<div class="fw-light" style="font-size: .75rem">이동시간</div>
+			</div>
+		</div>
+<div class="list-group scrollarea px-3 flex-grow-1">
+    <div th:each="nodeList : ${rideNodeList}" class="abc">
+        <!-- 각 rideNodeList 요소에 대한 div -->
+        <a href="#" class="list-group-item list-group-item-action py-3 lh-sm mt-3 border rounded-2">
+            <div class="d-flex w-100 align-items-center justify-content-start mb-1">
+                <!-- 각 요소 안에 있는 노드들의 정보를 출력 -->
+                <div th:each="node : ${nodeList}" class="def">
+                    <input type="hidden" class="badge text-bg-secondary" th:value="${node.node_id}" id="node_id">
+                    <th:block th:if="${node.kind == 2}" >
+                    <input type="hidden" class="node_mid" th:value="${node.m_id}" id="nodeMId">
+                    </th:block>
+                    
+                </div>
+            </div>
+                    <span type="text" id="onOff">off</span>
+        </a>
+    </div>
+</div>
+    <div class="d-flex align-items-center justify-content-center p-3">
+      <button type="button" class="btn btn-dark w-100" onclick="goVrp()">경로 최적화</button>
+    </div>
+  </div>
+
+
+  <div id="map" class="w-100"></div>
+
+  <div class="w-100 h-100 fixed-top justify-content-center align-items-center bg-opacity-10 bg-success" id="spin" style="display: none;">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+</main>
+
+<script th:inline="javascript">
+var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+mapOption = {
+   center: new kakao.maps.LatLng(37.4388938204128, 126.675113024566), // 지도의 중심좌표(인천일보아카데미)
+   level: 3 // 지도의 확대 레벨
+};
+var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+
+function spinOn() {
+     $("#spin").addClass("d-flex");
+   }
+   function spinOff() {
+     $("#spin").removeClass("d-flex");
+   }
+  
+   
+
+   // 각 innerList에 대한 클릭 이벤트를 추가합니다.
+// 모든 리스트 요소를 선택합니다.
+var innerLists = document.querySelectorAll('.abc');
+ //  console.log(innerLists);
+
+var isActives = new Array();
+
+// 각 리스트 요소에 대한 클릭 이벤트를 추가합니다.
+innerLists.forEach(function(innerList, index) {
+   
+
+    // 각 리스트의 활성화 상태를 추적하기 위한 변수를 추가합니다.
+    //var isActive = false;
+    isActives[index] = false;
+//    console.log(index, isActives);
+    
+    innerList.addEventListener('click', function() {
+        // 현재 리스트의 활성화 상태를 변경합니다.
+        //isActive = !isActive;
+        isActives[index] = !isActives[index];
+        //console.log(isActive, index);
+      //  console.log(innerList);
+
+
+        // 클릭한 리스트가 이미 활성화된 경우, 이벤트를 무시하고 비활성화합니다.
+        //if (isActive) {
+        if (isActives[index]) {
+            // 현재 리스트를 활성화합니다.
+            toggleOnOff(innerList, true, index);
+        } else {
+            // 현재 리스트를 비활성화합니다.
+            toggleOnOff(innerList, false, index);
+        }
+
+        // 다른 리스트들을 모두 비활성화합니다.
+        innerLists.forEach(function(list, i) {
+            //if (list !== innerList) {
+            if(index != i){
+                // 다른 리스트들을 강제로 비활성화합니다.
+                toggleOnOff(list, false, i);
+                
+            }
+        });
+        
+    });
+});
+
+// 문서를 로드할 때, 모든 리스트의 활성화를 해제합니다.
+document.addEventListener('DOMContentLoaded', function() {
+    innerLists.forEach(function(list) {
+        list.classList.remove('active');
+    });
+});
+
+//onOff 요소를 토글하는 함수
+function toggleOnOff(innerList, isActive, idx) {
+    // 해당 innerList와 관련된 nodeList를 가져옵니다.
+    var nodeList = innerList.querySelectorAll('.def'); // innerList에서 .def 클래스를 가진 요소를 선택합니다.
+    var onOffElement = innerList.querySelector('#onOff');
+    var nodeId = innerList.querySelector('#node_id').value;
+    var nodeMId = innerList.querySelector('#nodeMId').value;
+    var node = findNodeById(nodeId); // 해당하는 노드를 찾습니다.
+   
+    // 현재 리스트의 활성화 상태에 따라 동작을 수행합니다.
+    if (isActive) {
+        onOffElement.textContent = 'on'; // 활성화 상태일 경우, 텍스트를 'on'으로 변경합니다.
+        nodeList.forEach(function(nodeElement) {
+           nodeElement.querySelectorAll('.badge.text-bg-secondary').forEach(function(nodeIdElement) {
+               nodeId = nodeIdElement.value;
+           });
+           nodeElement.querySelectorAll('.node_mid').forEach(function(nodeMIdElement) {
+               nodeMId = nodeMIdElement.value;
+           });
+             node = findNodeById(nodeId);
+             var markerPosition = new kakao.maps.LatLng(node.y, node.x); // 해당하는 노드의 위치
+             var marker = new kakao.maps.Marker({
+                 position: markerPosition
+             });
+             marker.setMap(map); // 마커를 지도에 추가합니다.
+             markers[node.node_id] = marker; // 마커를 markers 객체에 저장합니다.
+             NODE_MAP[node.node_id] = node;
+             
+             console.log("하나씩"+nodeId);
+        });
+        isActives[idx] = true;
+        innerList.classList.add('active'); // 현재 리스트를 활성화 상태로 변경합니다.
+        
+        
+    } else {
+        onOffElement.textContent = 'off'; // 비활성화 상태일 경우, 텍스트를 'off'으로 변경합니다.
+        nodeList.forEach(function(nodeElement) {
+            // 각 노드 요소에서 ID를 가져와서 해당 노드에 대한 마커를 제거합니다.
+            var nodeId = nodeElement.querySelector('.badge.text-bg-secondary').value;
+            // 클로저를 사용하여 올바른 nodeId 값을 유지합니다.
+            (function(nodeId) {
+                var marker = markers[nodeId];
+                if (marker) {
+                    // 마커를 제거합니다.
+                    console.log("여기지롱" + nodeId);
+                    marker.setMap(null);
+                    delete markers[nodeId]; // markers 객체에서 제거합니다.
+                    delete NODE_MAP[nodeId];
+                }
+            })(nodeId);
+        });
+        
+        POLYLINE.setMap(null);
+        
+        isActives[idx] = false;
+        innerList.classList.remove('active');
+    }
+        
+  //  console.log(isActives);
+}
+   
+// 클릭된 리스트의 노드들을 맵에 나타내는 함수
+   function showNodesOnMap(nodeId) {
+    //  removeAllNodesFromMap();
+       // 각 노드에 대해 반복하여 맵에 마커를 추가합니다.
+       for (const node of nodeList) {
+    //      console.log("addMarker = "+ node);
+           addMarker(node);
+       }
+   }
+
+   // 맵에서 모든 노드를 제거하는 함수
+   function removeAllNodesFromMap() {
+       // markers 객체에 저장된 모든 마커를 제거합니다.
+       for (const nodeId in markers) {
+           markers[nodeId].setMap(null); // 마커를 지도에서 제거
+           delete markers[nodeId]; // markers 객체에서 제거
+       }
+       // NODE_MAP 객체에 저장된 모든 노드를 제거합니다.
+       NODE_MAP = {};
+   }
+
+   // 마커를 토글하는 함수
+   function toggleMarker(node) {
+    
+       var marker = markers[node.node_id]; // 해당 노드에 대한 마커를 가져옵니다.
+       if (marker) {
+           // 이미 마커가 추가되었으면 삭제합니다.
+           marker.setMap(null);
+           delete markers[node.node_id]; // 마커를 markers 객체에서 제거합니다.
+           delete NODE_MAP[node.node_id];
+       } else {
+          for(const nodeList of rideNodeList)
+           // 마커가 추가되지 않았으면 추가합니다.
+           addMarker(node);
+           NODE_MAP[node.node_id] = node;
+       }
+   }
+ 
+   var nodeList = /*[[${nodeList}]]*/ null;
+    //console.log("nodeList = ", nodeList);  
+
+   function findNodeById(nodeId) {
+       for (const node of nodeList) {
+          if (node.cycle == 1) {
+           if (parseInt(node.node_id) === parseInt(nodeId)) {
+            
+               return node; // 해당하는 ID를 가진 노드를 찾으면 반환합니다.
+           }
+          } else if(node.cycle == 2) {
+             if (parseInt(node.node_id) === parseInt(nodeId)) {
+                   
+                   return node; // 해당하는 ID를 가진 노드를 찾으면 반환합니다.
+               }
+          } else {
+             if (parseInt(node.node_id) === parseInt(nodeId)) {
+                   
+                   return node; // 해당하는 ID를 가진 노드를 찾으면 반환합니다.
+               }
+          }
+       }
+       return null; // 해당하는 ID를 가진 노드가 없으면 null을 반환합니다.
+   }
+   
+   // 해당하는 노드의 마커를 추가하는 함수
+   function addMarker(node) {
+      
+       var markerPosition = new kakao.maps.LatLng(node.y, node.x); // 해당하는 노드의 위치
+       var marker = new kakao.maps.Marker({
+           position: markerPosition
+       });
+       marker.setMap(map); // 마커를 지도에 추가합니다.
+       markers[node.node_id] = marker; // 마커를 markers 객체에 저장합니다.
+       NODE_MAP[node.node_id] = node;
+   }
+   
+   // 해당하는 노드의 마커를 제거하는 함수
+   function removeMarker(node) {
+      
+       var marker = markers[node.node_id]; // 해당 노드에 대한 마커를 가져옵니다.
+       //console.log("marker = " + marker);
+       if (marker) {
+           // 마커가 추가되었으면 삭제합니다.
+       //    console.log("통과")
+           marker.setMap(null);
+           delete markers[node.node_id]; // 마커를 markers 객체에서 제거합니다.
+           delete NODE_MAP[node.node_id];
+           
+       }
+   }
+
+   
+// 클릭된 항목의 'm_id'와 같은 kind가 2인 노드의 마커를 제거하는 함수
+   function removeConnectedMarker(nodeMId) {
+       // nodeList에서 'm_id'가 nodeMId이고 kind가 2인 노드들을 찾습니다.
+       
+       const connectedNodes = nodeList.filter(node => parseInt(node.m_id) === parseInt(nodeMId)  && parseInt(node.kind) === 2);
+       console.log("node.m_id " +  parseInt(node.m_id));
+       console.log("nodeMid " + nodeMId);
+       console.log("node.kind " + node.kind);
+       // 찾은 노드들의 마커를 제거합니다.
+       connectedNodes.forEach(node => {
+          console.log("통과");
+           removeMarker(node);
+       });
+   }
+
+  
+   // 각 노드에 대한 마커를 저장하기 위한 객체
+   var markers = {};
+   
+   
+// 주변 약국 검색
+function searchPoi() {
+  // 지도의 중심좌표를 얻어옵니다
+  var latlng = map.getCenter();
+  const x = latlng.getLng();
+  const y = latlng.getLat();
+
+  spinOn();
+  $.ajax({
+    url: '/poi',
+    data: {
+      x: x,
+      y: y
+    },
+    <!-- 여기서 result는 그냥 변수 -->
+    success: function (result) { 
+      if (result.code != 'SUCC') {
+        alert("주변 약국 검색에 실패 하였습니다.");
+        spinOff();
+        return;
+      }
+      const data = result.data;
+      spinOff();
+      displayData(data);
+      
+    },
+    error: function () {
+        spinOff();
+      alert("주변 약국 검색에 실패 하였습니다.");
+    }
+  });
+}
+
+
+//ajax 응답 받은 데이터로 화면에 그리기.
+const NODE_MAP = {};
+const MARKER_MAP = {};
+const INFO_MAP = {};
+function displayData(data) {
+ 
+    // 서버에서 받은 데이터 추출
+    const totalDistance = data.totalDistance;// 전체이동거리(미터)
+  const totalDuration = data.totalDuration;// 전체이동시간(초)
+  const totalPathPointList = data.totalPathPointList;// // 전체이동경로
+  const nodeList = data.nodeList;// // 방문지목록
+  $("#totalVisit").text(nodeList.length + "곳");
+  $("#totalDistance").text((totalDistance / 1000).toFixed(2) + "km");
+  $("#totalDuration").text(secondsToHoursMinutes(totalDuration));
+    // nodeList를 사용하여 HTML에 목록 추가
+    let html = '';
+    let count = 0;
+    for (const node of nodeList) {
+        // 각 노드에 대한 HTML 코드 생성
+        /* html += `
+            <a href="#" class="list-group-item list-group-item-action py-3 lh-sm mt-3 border rounded-2">
+                <!-- 노드에 대한 정보를 여기에 추가 -->
+                <span>${node.address}</span>
+                <!-- 추가 정보가 있다면 이어서 추가 가능 -->
+            </a>
+        `; */
+    }
+
+    // 생성된 HTML을 페이지의 목록 요소에 추가
+    $('#bechaList').html(html);
+    drawPath(totalPathPointList);
+    
+} 
+//경로를 그리기.
+
+
+
+$(document).ready(function() {
+    // 페이지 로딩 시 탑승 여부 표시
+    $('.ride').each(function() {
+        var rideValue = $(this).text().trim(); // 각각의 ride 요소에 있는 텍스트 가져오기
+        if (rideValue === '1') {
+            $(this).text("탑승완료");
+        } else if (rideValue === 'null') {
+            $(this).text("탑승여부");
+        }
+    });
+});
+
+
+function rideButton(button){
+  console.log("click성공");
+   // 버튼의 부모 요소에서 탑승 여부를 찾아서 변경합니다.
+    $(button).parent().find('#ride').html("탑승완료");
+   
+   var ride = 1
+     var node_id = $(button).closest('.list-group-item').find('#node_id').val();
+   console.log("node_id = " + node_id);
+   
+     spinOn();
+   
+   $.ajax({
+          url: '/ride',
+          data: {
+            ride : ride,
+            id : node_id
+          },
+
+          success: function (result) { 
+            if (result.code != 'SUCC') {
+            
+              return;
+            }
+            const data = result.data;
+            
+            displayData(data);
+    
+            
+          },
+          error: function () {
+             
+            alert("탑승성공 실패.....................");
+          }
+        });
+   
+
+}
+function secondsToHoursMinutes(seconds) {
+     // 시간으로 변환
+     const hours = Math.floor(seconds / 3600);
+     // 남은 분 계산
+     const minutes = Math.floor((seconds % 3600) / 60);
+     // 시간과 분을 "00" 형식으로 변환. 시간이 0일 경우, 시간 표시 생략
+     const formattedHours = hours > 0 ? `${hours.toString().padStart(2, '0')}시간 ` : '';
+     const formattedMinutes = minutes.toString().padStart(2, '0');
+     return `${formattedHours}${formattedMinutes}분`;
+   }
+   
+   
+   
+    function drawMarker(node, bounds) {
+     const position = new kakao.maps.LatLng(node.y, node.x);
+     bounds.extend(position);
+     // 배열의 좌표들이 잘 보이게 마커를 지도에 추가합니다
+     const marker = new kakao.maps.Marker({position: position, clickable: true});
+     marker.setMap(map);
+     const name = node.name;
+     const phone = node.phone;
+     // 인포윈도우를 생성합니다
+     const infowindow = new kakao.maps.InfoWindow({
+       content: '<div style="padding:5px;">' + name + '<br/>' + phone + '</div>',
+       removable: true
+     });
+    
+     MARKER_MAP[node.node_id] = marker; //바깥에서 인식이 가능하도록 전역변수 설정
+     INFO_MAP[node.node_id] = infowindow; 
+     
+     // 마커에 클릭이벤트를 등록합니다
+     kakao.maps.event.addListener(marker, 'click', function () {
+       infowindow.open(map, marker);
+     });
+   }
+
+
+
+    var POLYLINE = null;
+    function drawPath(pathPointList) {
+      if(pathPointList.length > 0) {
+        // 선을 구성하는 좌표 배열입니다. 이 좌표들을 이어서 선을 표시합니다
+        var linePath = [];
+        for(var point of pathPointList) {
+          linePath.push(new kakao.maps.LatLng(point.y, point.x));
+        }
+       
+        // 지도에 표시할 선을 생성합니다
+        POLYLINE = new kakao.maps.Polyline({
+            path: linePath, // 선을 구성하는 좌표배열 입니다
+            strokeWeight: 5, // 선의 두께 입니다
+            strokeColor: 'red', // 선의 색깔입니다
+            strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+            strokeStyle: 'solid' // 선의 스타일입니다
+        });
+        // 지도에 선을 표시합니다
+        POLYLINE.setMap(map);
+      }
+    }
+
+    //지도의 중심을 이동싴미는 기능
+    function panTo(nodeId) {
+       clearInfoWindow();
+       const node = NODE_MAP[nodeId];
+       INFO_MAP[nodeId].open(map, MARKER_MAP[nodeId]);
+       // 이동할 위도 경도 위치를 생성합니다
+       var moveLatLon = new kakao.maps.LatLng(node.y, node.x);
+       // 지도 중심을 부드럽게 이동시킵니다
+       // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
+       map.panTo(moveLatLon);
+     }
+
+     function clearInfoWindow() {
+       for(const nodeId in INFO_MAP) {
+         INFO_MAP[nodeId].close();
+       }
+     }
+
+   
+
+
+
+     
+     function goVrp() {
+        
+       spinOn();
+          $.ajax({
+              url: '/vrp',
+              type: 'post', // 관련정보들이 주소창에 나올 이유는 없으니 post로 돌림.
+              contentType: "application/json", //data(body)에 json 을 담으려면 둘이 셑트임(data,contenType)
+              data: 
+                JSON.stringify(Object.values(NODE_MAP)), // 컨트롤러에서 받은 data값이 JOSN 형식으로 Ajox 돌림.
+              success: function (result) { // 에러코드 200일땐 성공
+                  if (result.code != 'SUCC') {
+                      alert("경로 최적화에 실패 하였습니다.");
+                      spinOff();
+                      return;
+                  }
+                  spinOff();
+                  const data = result.data;
+                  displayData(data);
+                
+              },
+              error: function () { // 에러코드가 200이 아닌 경우.
+                  spinOff();
+                  alert("경로 최적화에 실패 하였습니다.");
+              }
+          });
+      }
+</script>

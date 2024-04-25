@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.icia.Taeumproject.Dao.MainDao">
+
+  <insert id="insert" parameterType="Node">
+    INSERT INTO NodeTbl
+    VALUES (
+     null,#{Address},#{x},#{y},#{m_id},0,#{kind},0,#{A_DATE}
+    )
+  </insert>
+  
+
+  <select id="selectList" resultType="Node">
+    select *, SQRT(POW(x - 126.675113, 2) + POW(y - 37.438893,2)) AS distance
+FROM NodeTbl ORDER BY distance ASC;
+  </select>
+  
+  <select id="endSelectList" resultType="Node">
+    SELECT * FROM endNodetbl
+  </select>
+  
+  <update id ="updateDelivery" parameterType="Integer">
+    UPDATE NodeTbl SET ride=#{ride}, cycle=#{cycle} WHERE id=#{id}
+  </update>
+  
+    <select id="selectRideList" resultType="Node">
+    select * FROM NodeTbl WHERE ride=#{ride}
+  </select>
+</mapper>
