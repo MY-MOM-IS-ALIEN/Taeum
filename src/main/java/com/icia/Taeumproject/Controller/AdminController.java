@@ -1,0 +1,491 @@
+package com.icia.Taeumproject.Controller;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.icia.Taeumproject.Dto.Node;
+import com.icia.Taeumproject.Dto.NodeCost;
+import com.icia.Taeumproject.Dto.TourActivity;
+import com.icia.Taeumproject.Service.ApplyService;
+import com.icia.Taeumproject.Service.MainService;
+import com.icia.Taeumproject.Service.MemberService;
+import com.icia.Taeumproject.Service.NodeCostService;
+import com.icia.Taeumproject.Service.NodeService;
+import com.icia.Taeumproject.parameter.NodeCostParam;
+import com.icia.Taeumproject.util.JsonResult;
+import com.icia.Taeumproject.util.KakaoApiUtil;
+import com.icia.Taeumproject.util.KakaoApiUtil.Point;
+import com.icia.Taeumproject.util.kakao.KakaoDirections;
+import com.icia.Taeumproject.util.kakao.KakaoDirections.Route;
+import com.icia.Taeumproject.util.kakao.KakaoDirections.Route.Section;
+import com.icia.Taeumproject.util.kakao.KakaoDirections.Route.Section.Road;
+import com.icia.Taeumproject.util.kakao.KakaoDirections.Route.Summary;
+import com.icia.Taeumproject.util.kakao.KakaoDirections.Route.Summary.Fare;
+import com.icia.Taeumproject.vrp.VrpResult;
+import com.icia.Taeumproject.vrp.VrpService;
+import com.icia.Taeumproject.vrp.VrpVehicleRoute;
+
+import lombok.extern.slf4j.Slf4j;
+
+
+
+@Controller
+@Slf4j
+public class AdminController {
+  @Autowired
+  public MemberService mServ;
+  @Autowired 
+  public ApplyService aServ;
+  
+  @Autowired
+  private MainService maServ;
+
+  @Autowired
+  private NodeService nodeService;
+  @Autowired
+  private NodeCostService nodeCostService;
+
+	@GetMapping("adminMain")
+	public String adminPage(Model model) {
+		log.info("adminPage()");
+		List<Node> nodeList = maServ.selectList();
+		model.addAttribute("nodeList", nodeList);
+		 return "adminMain";
+		
+	}
+	
+
+	  
+	  @GetMapping("/mainCenter")
+	  public String test(Model model) {
+	    int rideOne = 1;
+	    List< List<Node>> rideNodeList = new ArrayList<>();
+	    List<Node> innerList1 = new ArrayList<>();
+	    List<Node> innerList2 = new ArrayList<>();
+	    List<Node> innerList3 = new ArrayList<>();
+	    
+	      List<Node> nodeList = maServ.selectNodeList(rideOne);
+	      
+	      for(Node node : nodeList) {
+	        if(node.getCycle() == 1) {
+	          innerList1.add(node);
+	        }else if(node.getCycle() == 2) {
+	          innerList2.add(node);
+	        }else {
+	          innerList3.add(node);
+	        }
+	      }
+	      rideNodeList.add(innerList1);
+	      rideNodeList.add(innerList2);
+	      rideNodeList.add(innerList3);
+	      System.out.println("rideNodeList ==  == = = = =- = = " + rideNodeList);
+	      model.addAttribute("rideNodeList", rideNodeList);
+	      
+	      System.out.println(innerList1);
+	      System.out.println(innerList2);
+	      System.out.println(innerList3);
+	      //model.addAttribute("innerList1", innerList1);
+	      model.addAttribute("nodeList", nodeList);
+	      
+	      return "mainCenter"; // 뷰 이름 반환
+	  }
+	 
+	  @PostMapping("updateDelivery")
+	  public String updateDelivery(Integer ride , String node_id, Integer cycle) {
+	    log.info("updateDeliveryPROC");
+	    if (ride == null || node_id == null) {
+	      // ride 또는 m_id가 null인 경우에 대한 처리
+	      System.out.println("ride = " + ride);
+	      System.out.println("m_id/null = " + node_id);
+	  } else {
+	      System.out.println("ride = " + ride);
+	      System.out.println("m_id = " + node_id);
+	      String[] numbersAsString = node_id.split(", ");
+	      
+	      for (String num : numbersAsString) {
+	          Integer nodeId = Integer.parseInt(num);
+	          
+	          maServ.updateDelivery(ride, nodeId, cycle);
+	      }
+	      
+	  }
+	  
+	    
+	    
+	    return "redirect:/main";
+	  }
+	  
+//	  @GetMapping("insert")
+//	  public String insert() {
+//	    log.info("insertController()");
+//	    return "insert";
+//	  }
+//
+//	  @PostMapping("insertProc") // url : /map/address/point
+//	  public String getMapAddressPoint(@RequestParam(required = false) String fromAddress,
+//	      @RequestParam(required = false) int kind, Model model, RedirectAttributes rttr)
+//	      throws IOException, InterruptedException {
+//	    String view = null;
+//	    if (fromAddress != null && !fromAddress.isEmpty()) {
+//	      Point startPoint = KakaoApiUtil.getPointByAddress(fromAddress);
+//
+//	      if (startPoint != null) {
+//	        view  maServ.insertServ(fromAddress, startPoint, kind, rttr);
+//	      }
+//	    }
+//
+//	    return view;
+//	  }
+
+	//  @GetMapping("nodeList")
+	//  public String nodeList(Model model) {
+//	    log.info("nodeList");
+	//    
+	//    
+	//  }
+
+	  @PostMapping("/vrp")
+	  @ResponseBody
+	  public JsonResult postVrp(@RequestBody List<Node> nodeList, Model model) throws IOException, InterruptedException {
+	    System.out.println("Vrp()");
+	    System.out.println(nodeList.size());
+
+	    VrpService vrpService = new VrpService();
+	    
+
+	    Node firstNode = nodeList.get(0);
+	    String firstNodeId = String.valueOf(firstNode.getNode_id());
+	    
+	    // 차량 등록
+	    System.out.println("Vrp 차량등록");
+	    vrpService.addVehicle("차량01", firstNodeId);
+	    Map<String, Node> nodeMap = new HashMap<>();
+	    Map<String, Map<String, NodeCost>> nodeCostMap = new HashMap<>();
+	    
+	 
+	    HashMap<Integer, TourActivity> tourMap = new HashMap<>();
+	  
+	    for (int i = 0; i < nodeList.size(); i++) {
+	      Node node = nodeList.get(i);
+	     // System.out.println("여기지롱 =" + node);
+	      String nodeId = String.valueOf(node.getNode_id());
+	      if(!tourMap.containsKey(node.getM_id())) {
+	    	  
+	        TourActivity tourActivity = new TourActivity();
+	        tourActivity.setM_id(node.getM_id());
+	        tourMap.put(node.getM_id(), tourActivity);
+	        
+	      }
+	      
+	      TourActivity tourActivity = tourMap.get(node.getM_id());
+	      
+	      if(nodeList.get(i).getKind() == 1) {
+	        tourActivity.setStartNode_id(node.getNode_id()); 
+	        
+	        
+	      }else {
+	        tourActivity.setEndNode_id(node.getNode_id());
+	      }
+	     
+	      nodeMap.put(nodeId, node);
+	     // System.out.println("여기 질엘 = " + nodeMap);
+	      
+	  }
+	    for(Integer m_id : tourMap.keySet()) {
+	    	System.out.println("반복 해라 =" + m_id);
+	     TourActivity tourActivity = tourMap.get(m_id);
+	     
+	     // 조건을 모두 통과한 경우, 정상적으로 노드를 처리합니다.
+	     vrpService.addShipement(String.valueOf(tourActivity.getM_id()),String.valueOf(tourActivity.getStartNode_id()), 
+	         String.valueOf(tourActivity.getEndNode_id()));
+	     System.out.println("tourActivity.getM_id() = " + tourActivity.getM_id());
+	     System.out.println("tourActivity.getstartNode_id() = " + tourActivity.getStartNode_id());
+	     System.out.println("tourActivity.getendNode_id() = " + tourActivity.getEndNode_id());
+	    }
+	    
+	    
+	    
+	    
+
+	    for (int i = 0; i < nodeList.size(); i++) {
+	      Node startNode = nodeList.get(i);
+	      for (int j = 0; j < nodeList.size(); j++) {
+	        Node endNode = nodeList.get(j);
+	        NodeCost nodeCost = getNodeCost(startNode, endNode);
+	        if (i == j) {
+	          continue;
+	        }
+	        if (nodeCost == null) {
+	          nodeCost = new NodeCost();
+	          nodeCost.setDistanceMeter(0L);
+	          nodeCost.setDurationSecond(0L);
+	        }
+	        Long distanceMeter = nodeCost.getDistanceMeter();
+	        Long durationSecond = nodeCost.getDurationSecond();
+	        String startNodeId = String.valueOf(startNode.getNode_id());
+	        String endNodeId = String.valueOf(endNode.getNode_id());
+	        // 비용 등록
+	        vrpService.addCost(startNodeId, endNodeId, durationSecond, distanceMeter);
+	        if (!nodeCostMap.containsKey(startNodeId)) {
+	          nodeCostMap.put(startNodeId, new HashMap<>());
+	        }
+	        nodeCostMap.get(startNodeId).put(endNodeId, nodeCost);
+	      }
+	    }
+	    List<Node> vrpNodeList = new ArrayList<>();
+	    VrpResult vrpResult = vrpService.getVrpResult();
+
+	    for (VrpVehicleRoute vrpVehicleRoute : vrpResult.getVrpVehicleRouteList()) {
+	      System.out.println(vrpVehicleRoute);
+	      //모든 약을 시작점에서 픽업 한 경우만 정상 동작 하는 코드.
+	      if ("deliverShipment".equals(vrpVehicleRoute.getActivityName()) || "pickupShipment".equals(vrpVehicleRoute.getActivityName()) ) {
+	        String locationId = vrpVehicleRoute.getLocationId();
+	        vrpNodeList.add(nodeMap.get(locationId));
+	      }
+	      System.out.println("vrpVehicleRoute = " + vrpVehicleRoute);
+	      
+	      // 수정된 코드
+	      // 시작 약국에서 픽업 몇개하고 배송 후 다시 픽업해도 되는 코드
+//	      String locationId = vrpVehicleRoute.getLocationId();
+//	      if(prevLocationId == null) {
+//	        prevLocationId = locationId;
+//	      }else if(locationId.equals(prevLocationId)) {
+//	        continue;
+//	      }
+//	      
+//	      prevLocationId = locationId;
+//	      vrpNodeList.add(nodeMap.get(locationId));
+	    }
+	    
+	    
+	    
+	    
+	    int totalDistance = 0;
+	    int totalDuration = 0;
+	    List<Point> totalPathPointList = new ArrayList<>();
+
+	    for (int i = 1; i < vrpNodeList.size(); i++) {
+	        Node prev = vrpNodeList.get(i - 1);
+	        Node next = vrpNodeList.get(i);
+	        
+	        
+	    
+	        
+	        NodeCost nodeCost = nodeCostMap.get(String.valueOf(prev.getNode_id())).get(String.valueOf(next.getNode_id()));
+	        if (nodeCost != null) {
+	            String pathJson = nodeCost.getPathJson();
+	            totalDistance += nodeCost.getDistanceMeter();
+	            totalDuration += nodeCost.getDurationSecond();
+	            if (pathJson != null) {
+	                totalPathPointList.addAll(new ObjectMapper().readValue(pathJson, new TypeReference<List<Point>>() {}));
+	            }
+	        }
+	        
+	    }
+
+	    JsonResult jsonResult = new JsonResult();
+	    jsonResult.addData("totalDistance", totalDistance);// 전체이동거리
+	    jsonResult.addData("totalDuration", totalDuration);// 전체이동시간
+	    jsonResult.addData("totalPathPointList", totalPathPointList);// 전체이동경로
+	    jsonResult.addData("nodeList", vrpNodeList);// 방문지목록
+
+	//   TestResult testResult = new TestResult();
+	//   testResult.setTotalDistance(totalDistance);
+	//   testResult.setTotalDuration(totalDuration);
+	//   testResult.setTotalPathPointList(totalPathPointList);
+	//   testResult.setVrpNodeList(vrpNodeList);
+//	    System.out.println("testResult VRPVRPVRP = " + testResult);
+//	    System.out.println("vrpNodeList = " + vrpNodeList);
+	    
+	 // Model 객체에 TestResult 추가
+//	    model.addAttribute("testResult", testResult);
+	    return jsonResult;
+
+	  }
+
+
+
+
+	  private NodeCost getNodeCost(Node prev, Node next) throws IOException, InterruptedException {
+	    NodeCostParam nodeCostParam = new NodeCostParam();
+	    nodeCostParam.setStartNodeId(Long.valueOf(prev.getNode_id()));
+	    nodeCostParam.setEndNodeId(Long.valueOf(next.getNode_id()));
+	    NodeCost nodeCost = nodeCostService.getOneByParam(nodeCostParam);
+	    if (nodeCost == null) {
+	      KakaoDirections kakaoDirections = KakaoApiUtil.getKakaoDirections(new Point(prev.getX(), prev.getY()),
+	          new Point(next.getX(), next.getY()));
+	      List<Route> routes = kakaoDirections.getRoutes();
+	      Route route = routes.get(0);
+	      List<Point> pathPointList = new ArrayList<Point>();
+	      List<Section> sections = route.getSections();
+	      if (sections == null) {
+	        // {"trans_id":"018e3d7f7526771d9332cb717909be8f","routes":[{"result_code":104,"result_msg":"출발지와
+	        // 도착지가 5 m 이내로 설정된 경우 경로를 탐색할 수 없음"}]}
+	        pathPointList.add(new Point(prev.getX(), prev.getY()));
+	        pathPointList.add(new Point(next.getX(), next.getY()));
+	        nodeCost = new NodeCost();
+	        nodeCost.setStartNodeId(Long.valueOf(prev.getNode_id()));// 시작노드id
+	        nodeCost.setEndNodeId(Long.valueOf(next.getNode_id()));// 종료노드id
+	        nodeCost.setDistanceMeter(0l);// 이동거리(미터)
+	        nodeCost.setDurationSecond(0l);// 이동시간(초)
+	        nodeCost.setTollFare(0);// 통행 요금(톨게이트)
+	        nodeCost.setTaxiFare(0);// 택시 요금(지자체별, 심야, 시경계, 복합, 콜비 감안)
+	        nodeCost.setPathJson(new ObjectMapper().writeValueAsString(pathPointList));// 이동경로json [[x,y],[x,y]]
+	        nodeCost.setRegDt(new Date());// 등록일시
+	        nodeCost.setModDt(new Date());// 수정일시
+	        nodeCostService.add(nodeCost);
+	        return null;
+	      }
+	      List<Road> roads = sections.get(0).getRoads();
+	      for (Road road : roads) {
+	        List<Double> vertexes = road.getVertexes();
+	        for (int q = 0; q < vertexes.size(); q++) {
+	          pathPointList.add(new Point(vertexes.get(q), vertexes.get(++q)));
+	        }
+	      }
+	      Summary summary = route.getSummary();
+	      Integer distance = summary.getDistance();
+	      Integer duration = summary.getDuration();
+	      Fare fare = summary.getFare();
+	      Integer taxi = fare.getTaxi();
+	      Integer toll = fare.getToll();
+	      nodeCost = new NodeCost();
+	      nodeCost.setStartNodeId(Long.valueOf(prev.getNode_id()));// 시작노드id
+	      nodeCost.setEndNodeId(Long.valueOf(next.getNode_id()));// 종료노드id
+	      nodeCost.setDistanceMeter(distance.longValue());// 이동거리(미터)
+	      nodeCost.setDurationSecond(duration.longValue());// 이동시간(초)
+	      nodeCost.setTollFare(toll);// 통행 요금(톨게이트)
+	      nodeCost.setTaxiFare(taxi);// 택시 요금(지자체별, 심야, 시경계, 복합, 콜비 감안)
+	      nodeCost.setPathJson(new ObjectMapper().writeValueAsString(pathPointList));// 이동경로json [[x,y],[x,y]]
+	      nodeCost.setRegDt(new Date());// 등록일시
+	      nodeCost.setModDt(new Date());// 수정일시
+	      nodeCostService.add(nodeCost);
+	    }
+	    return nodeCost;
+	  }
+
+	  @GetMapping("main")
+	  public String main(Model model) {
+	 // 카카오api로 요청해서 약국정보 가져오기
+	    List<Node> nodeList = maServ.selectList();
+	    System.out.println(nodeList);
+	    model.addAttribute("nodeList", nodeList);
+	    return "main";
+	  }
+
+	  @GetMapping("/ride")
+	  @ResponseBody
+	  public String ride(@RequestParam Long ride, @RequestParam Long id) {
+	    log.info("ride()");
+	    List<Node> nodeList = maServ.selectList();
+
+	    for (int i = 0; i < nodeList.size(); i++) {
+	      Long nId = Long.valueOf(nodeList.get(i).getNode_id());
+	      System.out.println("node_id = " + id);
+	      System.out.println("nId = " + nId);
+
+	      if (nId.equals(id)) {
+	        maServ.updateRide(ride, id);
+	        break;
+	      }
+	    }
+	    return "redirect:/main";
+	  }
+
+	  @GetMapping("/poi")
+	  @ResponseBody
+	  public JsonResult getPoi(@RequestParam double x, @RequestParam double y, Model model) throws IOException, InterruptedException {
+	    Point center = new Point(x, y);
+
+	    // 카카오api로 요청해서 약국정보 가져오기
+	    List<Node> nodeList = maServ.selectList();
+	    System.out.println(nodeList);
+
+	    // copiedNodeList를 사용하여 반복문 실행
+	    List<Node> copiedNodeList = new ArrayList<>(nodeList);
+	    int totalDistance = 0;
+	    int totalDuration = 0;
+	    List<Point> totalPathPointList = new ArrayList<>();
+	    for (int i = 1; i < copiedNodeList.size(); i++) {
+	      Node prev = copiedNodeList.get(i - 1);
+	      Node next = copiedNodeList.get(i);
+
+	      NodeCostParam nodeCostParam = new NodeCostParam();
+	      nodeCostParam.setStartNodeId(Long.valueOf(prev.getNode_id()));
+	      nodeCostParam.setEndNodeId(Long.valueOf(next.getNode_id()));
+	      System.out.println("여기까진 됌");
+	      NodeCost nodeCost = nodeCostService.getOneByParam(nodeCostParam);
+
+	      if (nodeCost == null) {
+	        KakaoDirections kakaoDirections = KakaoApiUtil.getKakaoDirections(new Point(prev.getX(), prev.getY()),
+	            new Point(next.getX(), next.getY()));
+	        List<Route> routes = kakaoDirections.getRoutes();
+	        Route route = routes.get(0);
+	        List<Point> pathPointList = new ArrayList<Point>();
+	        List<Section> sections = route.getSections();
+
+	        if (sections == null) {
+	          // {"trans_id":"018e3d7f7526771d9332cb717909be8f","routes":[{"result_code":104,"result_msg":"출발지와
+	          // 도착지가 5 m 이내로 설정된 경우 경로를 탐색할 수 없음"}]}
+	          continue;
+	        }
+	        List<Road> roads = sections.get(0).getRoads();
+	        for (Road road : roads) {
+	          List<Double> vertexes = road.getVertexes();
+	          for (int q = 0; q < vertexes.size(); q++) {
+	            pathPointList.add(new Point(vertexes.get(q), vertexes.get(++q)));
+	          }
+	        }
+	        Summary summary = route.getSummary();
+	        Integer distance = summary.getDistance();
+	        Integer duration = summary.getDuration();
+	        Fare fare = summary.getFare();
+	        Integer taxi = fare.getTaxi();
+	        Integer toll = fare.getToll();
+
+	        nodeCost = new NodeCost();
+	        nodeCost.setStartNodeId(Long.valueOf(prev.getNode_id()));// 시작노드id
+	        nodeCost.setEndNodeId(Long.valueOf(next.getNode_id()));// 종료노드id
+	        nodeCost.setDistanceMeter(distance.longValue());// 이동거리(미터)
+	        nodeCost.setDurationSecond(duration.longValue());// 이동시간(초)
+	        nodeCost.setTollFare(toll);// 통행 요금(톨게이트)
+	        nodeCost.setTaxiFare(taxi);// 택시 요금(지자체별, 심야, 시경계, 복합, 콜비 감안)
+	        nodeCost.setPathJson(new ObjectMapper().writeValueAsString(pathPointList));// 이동경로json [[x,y],[x,y]]
+	        nodeCost.setRegDt(new Date());// 등록일시
+	        nodeCost.setModDt(new Date());// 수정일시
+	        nodeCostService.add(nodeCost);
+	      }
+
+	      totalDistance += nodeCost.getDistanceMeter();
+	      totalDuration += nodeCost.getDurationSecond();
+	      totalPathPointList.addAll(new ObjectMapper().readValue(nodeCost.getPathJson(), new TypeReference<List<Point>>() {
+	      }));
+	    }
+
+	    JsonResult jsonResult = new JsonResult();
+//	    jsonResult.addData("totalDistance", totalDistance);// 전체이동거리
+//	    jsonResult.addData("totalDuration", totalDuration);// 전체이동시간
+//	    jsonResult.addData("totalPathPointList", totalPathPointList);// 전체이동경로
+	    jsonResult.addData("nodeList", nodeList);// 방문지목록
+
+	    
+//	    System.out.println("totalPathPointList = " + totalPathPointList);
+	    System.out.println("nodeList 마지막 " + nodeList);
+	    return jsonResult;
+	  }
+}
