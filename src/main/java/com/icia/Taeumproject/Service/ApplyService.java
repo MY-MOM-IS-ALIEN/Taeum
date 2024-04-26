@@ -100,7 +100,7 @@ public class ApplyService {
         	  
         	  if(startPoint != null) {
         		  int kind  = 1;
-        		  maServ.insertServ(apply.getM_ID(),apply.getA_STARTADRESS(), startPoint, kind, rttr, apply.getA_DATE());
+        		  maServ.insertServ(apply.getM_ID(),apply.getA_STARTADRESS(), startPoint, kind, rttr, apply.getA_LOCALDATE(), apply.getA_DATE());
         	  }
           } 
           if(apply.getA_ENDADRESS() != null && !apply.getA_ENDADRESS().isEmpty()) {
@@ -108,7 +108,7 @@ public class ApplyService {
         	  
         	  if(endPoint != null) {
         		  int kind = 2;
-        		  maServ.insertServ(apply.getM_ID(),apply.getA_ENDADRESS(), endPoint, kind, rttr, null);
+        		  maServ.insertServ(apply.getM_ID(),apply.getA_ENDADRESS(), endPoint, kind, rttr, null, null);
         	  }
           }
           // 사용자 정보 업데이트

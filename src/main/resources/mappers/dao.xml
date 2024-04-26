@@ -6,7 +6,7 @@
   <insert id="insert" parameterType="Node">
     INSERT INTO NodeTbl
     VALUES (
-     null,#{Address},#{x},#{y},#{m_id},0,#{kind},0,#{A_DATE}
+     null,#{Address},#{x},#{y},#{m_id},0,#{kind},0,#{A_DATE}, #{A_LOCALDATE}
     )
   </insert>
   
@@ -26,5 +26,17 @@ FROM NodeTbl ORDER BY distance ASC;
   
     <select id="selectRideList" resultType="Node">
     select * FROM NodeTbl WHERE ride=#{ride}
+  </select>
+  
+  <select id="selectLocaldate" resultType="Node">
+    <![CDATA[
+    select * from nodetbl WHERE A_DATE LIKE CONCAT('%', #{A_DATE}, '%');
+  ]]>
+  </select>
+  
+  <select id="selectDriverList" resultType="DriverDto">
+      <![CDATA[
+    select * from drivertbl WHERE DR_AREA LIKE CONCAT('%', #{DR_AREA}, '%');
+  ]]>
   </select>
 </mapper>

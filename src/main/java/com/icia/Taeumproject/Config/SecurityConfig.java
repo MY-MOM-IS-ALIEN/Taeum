@@ -92,8 +92,8 @@ public class SecurityConfig {
       .requestMatchers("/mainCenter").permitAll()
       .requestMatchers("/selectNodeList").permitAll()
       .requestMatchers("/selectRideList").permitAll()
-    
-      
+      .requestMatchers("/selectLocaldate").permitAll()
+      .requestMatchers("/selectedLocal").permitAll()
       
       
       

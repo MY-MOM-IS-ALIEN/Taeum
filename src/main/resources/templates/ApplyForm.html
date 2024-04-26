@@ -25,7 +25,8 @@
 <body>
 	<section>
 		<div class="content">
-			<form th:action="@{/ApplyProc}" class="write-form" method="post" enctype="multipart/form-data">
+			<form th:action="@{/ApplyProc}" class="write-form" method="post"
+				enctype="multipart/form-data">
 				<h2 class="login-header">서비스 신청하기</h2>
 				<!-- 작성자(로그인 한 id), 제목, 내용, 파일  -->
 				<div class="apply-content">
@@ -98,7 +99,7 @@
 				<!-- 버튼 영역 -->
 				<div class="btn-area">
 					<button class="btn-write" onclick="return checkAddresses()">신청하기</button>
-					 <a class="btn-write" th:href="@{/}">뒤로가기</a>
+					<input type="button" class="btn-write" value="뒤로가기" id="backbtn">
 				</div>
 			</form>
 		</div>
@@ -167,6 +168,7 @@
             }
         }).open();
     }
+    
     function checkAddresses() {
         var startAddress = document.getElementById("A_STARTDADRESS").value;
         var endAddress = document.getElementById("A_ENDDADRESS").value;

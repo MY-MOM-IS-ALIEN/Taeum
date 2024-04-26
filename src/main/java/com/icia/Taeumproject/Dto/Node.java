@@ -20,5 +20,6 @@ public class Node {
 	private int ride;
 	private int kind;
 	private int cycle;
-	private Timestamp A_DATE;
+	private LocalDateTime A_DATE;
+	private Timestamp A_LOCALDATE;
 }

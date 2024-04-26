@@ -10,6 +10,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.icia.Taeumproject.Dao.MainDao;
 import com.icia.Taeumproject.Dto.ApplyDto;
+import com.icia.Taeumproject.Dto.DriverDto;
 import com.icia.Taeumproject.Dto.Node;
 import com.icia.Taeumproject.util.KakaoApiUtil.Point;
 
@@ -26,7 +27,7 @@ public class MainService {
     mDao.updateDelivery(ride, nodeId, cycle);
   }
   
-  public void insertServ(int m_id,String fromAddress,Point startPoint,int sOrE,RedirectAttributes rttr, Timestamp A_DATE) {
+  public void insertServ(int m_id,String fromAddress,Point startPoint,int sOrE,RedirectAttributes rttr, Timestamp A_DATE, LocalDateTime A_DateTime) {
       log.info("insertServ()");
       Node node = new Node();
       
@@ -37,7 +38,8 @@ public class MainService {
       node.setY(startPoint.getY());
       node.setAddress(fromAddress);
       node.setKind(sOrE);
-      node.setA_DATE(A_DATE);
+      node.setA_DATE(A_DateTime);
+      node.setA_LOCALDATE(A_DATE);
       
       mDao.insert(node);
       
@@ -83,6 +85,16 @@ public class MainService {
     
     return rideNodeList;
     
+  }
+
+  public List<Node> selectLocaldate(String date) {
+   List<Node> selectLocaldate = mDao.selectLocaldate(date);
+    return selectLocaldate;
+  }
+
+  public List<DriverDto> selectDriverList(String local) {
+    List<DriverDto> selectDriverList = mDao.selectDriverList(local);
+    return selectDriverList;
   }
 
 
