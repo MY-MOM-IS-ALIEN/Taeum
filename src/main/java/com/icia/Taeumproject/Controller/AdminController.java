@@ -43,6 +43,7 @@ import com.icia.Taeumproject.vrp.VrpResult;
 import com.icia.Taeumproject.vrp.VrpService;
 import com.icia.Taeumproject.vrp.VrpVehicleRoute;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -72,6 +73,7 @@ public class AdminController {
     String currentDateStr = currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     // 현재 날짜를 사용하여 데이터 조회
     List<Node> nodeList = maServ.selectLocaldate(currentDateStr);
+    log.info(currentDateStr);
 		model.addAttribute("nodeList", nodeList);
 		 return "adminMain";
 		
@@ -80,6 +82,9 @@ public class AdminController {
 @GetMapping("adminDriverList")
   public String adminDriverList() {
   log.info("adminDriverList()");
+  
+  
+  
   return "adminDriverList";
 }
 	  
@@ -142,34 +147,20 @@ public class AdminController {
 	    return "redirect:/main";
 	  }
 	  
-//	  @GetMapping("insert")
-//	  public String insert() {
-//	    log.info("insertController()");
-//	    return "insert";
-//	  }
-//
-//	  @PostMapping("insertProc") // url : /map/address/point
-//	  public String getMapAddressPoint(@RequestParam(required = false) String fromAddress,
-//	      @RequestParam(required = false) int kind, Model model, RedirectAttributes rttr)
-//	      throws IOException, InterruptedException {
-//	    String view = null;
-//	    if (fromAddress != null && !fromAddress.isEmpty()) {
-//	      Point startPoint = KakaoApiUtil.getPointByAddress(fromAddress);
-//
-//	      if (startPoint != null) {
-//	        view  maServ.insertServ(fromAddress, startPoint, kind, rttr);
-//	      }
-//	    }
-//
-//	    return view;
-//	  }
 
-	//  @GetMapping("nodeList")
-	//  public String nodeList(Model model) {
-//	    log.info("nodeList");
-	//    
-	//    
-	//  }
+	  @GetMapping("nodeSelection")
+
+	  public void nodeSelection(String drID, Model model) {
+	    log.info("nodeSelection 페이지()");
+	    System.out.println("nodeSelectionnodeSelectionnodeSelectionnodeSelection==============" + drID);
+	      
+	   model.addAttribute("drID", drID);
+	    
+	  
+	   
+	  }
+	  
+	  
 
 	  @PostMapping("/vrp")
 	  @ResponseBody

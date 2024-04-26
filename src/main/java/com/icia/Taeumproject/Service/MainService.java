@@ -27,19 +27,21 @@ public class MainService {
     mDao.updateDelivery(ride, nodeId, cycle);
   }
   
-  public void insertServ(int m_id,String fromAddress,Point startPoint,int sOrE,RedirectAttributes rttr, Timestamp A_DATE, LocalDateTime A_DateTime) {
+  public void insertServ(int m_id,String fromAddress,Point startPoint,int sOrE,RedirectAttributes rttr, LocalDateTime A_DATE, Timestamp A_DateTime) {
       log.info("insertServ()");
       Node node = new Node();
       
+            
       
-      
+              String aDateAsString = A_DATE.toString();
+              
       node.setM_id(m_id);
       node.setX(startPoint.getX());
       node.setY(startPoint.getY());
       node.setAddress(fromAddress);
       node.setKind(sOrE);
-      node.setA_DATE(A_DateTime);
-      node.setA_LOCALDATE(A_DATE);
+      node.setA_DATE(aDateAsString);
+      node.setA_LOCALDATE(A_DateTime);
       
       mDao.insert(node);
       
@@ -92,6 +94,7 @@ public class MainService {
     return selectLocaldate;
   }
 
+  
   public List<DriverDto> selectDriverList(String local) {
     List<DriverDto> selectDriverList = mDao.selectDriverList(local);
     return selectDriverList;

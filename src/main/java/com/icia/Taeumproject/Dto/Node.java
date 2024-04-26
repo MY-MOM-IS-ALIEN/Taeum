@@ -3,6 +3,8 @@ package com.icia.Taeumproject.Dto;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -11,6 +13,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class Node {
+
 	private Integer node_id;
 	private Double x;
 	private Double y;
@@ -20,6 +23,6 @@ public class Node {
 	private int ride;
 	private int kind;
 	private int cycle;
-	private LocalDateTime A_DATE;
+	private String A_DATE;
 	private Timestamp A_LOCALDATE;
 }

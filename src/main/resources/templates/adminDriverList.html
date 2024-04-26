@@ -33,6 +33,18 @@
         background-color: #3F7EFC;
         border-color: #3F7EFC; /* 선택적으로 테두리 색상을 지정할 수 있습니다. */
     }
+    
+    .circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+  }
+
+  .green { background-color: green; }
+  .orange { background-color: orange; }
+  .red { background-color: red; }
 </style>
  <th:block th:insert="~{fragments :: header}" />
 
@@ -79,6 +91,7 @@
             
             <!--  -->
         </div>
+        <div style="width: 100%; height: 100%;"> 
        <div style="display: flex; align-items: flex-start; margin-top: 3%; margin-left: 3%; width: 100%; height: 50%;" >
     <img src="images/nullprofile.png" style="width: 300px; height: auto;">
     <div style="margin-left: 3%;"> <!-- 여백 조정 -->
@@ -93,13 +106,59 @@
                 <li id="driverLocal">주 운행지 : </li>
                 <br>
                 <li id="driverCarnum">차량 번호 : </li>
+                <br>
+                <li style="display:none;" id="driverId"></li>
             </ul>
-          <div></div>
+          
+          
     </div>
 </div>
+    <div>
+      <h2>운행 리스트</h2>
+      <table border="1" id="myTable">
+      <tr>
+       <td></td>
+       <td>배차 선정일</td>
+       <td>선정 시간</td>
+       <td>배차 상태</td>
+      </tr>
+      
+      </table>
+      
+    </div>
+    </div>
     </main>
 
-    <script>
+    <script th:inline="javascript">
+    
+    $(document).on('click', '.orange', function(event){
+        var drIDValue = $("#driverId").text();
+        console.log("drIDValue = ", drIDValue);
+        $.ajax({
+            type: "GET", // 또는 "GET"
+            url: "/nodeSelection", // 컨트롤러의 URL을 여기에 입력하세요.
+            data: { drID: drIDValue }, // dr_ID1의 값을 drID라는 이름으로 전달합니다.
+            success: function(response){
+                // 성공적으로 요청이 완료되었을 때 실행할 코드를 여기에 작성하세요.
+                console.log(drIDValue);
+               if(drIDValue == ""){
+            	   alert("기사 선택을 먼저 해주세요");
+               }else{
+            	   window.location.href = "nodeSelection";   
+               }
+               
+              
+                
+            },
+            error: function(xhr, status, error){
+                // 요청이 실패했을 때 실행할 코드를 여기에 작성하세요.
+                console.error(xhr.responseText); // 오류 메시지를 콘솔에 출력하거나 다른 작업을 수행합니다.
+            }
+        });
+    });
+    
+    
+    
         $(document).ready(function() {
             $('#local').change(function() {
                 var selectedValue = $(this).val(); // 선택된 옵션의 값
@@ -138,25 +197,119 @@
                 driverItem.append('<div class="d-flex w-100 align-items-center justify-content-start mb-1"></div>');
                 driverItem.append('<div class="ma-1"></div>');
                 driverItem.append('<div class="ma-2"></div>');
-                driverItem.find('.d-flex').append('<span type="text"> 이름 : '+ driver.dr_NAME +'</span>');
-                driverItem.find('.d-flex').append('<input type="hidden" id="dr_ID" value="${driver.dr_ID}">');
+                driverItem.find('.d-flex').append('<span type="text"> 이름 : '+ driver.m_NAME +'</span>');
+                driverItem.find('.d-flex').append('<input type="hidden" id="dr_ID" value="'+driver.dr_ID+'">');
                 console.log("driver.dr_ID = ", driver.dr_ID);
-                driverItem.find('.ma-1').append('<span type="text"> 주소 : '+ driver.dr_AREA +'</span>');
+                driverItem.find('.ma-1').append('<span type="text"> 운행구역 : '+ driver.dr_AREA +'</span>');
                 driverItem.find('.ma-2').append('<span type="text"> 차량번호 : '+ driver.dr_CARNUM +'</span>');
                 
                 // 링크를 클릭했을 때 이벤트 처리
-                driverItem.find('a').click(function() {
-                    // 해당 링크의 부모 요소인 list-group-item에서 input hidden 요소를 찾아서 해당 driver ID를 가져옴
-                    var driverID = $(this).parent().find('#dr_ID').val();
-                    console.log("Clicked driver ID:", driverID);
-                    
-                    // 여기에 driver ID를 이용하여 해당하는 정보를 가져와서 표시하는 코드를 작성
-                    // 예를 들어, Ajax 요청을 보내거나 저장된 데이터에서 해당 ID의 정보를 찾는 등의 작업을 수행
-                    // 그 후에 해당 정보를 화면에 출력하면 됨
-                });
+                // 클릭 이벤트 핸들러를 설정하는 코드
                 $('#driverList').append(driverItem);
             });
+    $(document).on('click', '#driverList a', function(event) {
+        event.preventDefault(); // 기본 동작 방지
+        var driverID = parseInt($(this).find('#dr_ID').val()); // 드라이버 ID 가져오기
+        console.log("Clicked driver ID:", driverID);
+        
+        // 선택된 드라이버의 정보를 가져와서 화면에 출력
+        var selectedDriver = driverData.find(function(driver) {
+            return parseInt(driver.dr_ID) === parseInt(driverID);
+        });
+        if (selectedDriver) {
+            displayDriverInfo(selectedDriver);
+        } else {
+            console.error('드라이버 정보를 찾을 수 없습니다.');
         }
+    });
+        }
+     // 드라이버 정보를 화면에 출력하는 함수
+        function displayDriverInfo(driverInfo) {
+            $('#driverName').text('이름: ' + driverInfo.m_NAME);
+            $('#driverPhone').text('전화번호: ' + driverInfo.m_PHONE);
+            $('#driverAdrees').text('주소: ' + driverInfo.dr_ADDRESS);
+            $('#driverLocal').text('주 운행지: ' + driverInfo.dr_AREA);
+            $('#driverCarnum').text('차량 번호: ' + driverInfo.dr_CARNUM);
+            $('#driverId').text(driverInfo.dr_ID);
+        }
+     //2024-04-26 진행중-------------------------------------------------------------------------
+        // 리스트 예시
+        
+        
+        var dataList = [
+        	{ date: "2024-04-26", time: "10:00", status: "운행중" },
+            { date: "2024-04-27", time: "11:00", status: "대기중" },
+            { date: "2024-04-28", time: "12:00", status: "거절" }
+        ];
+        
+        // 테이블에 데이터 추가
+        var table = document.getElementById("myTable");
+
+        dataList.forEach(function(data, index) {
+          var row = table.insertRow();
+          var cell0 = row.insertCell(0); // 순서 번호를 표시하는 열
+          var cell1 = row.insertCell(1);
+          var cell2 = row.insertCell(2);
+          var cell3 = row.insertCell(3);
+          
+          
+          cell0.innerHTML = index + 1; // 1부터 시작하도록 인덱스에 1을 더합니다.
+          cell1.innerHTML = data.date;
+          cell2.innerHTML = data.time;
+          
+       // 상태에 따라 원의 색상을 결정합니다.
+          var circleClass = "";
+          switch(data.status) {
+            case "운행중":
+              circleClass = "green";
+              break;
+            case "대기중":
+              circleClass = "orange";
+              break;
+            case "거절":
+              circleClass = "red";
+              break;
+          }
+          cell3.innerHTML =  data.status + '<div class="circle ' + circleClass + '"></div>' ;
+        });
+        
+        
+      
+        
+     /* // 현재 날짜와 시간을 저장할 변수 선언
+        var currentDateTime = null;
+        // yy-MM-dd 형식의 날짜를 저장할 변수 선언
+        var currentDate = null;
+        // hh:mm:ss 형식의 시간을 저장할 변수 선언
+        var currentTime = null;
+        var status = null;
+        
+        var dataList = [];
+        // 버튼 클릭 시 현재 날짜와 시간을 저장하는 함수
+        function saveCurrentDateTime() {
+          // 현재 날짜와 시간을 가져와 변수에 저장
+          var now = new Date();
+          // 현재 날짜와 시간을 문자열로 변환하여 저장
+          currentDateTime = now.toLocaleString();
+          console.log("currentDateTime = " + currentDateTime);
+
+          // yy-MM-dd 형식의 날짜를 저장
+          currentDate = now.getFullYear().toString().substring(2) + '-' + addZero(now.getMonth() + 1) + '-' + addZero(now.getDate());
+          console.log("currentDate = " + currentDate);
+          // hh:mm:ss 형식의 시간을 저장
+          currentTime = addZero(now.getHours()) + ':' + addZero(now.getMinutes()) + ':' + addZero(now.getSeconds());
+          console.log("currentTime = " + currentTime);
+          
+          status = "운행중";
+          dataList.push({ date: currentDate, time: currentTime });
+          dataList.push({ status: status})
+          alert("현재 날짜와 시간이 저장되었습니다:\n" + currentDateTime + "\n날짜: " + currentDate + "\n시간: " + currentTime);
+        }
+
+        // 숫자를 두 자리수로 변환하는 함수
+        function addZero(num) {
+          return (num < 10 ? '0' : '') + num;
+        } */
     </script>
 </body>
 </html>
