@@ -1,6 +1,8 @@
 package com.icia.Taeumproject.Controller;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.icia.Taeumproject.Dto.DriverDto;
 import com.icia.Taeumproject.Dto.Node;
 import com.icia.Taeumproject.Dto.NodeCost;
 import com.icia.Taeumproject.Dto.TourActivity;
@@ -63,13 +66,22 @@ public class AdminController {
 	@GetMapping("adminMain")
 	public String adminPage(Model model) {
 		log.info("adminPage()");
-		List<Node> nodeList = maServ.selectList();
+		 // 현재 날짜를 가져오기
+    LocalDate currentDate = LocalDate.now();
+    // 날짜를 yyyy-MM-dd 형식의 문자열로 변환
+    String currentDateStr = currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    // 현재 날짜를 사용하여 데이터 조회
+    List<Node> nodeList = maServ.selectLocaldate(currentDateStr);
 		model.addAttribute("nodeList", nodeList);
 		 return "adminMain";
 		
 	}
 	
-
+@GetMapping("adminDriverList")
+  public String adminDriverList() {
+  log.info("adminDriverList()");
+  return "adminDriverList";
+}
 	  
 	  @GetMapping("/mainCenter")
 	  public String test(Model model) {
@@ -379,14 +391,14 @@ public class AdminController {
 	    return nodeCost;
 	  }
 
-	  @GetMapping("main")
-	  public String main(Model model) {
-	 // 카카오api로 요청해서 약국정보 가져오기
-	    List<Node> nodeList = maServ.selectList();
-	    System.out.println(nodeList);
-	    model.addAttribute("nodeList", nodeList);
-	    return "main";
-	  }
+//	  @GetMapping("main")
+//	  public String main(Model model) {
+//	 // 카카오api로 요청해서 약국정보 가져오기
+//	    List<Node> nodeList = maServ.selectList();
+//	    System.out.println(nodeList);
+//	    model.addAttribute("nodeList", nodeList);
+//	    return "main";
+//	  }
 
 	  @GetMapping("/ride")
 	  @ResponseBody
@@ -488,4 +500,25 @@ public class AdminController {
 	    System.out.println("nodeList 마지막 " + nodeList);
 	    return jsonResult;
 	  }
+	  
+	  
+	  @PostMapping("selectLocaldate")
+	  @ResponseBody
+	  public List<Node> selectLocaldate(String date) {
+	    log.info("selectLocaldate()");
+	  List<Node> selectLocaldate =  maServ.selectLocaldate(date);
+	    return selectLocaldate;
+	  }
+	  
+    
+      @PostMapping("selectedLocal")
+      @ResponseBody 
+      public List<DriverDto> selectedLocal(String selectedValue, Model model) {
+      List<DriverDto> driverDtoList = maServ.selectDriverList(selectedValue);
+      System.out.println("local = " + selectedValue);
+      model.addAttribute("driverDtoList", driverDtoList);
+      return driverDtoList;
+          }
+     
+	  
 }
