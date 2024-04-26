@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>태움</title>
+    <script src="script.js"></script>
+    <style> /* Your CSS styles here */ </style>
+</head>
+<body>
+  <div th:fragment="header" class="top-bar">
+    <div class="content">
+    <!-- role에따라 로고클릭시 알맞은 메인으로 리다이렉트 -->
+			<th:block sec:authorize="hasRole('USER') or isAnonymous()">
+				<a href="/"> <img
+					src="images/taeum-high-resolution-logo-transparent.png" alt="로고"
+					class="top-left logo">
+				</a>
+			</th:block>
+
+			<th:block sec:authorize="hasRole('ADMIN')">
+				<a href="adminMain"> <img
+					src="images/taeum-high-resolution-logo-transparent.png" alt="로고"
+					class="top-left logo">
+				</a>
+			</th:block>
+			<th:block sec:authorize="hasRole('DRIVER')">
+				<a href="driverMain"> <img
+					src="images/taeum-high-resolution-logo-transparent.png" alt="로고"
+					class="top-left logo">
+				</a>
+			</th:block>
+			<h2 class="top-left top-home">
+				<th:block sec:authorize="hasRole('USER') or isAnonymous()">
+					<a href="/">태움</a>
+				</th:block>
+
+				<th:block sec:authorize="hasRole('ADMIN')">
+					<a href="/adminMain">태움</a>
+				</th:block>
+				<th:block sec:authorize="hasRole('DRIVER')">
+					<a href="/driverMain">태움</a>
+				</th:block>
+			</h2>
+
+			<nav class="top-right">
+        <ul>
+          <!-- 로그인되지 않은 사용자에게만 표시 -->
+          <li sec:authorize="isAnonymous()">
+            <a href="/loginForm">Login</a>
+          </li>
+          <li sec:authorize="isAnonymous()">
+            <a href="/joinForm">Join</a>
+          </li>
+          <!-- 로그인된 사용자에게만 표시 -->
+          <li sec:authorize="isAuthenticated()">
+            <a th:href="@{/logout}">Logout</a>
+          </li>
+          <li id="applyLink" sec:authorize="hasRole('USER')">
+           <a th:href="@{/ApplyForm}">Apply</a>
+          </li>
+          <!-- 로그인 및 관리자일때만 -->
+          
+          <!-- 세션에 저장된 사용자 이름 표시 -->
+          <li sec:authorize="isAuthenticated()">
+            <span th:text="${#authentication.principal.M_NAME}+ '님 환영합니다'"  ></span>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div class="body-top-bar-divider"></div>
+  </div>
+
+  <main></main>
+
+  <div th:fragment="footer" class="footer-bar">
+    <div class="content">
+      <div class="fcontents">
+        <span class="footer-txt">&copy; Taeum 2024</span>
+      </div>
+    </div>
+  </div>
+<script th:inline="javascript">
+//Message handling
+const msg = null;
+if (msg != null) {
+    alert(msg);
+});
+</script>
+  
+</body>
+</html>
