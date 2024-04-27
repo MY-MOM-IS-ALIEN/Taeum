@@ -53,11 +53,10 @@
 	<!-- standBy 관련 쿼리 -->
 	<select id="getPassengerList" parameterType="Integer"
 		resultType="ApplyDto">
-		SELECT at.*
-		FROM applytbl at
-		INNER JOIN membertbl mt ON
-		at.M_ID = mt.M_ID
-		WHERE mt.M_ID = #{m_id}
+		SELECT nt.*
+		FROM nodetbl nt, membertbl mt
+		WHERE nt.M_ID = mt.M_ID
+		AND mt.M_ID = #{m_id}
 	</select>
 
 	<select id="getInfo" parameterType="Integer"
@@ -79,12 +78,12 @@
 
 
 	<!-- getDriverImage 관련 쿼리 -->
-	<!-- <select id="getDriverImage" parameterType="String"
-		resultType="String">
-		SELECT DR_IMAGE
-		FROM drivertbl
-		WHERE username = #{username}
-	</select> -->
+ 	 <select id="getDriverImage" parameterType="Integer" 
+ 		resultType="String"> 
+ 		SELECT DR_IMAGE 
+ 		FROM drivertbl 
+ 		WHERE M_ID = #{M_ID} 
+ 	</select> 
 
 	<insert id="insertDriver" parameterType="DriverDto">
     INSERT INTO drivertbl

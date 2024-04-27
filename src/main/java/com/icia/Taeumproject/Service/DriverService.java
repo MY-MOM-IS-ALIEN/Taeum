@@ -78,13 +78,17 @@ public class DriverService {
 		return "routeCheck";
 	}
 
-//	public String getDriverImage(String email) {
-//		String driverImage = drDao.getDriverImage(email);
-//
-//		return driverImage;
-//	}
+	public String getDriverImage(int M_ID, Model model) {
+		String driverImage = drDao.getDriverImage(M_ID);
+		model.addAttribute("driverImage", driverImage);
+		
+		return driverImage;
+	}
 	
-	public String insertDriver(List<MultipartFile> files, HttpSession session ,DriverDto driver, RedirectAttributes rttr) {
+	public String insertDriver(List<MultipartFile> files,
+									HttpSession session ,
+									DriverDto driver, 
+									RedirectAttributes rttr) {
 		log.info("insertDriver()");
 		
 		TransactionStatus status = manager.getTransaction(definition);
@@ -94,8 +98,8 @@ public class DriverService {
 		
 		try {
 			//정보글 저장
-			System.out.println(driver);
 			drDao.insertDriver(driver);
+			log.info("driver: {}", driver);
 			
 			int mid = driver.getM_ID();
 			mDao.updateRole(mid);
@@ -144,11 +148,11 @@ public class DriverService {
 			String oriname = mf.getOriginalFilename();
 
 			DriverFileDto dfd = new DriverFileDto();
-			dfd.setDf_oriname(oriname);
+			dfd.setDp_oriname(oriname);
 			dfd.setM_ID(M_ID);
 			String sysname = System.currentTimeMillis() + oriname.substring(oriname.lastIndexOf("."));
 			//확장자 : 파일을 구분하기 위한 식별 체계. (예. xxxx.jpg)
-			dfd.setDf_sysname(sysname);
+			dfd.setDp_sysname(sysname);
 
 			//파일 저장
 			File file = new File(realPath + sysname);

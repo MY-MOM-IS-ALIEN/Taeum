@@ -43,14 +43,14 @@ public class HomeController {
     	  return "mainOfmain";
       }
       
-     @GetMapping("ApplyForm")
-     public String ApplyForm() {
+     @GetMapping("applyForm")
+     public String applyForm() {
        
-         return "ApplyForm";
+         return "applyForm";
      }
-         @PostMapping("ApplyProc")
-         public String ApplyProc(ApplyDto apply, RedirectAttributes rttr) {
-             log.info("ApplyProc");
+         @PostMapping("applyProc")
+         public String applyProc(ApplyDto apply, RedirectAttributes rttr) {
+             log.info("applyProc");
 
              // 현재 로그인한 사용자 정보 가져오기
              Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

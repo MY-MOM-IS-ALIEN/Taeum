@@ -98,9 +98,11 @@ public class ApplyService {
           if(apply.getA_STARTADRESS() != null && !apply.getA_STARTADRESS().isEmpty()) {
         	  Point startPoint = KakaoApiUtil.getPointByAddress(apply.getA_STARTADRESS());
         	  
+        	  String aDateAsString = apply.getA_DATE().toString();
+        	  
         	  if(startPoint != null) {
         		  int kind  = 1;
-        		  maServ.insertServ(apply.getM_ID(),apply.getA_STARTADRESS(), startPoint, kind, rttr, apply.getA_LOCALDATE(), apply.getA_DATE());
+        		  maServ.insertServ(apply.getM_ID(),apply.getA_STARTADRESS(), startPoint, kind, rttr, apply.getA_DATE() , apply.getA_LOCALDATE());
         	  }
           } 
           if(apply.getA_ENDADRESS() != null && !apply.getA_ENDADRESS().isEmpty()) {

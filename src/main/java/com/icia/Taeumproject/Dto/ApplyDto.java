@@ -4,12 +4,15 @@ package com.icia.Taeumproject.Dto;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class ApplyDto {
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
   private int M_ID;
   private String M_NAME;
   private String M_PHONE;
