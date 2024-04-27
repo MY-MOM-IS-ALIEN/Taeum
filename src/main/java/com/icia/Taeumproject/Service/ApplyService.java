@@ -100,7 +100,7 @@ public class ApplyService {
         	  
         	  if(startPoint != null) {
         		  int kind  = 1;
-        		  maServ.insertServ(apply.getM_ID(),apply.getA_STARTADRESS(), startPoint, kind, rttr, apply.getA_LOCALDATE(), apply.getA_DATE());
+        		  maServ.insertServ(apply.getM_ID(),apply.getA_STARTADRESS(), startPoint, kind, rttr, apply.getA_DATE(), apply.getA_LOCALDATE());
         	  }
           } 
           if(apply.getA_ENDADRESS() != null && !apply.getA_ENDADRESS().isEmpty()) {

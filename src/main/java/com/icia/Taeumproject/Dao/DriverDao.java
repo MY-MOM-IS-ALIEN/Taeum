@@ -21,7 +21,7 @@ public interface DriverDao {
 
 	List<ApplyDto> getRouteList(int m_id);
 
-//	String getDriverImage(String email);
+	String getDriverImage(int M_ID);
 
 	DriverDto getDriverInfo(int m_id);
 

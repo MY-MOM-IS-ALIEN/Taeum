@@ -66,15 +66,15 @@ public class AdminController {
 	@GetMapping("adminMain")
 	public String adminPage(Model model) {
 		log.info("adminPage()");
-		 // 현재 날짜를 가져오기
-    LocalDate currentDate = LocalDate.now();
-    // 날짜를 yyyy-MM-dd 형식의 문자열로 변환
-    String currentDateStr = currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-    // 현재 날짜를 사용하여 데이터 조회
-    List<Node> nodeList = maServ.selectLocaldate(currentDateStr);
+		// 현재 날짜를 가져오기
+		LocalDate currentDate = LocalDate.now();
+		// 날짜를 yyyy-MM-dd 형식의 문자열로 변환
+		String currentDateStr = currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		// 현재 날짜를 사용하여 데이터 조회
+		List<Node> nodeList = maServ.selectLocaldate(currentDateStr);
 		model.addAttribute("nodeList", nodeList);
-		 return "adminMain";
-		
+		return "adminMain";
+
 	}
 	
 @GetMapping("adminDriverList")

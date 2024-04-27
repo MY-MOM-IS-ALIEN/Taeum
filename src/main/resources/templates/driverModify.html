@@ -23,7 +23,7 @@
         <fieldset class="profile">
             <div class="driverInfo-1">
                 <div class="driver-image">
-                    <img alt="프로필 이미지" src="">
+					<span id="userImage"></span>                
                 </div>
                 <p>
                     <span th:text="${driver.M_NAME}"></span>
@@ -86,5 +86,25 @@
     $("#moveToStandBy").click(function(){
         location.href = `/standBy`;
     });
+    
+    
+    var driverM_ID = "${driverImage.M_ID}";
+	var userImage = document.getElementById("userImage");
+	$.ajax({
+		url : '<%=request.getContextPath()%>/getDriverImage',
+		type : 'post', 
+		data : {
+			m_id : driverM_ID
+		},
+		success : function(profileAjax) { 
+			console.log(profileAjax);
+			var imagePath = '<%=request.getContextPath()%>/resources/images/' + profileAjax;
+			userImage.innerHTML = '<img src="' + imagePath + '">';
+		},
+		error : function() {
+			alert("에러입니다");
+		}
+	});
+	
 </script>
 </html>
