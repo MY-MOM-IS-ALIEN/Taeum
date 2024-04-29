@@ -1,90 +1,76 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Taeum</title>
-    <script src="js/jquery-3.7.1.min.js"></script>
-    <link rel="stylesheet" href="css/style.css">
-    <script th:inline="javascript">
-        $(function () {
-            let m = /*[[${msg}]]*/ null;
-            if (m != null) {
-                alert(m);
-            }
-        });
-    </script>
-    <th:block th:insert="~{fragments :: header}" />
+<title>Taeum</title>
+<link rel="shortcut icon" href="#">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+<script
+  src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script
+  src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+
+<script th:inline="javascript">
+  $(document).ready(function() {
+    // bxSlider configuration
+    $(".slider").bxSlider({
+      auto : true, // Auto slide
+      slideWidth : 600
+    // Slide width
+    });
+
+    // Message handling
+    const msg = null;
+    if (msg != null) {
+      alert(message);
+    }
+  });
+  
+  function redirectToDriverModify() {
+    window.location.href = '/driverModify';
+  }
+  function redirectToDriverUpdate() {
+    window.location.href = '/driverUpdate';
+  }
+  
+  $(function() {
+    const msg = /*[[${msg}]]*/null;
+    if (msg != null) {
+      alert(msg);
+    }
+  });
+</script>
+
+<th:block th:insert="~{fragments::header}" />
 </head>
 <body>
-<section>
-    <div class="box-layout">
-        <fieldset class="profile">
-            <div class="driverInfo-1">
-                <div class="driver-image">
-                    <img alt="프로필 이미지" src="">
-                </div>
-                <p>
-                    <span th:text="${driver.M_NAME}"></span>
-                </p>
-            </div>
-            <div class="driverInfo">
-                <p>
-                    <span th:text="${driver.M_PHONE}"></span>
-                </p>
-                <p>
-                    <span th:text="${driver.DR_CARNUM}"></span>
-                </p>
-                <p>
-                    <span th:text="${driver.DR_ADDRESS}"></span>
-                </p>
-                <button>운행시작</button>
-            </div>
-        </fieldset>
-        <fieldset class="raceInfo">
-            <div class="traffic-area">
-                <p>
-                    <span class="span-1" th:text="${todayTraffic}"></span> <br>
-                    오늘 운행
-                </p>
-
-                <p>
-                    <span class="span-1" th:text="${monthTraffic}"></span> <br>
-                    이번 달 운행
-                </p>
-
-                <p>
-                    <span class="span-1" th:text="${totalTraffic}"></span> <br> 총
-                    운행
-                </p>
-            </div>
-            <input type="button" id="moveToStandBy" value="운행정보">
-        </fieldset>
+  <section>
+    <div class="content-home">
+      <div class="slider">
+        <div>
+          <img src="images/markus-winkler-3vlGNkDep4E-unsplash.jpg">
+        </div>
+        <div>
+          <img src="images/martin-kallur-ig-mkallur-l4m_o4aFOn8-unsplash.jpg">
+        </div>
+        <div>
+          <img src="images/mealpro-uFIfEb-fPA4-unsplash.jpg">
+        </div>
+        <div>
+          <img src="images/trinity-nguyen-dG0ZnlqKXEc-unsplash.jpg">
+        </div>
+      </div>
     </div>
-</section>
+    <div class="buttons-container">
+      <th:block sec:authorize="hasRole('DRIVER')">
+        <button onclick="redirectToDriverModify()">운행정보</button>
+        <button onclick="redirectToDriverUpdate()">정보수정</button>
+        
+      </th:block>
+    </div>
+  </section>
+  <th:block th:insert="~{fragments::footer}" />
 </body>
-<script th:inline="javascript">
-    // 파일 제목 처리
-    $("#file").on("change", function () {
-        let files = $("#file")[0].files;
-        console.log(files);
-
-        let fileName = ""; // 출력할 문장 저장 변수
-
-        if (files.length > 1) {
-            fileName = `${files[0].name} 외 ${files.length - 1}개`;
-        } else if (files.length === 1) {
-            fileName = files[0].name;
-        } else {
-            fileName = "파일선택";
-        }
-        $(".upload-name").val(fileName);
-    });
-
-
-    $("#moveToStandBy").click(function(){
-        location.href = `/standBy`;
-    });
-</script>
 </html>

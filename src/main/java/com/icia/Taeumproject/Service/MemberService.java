@@ -143,5 +143,12 @@ public class MemberService {
         return view;
       }
 
+  	public void DriveMemberUpdate(MemberDto member) {
+  		log.info("DriveMemberUpdate()");
+  		
+  		mDao.updateDriveMemberUpdate(member);  		
+}
 
+  
+  
 }

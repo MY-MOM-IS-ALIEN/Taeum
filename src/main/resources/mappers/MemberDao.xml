@@ -37,4 +37,8 @@
     update membertbl set role='DRIVER' where M_ID=#{mid}
   </update>
   
+  <update id="updateDriveMemberUpdate" parameterType="MemberDto">
+    update membertbl set M_NAME=#{M_NAME},M_PHONE=#{M_PHONE} WHERE M_ID=#{M_ID}
+  </update>
+  
 </mapper>

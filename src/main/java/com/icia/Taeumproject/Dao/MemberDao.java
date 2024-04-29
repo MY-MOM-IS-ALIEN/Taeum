@@ -28,4 +28,6 @@ public interface MemberDao {
 
   void updateRole(int mid);
 
+void updateDriveMemberUpdate(MemberDto member);
+
 }

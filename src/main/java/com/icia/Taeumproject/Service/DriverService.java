@@ -17,7 +17,6 @@ import com.icia.Taeumproject.Dao.MemberDao;
 import com.icia.Taeumproject.Dto.ApplyDto;
 import com.icia.Taeumproject.Dto.DriverDto;
 import com.icia.Taeumproject.Dto.DriverFileDto;
-import com.icia.Taeumproject.Dto.MemberDto;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +50,9 @@ public class DriverService {
 		// 총 운행 건수 가져오기
 		int totalTraffic = drDao.getTotalTraffic(m_id);
 		model.addAttribute("totalTraffic", totalTraffic);
-
+		
+		String driverImage = drDao.getDriverImage(m_id);
+		model.addAttribute("driverImage", driverImage);
 	}
 
 	public void getPassengerInfo(int m_id, String username, Model model) {
@@ -60,7 +61,7 @@ public class DriverService {
 		DriverDto mdto = drDao.getInfo(m_id);
 		model.addAttribute("driverName", mdto);
 	
-		List<ApplyDto> applyList = drDao.getPassengerList(m_id);
+		List<DriverDto> applyList = drDao.getPassengerList(m_id);
 		model.addAttribute("applyList", applyList);
 		log.info("applyList: {}", applyList);
 		
@@ -78,13 +79,21 @@ public class DriverService {
 		return "routeCheck";
 	}
 
-//	public String getDriverImage(String email) {
-//		String driverImage = drDao.getDriverImage(email);
-//
-//		return driverImage;
-//	}
+	public String getDriverImage(int M_ID, Model model) {
+		String driverImage = drDao.getDriverImage(M_ID);
+		model.addAttribute("driverImage", driverImage);
+		
+		log.info("driverImage: {}", driverImage);
+		
+		return driverImage;
+	}
 	
-	public String insertDriver(List<MultipartFile> files, HttpSession session ,DriverDto driver, RedirectAttributes rttr) {
+
+	
+	public String insertDriver(List<MultipartFile> files,
+									HttpSession session ,
+									DriverDto driver, 
+									RedirectAttributes rttr) {
 		log.info("insertDriver()");
 		
 		TransactionStatus status = manager.getTransaction(definition);
@@ -94,8 +103,8 @@ public class DriverService {
 		
 		try {
 			//정보글 저장
-			System.out.println(driver);
 			drDao.insertDriver(driver);
+			log.info("driver: {}", driver);
 			
 			int mid = driver.getM_ID();
 			mDao.updateRole(mid);
@@ -108,7 +117,7 @@ public class DriverService {
 			//commit 수행
 			manager.commit(status);
 			
-			view = "redirect:driverMain";
+			view = "redirect:driverModify";
 			msg = "저장 성공";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -144,11 +153,11 @@ public class DriverService {
 			String oriname = mf.getOriginalFilename();
 
 			DriverFileDto dfd = new DriverFileDto();
-			dfd.setDf_oriname(oriname);
+			dfd.setDP_ORINAME(oriname);
 			dfd.setM_ID(M_ID);
 			String sysname = System.currentTimeMillis() + oriname.substring(oriname.lastIndexOf("."));
 			//확장자 : 파일을 구분하기 위한 식별 체계. (예. xxxx.jpg)
-			dfd.setDf_sysname(sysname);
+			dfd.setDP_SYSNAME(sysname);
 
 			//파일 저장
 			File file = new File(realPath + sysname);
@@ -159,4 +168,37 @@ public class DriverService {
 		}
 	}
 
+	public String driverUpdateProc(List<MultipartFile> files,
+									DriverDto driver,
+									RedirectAttributes rttr,
+									HttpSession session) {
+		log.info("driverUpdateProc()");
+		TransactionStatus status = manager.getTransaction(definition);
+		String msg = null;
+		
+		try {
+	        // 드라이버 정보 업데이트
+	        drDao.updateDriver(driver);
+	        log.info("업데이트 완료");
+	        msg = "업데이트 완료 다시 로그인 후 이용해주세요";
+	        
+	        if(!files.get(0).isEmpty()) {//업로드 파일이 있다면
+				fileUpload(files, session, driver.getM_ID()); // 여기는 컬럼을 어떻게할지 정해야함
+			}
+			
+			//commit 수행
+			manager.commit(status);
+
+	        // 드라이버 정보 가져오기
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        manager.rollback(status);
+	        log.error("업데이트 실패");
+	        msg = "업데이트 실패";
+	    }
+		
+		rttr.addFlashAttribute("msg", msg);
+        session.invalidate();
+	    return "redirect:/";
+	}
 }

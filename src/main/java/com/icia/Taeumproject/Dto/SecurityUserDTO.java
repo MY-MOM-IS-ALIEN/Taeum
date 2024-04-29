@@ -13,12 +13,14 @@ public class SecurityUserDTO extends User {
     private int M_ID;
     private String M_NAME;
     private String M_PHONE;
+    private String role;
 
     public SecurityUserDTO(MemberDto userDTO) {
         super(userDTO.getUsername(), userDTO.getPassword(), makeGrantedAuthority(userDTO.getRole()));
         this.M_ID = userDTO.getM_ID(); // Assigning M_ID value
         this.M_NAME = userDTO.getM_NAME();
         this.M_PHONE = userDTO.getM_PHONE();
+        this.role = userDTO.getRole();
     }
 
     private static List<GrantedAuthority> makeGrantedAuthority(String role){
@@ -48,4 +50,10 @@ public class SecurityUserDTO extends User {
     public void setM_PHONE(String M_PHOME) {
       this.M_PHONE = M_PHOME;
     }
+    public String getRole() {
+        return M_PHONE;
+      }
+      public void setRole(String role) {
+        this.role = role;
+      }
 }
