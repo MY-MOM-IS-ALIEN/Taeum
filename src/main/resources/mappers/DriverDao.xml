@@ -92,7 +92,7 @@
 
 <insert id="insertFile" parameterType="DriverFileDto">
     INSERT INTO driverprofile
-    VALUES(NULL,#{df_oriname},#{df_sysname},#{M_ID})
+    VALUES(NULL,#{dp_oriname},#{dp_sysname},#{M_ID})
   </insert>
 
   <update id="updateDriver" parameterType="DriverDto">

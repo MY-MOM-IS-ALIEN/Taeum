@@ -160,7 +160,10 @@ public class DriverController {
 	}
 
 	@PostMapping("driverUpdateProc")
-	public String driverUpdateProc(DriverDto driver,RedirectAttributes rttr,HttpSession session) {
+	public String driverUpdateProc(List<MultipartFile> files,
+									DriverDto driver,
+									RedirectAttributes rttr,
+									HttpSession session) {
 		log.info("driverUpdateProc()");
 		String view = null;
 		
@@ -173,7 +176,7 @@ public class DriverController {
 		member.setM_PHONE(m_phone);
 		
 		mServ.DriveMemberUpdate(member);
-		view = drServ.driverUpdateProc(driver,rttr,session);
+		view = drServ.driverUpdateProc(files,driver,rttr,session);
 		
 		return view;
 	}

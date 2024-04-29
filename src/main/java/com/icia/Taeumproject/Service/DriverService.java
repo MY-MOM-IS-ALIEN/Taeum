@@ -4,9 +4,6 @@ import java.io.File;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -20,8 +17,6 @@ import com.icia.Taeumproject.Dao.MemberDao;
 import com.icia.Taeumproject.Dto.ApplyDto;
 import com.icia.Taeumproject.Dto.DriverDto;
 import com.icia.Taeumproject.Dto.DriverFileDto;
-import com.icia.Taeumproject.Dto.MemberDto;
-import com.icia.Taeumproject.Dto.SecurityUserDTO;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -166,9 +161,12 @@ public class DriverService {
 		}
 	}
 
-	public String driverUpdateProc(DriverDto driver,RedirectAttributes rttr,HttpSession session) {
+	public String driverUpdateProc(List<MultipartFile> files,
+									DriverDto driver,
+									RedirectAttributes rttr,
+									HttpSession session) {
 		log.info("driverUpdateProc()");
-		System.out.println(driver);
+		TransactionStatus status = manager.getTransaction(definition);
 		String msg = null;
 		
 		try {
@@ -176,10 +174,18 @@ public class DriverService {
 	        drDao.updateDriver(driver);
 	        log.info("업데이트 완료");
 	        msg = "업데이트 완료 다시 로그인 후 이용해주세요";
+	        
+	        if(!files.get(0).isEmpty()) {//업로드 파일이 있다면
+				fileUpload(files, session, driver.getM_ID()); // 여기는 컬럼을 어떻게할지 정해야함
+			}
+			
+			//commit 수행
+			manager.commit(status);
 
 	        // 드라이버 정보 가져오기
 	    } catch (Exception e) {
 	        e.printStackTrace();
+	        manager.rollback(status);
 	        log.error("업데이트 실패");
 	        msg = "업데이트 실패";
 	    }

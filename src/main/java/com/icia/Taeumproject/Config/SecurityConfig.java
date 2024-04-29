@@ -71,6 +71,7 @@ public class SecurityConfig {
       .requestMatchers("/driverMain").permitAll()
       .requestMatchers("/driverUpdate").permitAll()
       .requestMatchers("/driverUpdateProc").permitAll()
+      .requestMatchers("/fileUpload").permitAll()
       .requestMatchers("/applyWrite").permitAll()
       .requestMatchers("/handleTextMessage","/afterConnectionEstablished","/afterConnectionClosed").permitAll()
       .requestMatchers("/my-websocket-endpoint/**").permitAll() 
