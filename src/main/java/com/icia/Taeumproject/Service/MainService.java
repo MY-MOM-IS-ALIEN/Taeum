@@ -1,6 +1,7 @@
 package com.icia.Taeumproject.Service;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import com.icia.Taeumproject.Dao.MainDao;
 import com.icia.Taeumproject.Dto.ApplyDto;
 import com.icia.Taeumproject.Dto.DriverDto;
 import com.icia.Taeumproject.Dto.Node;
+import com.icia.Taeumproject.Dto.dispatchDto;
 import com.icia.Taeumproject.util.KakaoApiUtil.Point;
 
 import lombok.extern.slf4j.Slf4j;
@@ -98,6 +100,21 @@ public class MainService {
   public List<DriverDto> selectDriverList(String local) {
     List<DriverDto> selectDriverList = mDao.selectDriverList(local);
     return selectDriverList;
+  }
+
+  public List<Node> selectNodeArea(String address, String currentDate) {
+     List<Node> selectNodeArea = mDao.selectNodeArea(address, currentDate);
+    return selectNodeArea;
+  }
+
+  public void isnertConfirm(Integer ridding, String dateTime, int status) {
+    mDao.insertDispatch(ridding, dateTime, status);
+    
+  }
+
+  public List<dispatchDto> GetDriverList(Integer dr_ID) {
+      List<dispatchDto> dispatchDtoList = mDao.GetDriverList(dr_ID);
+    return dispatchDtoList;
   }
 
 

@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Select;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +25,7 @@ import com.icia.Taeumproject.Dto.DriverDto;
 import com.icia.Taeumproject.Dto.Node;
 import com.icia.Taeumproject.Dto.NodeCost;
 import com.icia.Taeumproject.Dto.TourActivity;
+import com.icia.Taeumproject.Dto.dispatchDto;
 import com.icia.Taeumproject.Service.ApplyService;
 import com.icia.Taeumproject.Service.MainService;
 import com.icia.Taeumproject.Service.MemberService;
@@ -43,7 +45,6 @@ import com.icia.Taeumproject.vrp.VrpResult;
 import com.icia.Taeumproject.vrp.VrpService;
 import com.icia.Taeumproject.vrp.VrpVehicleRoute;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -82,19 +83,30 @@ public class AdminController {
 @GetMapping("adminDriverList")
   public String adminDriverList() {
   log.info("adminDriverList()");
-  
-  
-  
+
   return "adminDriverList";
 }
 	  
+@PostMapping("GetDriverList")
+@ResponseBody
+public List<dispatchDto> GetDriverList(int DR_ID, Model model) {
+  log.info("GetDriverList");
+   
+    System.out.println("DR_IDDR_IDDR_IDDR_IDDR_IDDR_IDDR_IDDR_IDDR_IDDR_IDDR_ID = " + DR_ID) ;
+  List<dispatchDto> dispatchDtoList = maServ.GetDriverList(DR_ID);
+  model.addAttribute("GetDriverList",dispatchDtoList);
+  return dispatchDtoList;
+}
+
+
 	  @GetMapping("/mainCenter")
 	  public String test(Model model) {
-	    int rideOne = 1;
+	    int rideOne = 6;
 	    List< List<Node>> rideNodeList = new ArrayList<>();
 	    List<Node> innerList1 = new ArrayList<>();
 	    List<Node> innerList2 = new ArrayList<>();
 	    List<Node> innerList3 = new ArrayList<>();
+	    
 	    
 	      List<Node> nodeList = maServ.selectNodeList(rideOne);
 	      
@@ -123,7 +135,7 @@ public class AdminController {
 	  }
 	 
 	  @PostMapping("updateDelivery")
-	  public String updateDelivery(Integer ride , String node_id, Integer cycle) {
+	  public String updateDelivery(String ride , String node_id, Integer cycle, String dateTime) {
 	    log.info("updateDeliveryPROC");
 	    if (ride == null || node_id == null) {
 	      // ride 또는 m_id가 null인 경우에 대한 처리
@@ -136,29 +148,50 @@ public class AdminController {
 	      
 	      for (String num : numbersAsString) {
 	          Integer nodeId = Integer.parseInt(num);
+	          Integer riding = Integer.parseInt(ride);
 	          
-	          maServ.updateDelivery(ride, nodeId, cycle);
+	          maServ.updateDelivery(riding, nodeId, cycle);
 	      }
-	      
+	        Integer ridding = Integer.parseInt(ride);
+	        int status = 0;
+	          maServ.isnertConfirm(ridding, dateTime,status);
+	  }
+ 
+	    return "adminDriverList";
 	  }
 	  
-	    
-	    
-	    return "redirect:/main";
-	  }
 	  
-
 	  @GetMapping("nodeSelection")
-
-	  public void nodeSelection(String drID, Model model) {
-	    log.info("nodeSelection 페이지()");
-	    System.out.println("nodeSelectionnodeSelectionnodeSelectionnodeSelection==============" + drID);
-	      
-	   model.addAttribute("drID", drID);
+	    public String nodeSelection(@RequestParam ("drID") String drID ,@RequestParam("selectedLocal") String address,@RequestParam("selectDate") String selectDate,Model model) {
+	    log.info("nodeSelection()");
 	    
-	  
+	 
+	    
+	    
+	    List<Node> nodeList = maServ.selectNodeArea(address, selectDate);
+	    
+	    model.addAttribute("drID",drID);
+	    model.addAttribute("dr_AREA", address);
+	    //날짜 모델에 추가되어야함
+	    model.addAttribute("nodeList", nodeList);
+	    
 	   
+
+	    return "nodeSelection";
 	  }
+	  
+	  
+
+//	  @PostMapping("nodeSelectionProc")
+//	  @ResponseBody
+//	  public void nodeSelection(String drID, Model model) {
+//	    log.info("nodeSelection Proc");
+//	    System.out.println("nodeSelectionnodeSelectionnodeSelectionnodeSelection==============" + drID);
+//	      
+//	   model.addAttribute("drID", drID);
+//	  }
+	  
+	  
 	  
 	  
 
