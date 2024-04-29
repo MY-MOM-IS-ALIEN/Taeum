@@ -22,9 +22,9 @@
 				<div class="apply-content">
 					<input type="hidden" name="M_ID"
 						th:value="${#authentication.principal != null ? #authentication.principal.M_ID : ''}">
-					성함:<input class="write-input" name="M_NAME"
+					성함:<input class="write-input" name="M_NAME" id="M_NAME"
 						th:value="${#authentication.principal != null ? #authentication.principal.M_NAME : ''}">
-					연락처:<input class="write-input" name="M_PHONE"
+					연락처:<input class="write-input" name="M_PHONE" id="M_PHONE"
 						th:value="${#authentication.principal != null ? #authentication.principal.M_PHONE : ''}">
 				  차량번호:<input
 						type="text" class="write-input" id="DR_CARNUM" name="DR_CARNUM"
@@ -51,8 +51,9 @@
 				</div>
 
 				<div class="btn-area">
-					<input type="submit" class="btn-write" value="저장"> <input
-						type="button" class="btn-write" value="뒤로가기" id="backbtn">
+					<input type="submit" class="btn-write" value="저장"> 
+					<input type="button" class="btn-write" value="뒤로가기" id="backbtn">
+					<input type="button" class="btn-write" value="퇴사" id="cleanbtn">
 				</div>
 			</form>
 		</div>
@@ -141,6 +142,15 @@
             break;
         }
     }
+    
+ // 퇴사시 기본정보로 들어가게끔 버튼처리
+ var DR_ID = /*[[${driver.DR_ID}]]*/ null;
+ 
+    document.getElementById('cleanbtn').addEventListener('click', function() {
+        // 성함과 연락처 입력 필드의 값을 변경
+        document.getElementById('M_NAME').value = '드라이버'+DR_ID;
+        document.getElementById('M_PHONE').value = 'null';
+    });
 </script>
 </html>
 

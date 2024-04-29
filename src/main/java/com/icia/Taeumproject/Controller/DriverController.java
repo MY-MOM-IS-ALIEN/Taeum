@@ -160,7 +160,7 @@ public class DriverController {
 	}
 
 	@PostMapping("driverUpdateProc")
-	public String driverUpdateProc(DriverDto driver,RedirectAttributes rttr,Model model) {
+	public String driverUpdateProc(DriverDto driver,RedirectAttributes rttr,HttpSession session) {
 		log.info("driverUpdateProc()");
 		String view = null;
 		
@@ -173,16 +173,7 @@ public class DriverController {
 		member.setM_PHONE(m_phone);
 		
 		mServ.DriveMemberUpdate(member);
-		view = drServ.driverUpdateProc(driver,rttr,model);
-		
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-		Object principal = authentication.getPrincipal();
-		int m_id = ((SecurityUserDTO) principal).getM_ID();
-		log.info("m_id: {}", m_id);
-		
-		drServ.getDriverInfo(m_id, model);
-		System.out.println(model);
+		view = drServ.driverUpdateProc(driver,rttr,session);
 		
 		return view;
 	}

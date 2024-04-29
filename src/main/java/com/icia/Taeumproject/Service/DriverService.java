@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -54,7 +55,6 @@ public class DriverService {
 		// 총 운행 건수 가져오기
 		int totalTraffic = drDao.getTotalTraffic(m_id);
 		model.addAttribute("totalTraffic", totalTraffic);
-
 	}
 
 	public void getPassengerInfo(int m_id, String username, Model model) {
@@ -166,27 +166,26 @@ public class DriverService {
 		}
 	}
 
-	public String driverUpdateProc(DriverDto driver,RedirectAttributes rttr,Model model) {
+	public String driverUpdateProc(DriverDto driver,RedirectAttributes rttr,HttpSession session) {
 		log.info("driverUpdateProc()");
 		System.out.println(driver);
 		String msg = null;
-		String view = null;
 		
-		try{
-			drDao.updateDriver(driver);
-			msg = "업데이트 완료";
-			view = "redirect:driverMain";
-			System.out.println("여기까지 옴");
-		} catch (Exception e) {
-			e.printStackTrace();
-			msg = "업데이트 실패";
-			view = "redirect:driverUpdate";
-		} 
-			
-		rttr.addFlashAttribute("msg",msg);
-		System.out.println("리턴직전");
+		try {
+	        // 드라이버 정보 업데이트
+	        drDao.updateDriver(driver);
+	        log.info("업데이트 완료");
+	        msg = "업데이트 완료 다시 로그인 후 이용해주세요";
 
-		return view;
+	        // 드라이버 정보 가져오기
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        log.error("업데이트 실패");
+	        msg = "업데이트 실패";
+	    }
+		
+		rttr.addFlashAttribute("msg", msg);
+        session.invalidate();
+	    return "redirect:/";
 	}
-
 }

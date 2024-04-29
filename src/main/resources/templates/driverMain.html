@@ -34,6 +34,7 @@
   function redirectToDriverUpdate() {
     window.location.href = '/driverUpdate';
   }
+  
   $(function() {
     const msg = /*[[${msg}]]*/null;
     if (msg != null) {
@@ -64,9 +65,8 @@
     </div>
     <div class="buttons-container">
       <th:block sec:authorize="hasRole('DRIVER')">
-        <button onclick="redirectToDriverModify()">마이페이지</button>
+        <button onclick="redirectToDriverModify()">운행정보</button>
         <button onclick="redirectToDriverUpdate()">정보수정</button>
-        <button onclick="redirectTo">운행정보</button>
         
       </th:block>
     </div>
