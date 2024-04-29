@@ -106,7 +106,7 @@ public class DriverController {
 	}
 
 	// 기사 프로필 이미지 가져오기
-	@PostMapping("getDriverImage")
+	@GetMapping("getDriverImage")
 	@ResponseBody
 	public String driverProfile(@RequestParam("M_ID") int M_ID, Model model) {
 		log.info("driverProfile()");
@@ -117,10 +117,10 @@ public class DriverController {
 		int m_id = ((SecurityUserDTO) principal).getM_ID();
 		log.info("m_id: {}", m_id);
 
-		String profileAjax = drServ.getDriverImage(M_ID, model);
+		return drServ.getDriverImage(M_ID, model);
 
-		return profileAjax;
 	}
+	
 
 	@GetMapping("driverJoin")
 	public String driverJoin() {

@@ -5,23 +5,23 @@
 
 	<!-- driverMain 관련 쿼리 -->
 	<select id="getDriverInfo" parameterType="Integer"
-	resultType="DriverDto">
-	SELECT dt.*, mt.*
-	FROM drivertbl dt, membertbl mt
-	WHERE mt.m_id = #{m_id}
-	LIMIT 1
-</select>
+		resultType="DriverDto">
+		SELECT dt.*, mt.*
+		FROM drivertbl dt, membertbl mt
+		WHERE mt.m_id = #{m_id}
+		LIMIT 1
+	</select>
 
 	<select id="getTodayTraffic" parameterType="Integer"
 		resultType="Integer">
 		SELECT count(D_ID)
-		FROM dispatchtbl, membertbl mt
+		FROM dispatchtbl, drivertbl dt
 		WHERE
 		DATE(D_SELECT) = CURDATE()
 		AND D_SELECT &lt; CURDATE()
 		AND D_STATUS !=
 		'취소'
-		AND mt.m_id = #{m_id}
+		AND dt.dr_id = #{dr_id};
 	</select>
 
 	<select id="getMonthTraffic" parameterType="Integer"
@@ -52,10 +52,11 @@
 
 	<!-- standBy 관련 쿼리 -->
 	<select id="getPassengerList" parameterType="Integer"
-		resultType="ApplyDto">
-		SELECT nt.*
-		FROM nodetbl nt, membertbl mt
-		WHERE nt.M_ID = mt.M_ID
+		resultType="DriverDto">
+		SELECT dt.*
+		FROM drivertbl at, membertbl mt
+		WHERE dt.M_ID =
+		mt.M_ID
 		AND mt.M_ID = #{m_id}
 	</select>
 
@@ -64,7 +65,8 @@
 		SELECT dt.*
 		FROM drivertbl dt, membertbl mt
 		WHERE mt.m_id
-		= #{m_id}
+		=
+		#{m_id}
 	</select>
 
 	<!-- routeCheck 관련 쿼리 -->
@@ -76,24 +78,23 @@
 		#{m_id}
 	</select>
 
-
 	<!-- getDriverImage 관련 쿼리 -->
- 	 <select id="getDriverImage" parameterType="Integer" 
- 		resultType="String"> 
- 		SELECT DR_IMAGE 
- 		FROM drivertbl 
- 		WHERE M_ID = #{M_ID} 
- 	</select> 
+	<select id="getDriverImage" parameterType="Integer"
+		resultType="String">
+		SELECT DP_SYSNAME
+		FROM driverprofile
+		WHERE M_ID = #{M_ID} LIMIT 1
+	</select>
 
 	<insert id="insertDriver" parameterType="DriverDto">
-    INSERT INTO drivertbl
-    VALUES(NULL,#{DR_ADDRESS},#{DR_CARNUM},#{DR_AREA},#{M_ID})
-</insert>
+		INSERT INTO drivertbl
+		VALUES(NULL,#{DR_ADDRESS},#{DR_CARNUM},#{DR_AREA},#{M_ID})
+	</insert>
 
-<insert id="insertFile" parameterType="DriverFileDto">
-    INSERT INTO driverprofile
-    VALUES(NULL,#{dp_oriname},#{dp_sysname},#{M_ID})
-  </insert>
+	<insert id="insertFile" parameterType="DriverFileDto">
+		INSERT INTO driverprofile
+		VALUES(NULL,#{DP_ORINAME},#{DP_SYSNAME},#{M_ID})
+	</insert>
 
   <update id="updateDriver" parameterType="DriverDto">
     update drivertbl set DR_CARNUM=#{DR_CARNUM},DR_AREA=#{DR_AREA} WHERE M_ID=#{M_ID}

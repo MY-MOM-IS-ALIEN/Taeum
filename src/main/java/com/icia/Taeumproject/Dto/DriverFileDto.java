@@ -6,8 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class DriverFileDto {
-	private int dp_id;
+	private int DP_ID;
 	private int M_ID;//외래키 드라이버 ID
-	private String dp_oriname;
-	private String dp_sysname;
+	private String DP_SYSNAME;
+	private String DP_ORINAME;
 }
