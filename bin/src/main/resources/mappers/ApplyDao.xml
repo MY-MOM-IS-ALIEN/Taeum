@@ -3,8 +3,10 @@
 <mapper namespace="com.icia.Taeumproject.Dao.ApplyDao">
 <insert id = "insertApply" parameterType="ApplyDto">
     INSERT INTO applytbl
-    VALUES(#{M_NAME},#{M_PHONE},#{A_ID},#{A_NAME},#{A_PHONE},#{A_STARTADRESSNUM},#{A_STARTADRESS},#{A_STARTDADRESS},
-    #{A_STARTRADRESS},#{A_ENDADRESSNUM},#{A_ENDADRESS},#{A_ENDDADRESS},#{A_ENDRADRESS},#{A_DATE},DEFAULT,#{A_CONTENTS},#{M_ID})
+    VALUES(#{M_NAME}, #{M_PHONE}, #{A_ID}, #{A_NAME}, #{A_PHONE}, 
+    #{A_STARTADRESSNUM}, #{A_STARTADRESS}, #{A_STARTDADRESS},
+    #{A_STARTRADRESS}, #{A_ENDADRESSNUM}, #{A_ENDADRESS},
+    #{A_ENDDADRESS}, #{A_ENDRADRESS}, #{A_DATE}, #{A_CONTENTS}, #{M_ID}, DEFAULT)
 </insert>
 
 </mapper>

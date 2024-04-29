@@ -95,4 +95,7 @@
     VALUES(NULL,#{df_oriname},#{df_sysname},#{M_ID})
   </insert>
 
+  <update id="updateDriver" parameterType="DriverDto">
+    update drivertbl set DR_CARNUM=#{DR_CARNUM},DR_AREA=#{DR_AREA} WHERE M_ID=#{M_ID}
+  </update>
 </mapper>

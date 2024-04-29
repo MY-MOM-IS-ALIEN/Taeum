@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -18,6 +20,7 @@ import com.icia.Taeumproject.Dto.ApplyDto;
 import com.icia.Taeumproject.Dto.DriverDto;
 import com.icia.Taeumproject.Dto.DriverFileDto;
 import com.icia.Taeumproject.Dto.MemberDto;
+import com.icia.Taeumproject.Dto.SecurityUserDTO;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -161,6 +164,29 @@ public class DriverService {
 			//파일 정보 저장
 			drDao.insertFile(dfd);
 		}
+	}
+
+	public String driverUpdateProc(DriverDto driver,RedirectAttributes rttr,Model model) {
+		log.info("driverUpdateProc()");
+		System.out.println(driver);
+		String msg = null;
+		String view = null;
+		
+		try{
+			drDao.updateDriver(driver);
+			msg = "업데이트 완료";
+			view = "redirect:driverMain";
+			System.out.println("여기까지 옴");
+		} catch (Exception e) {
+			e.printStackTrace();
+			msg = "업데이트 실패";
+			view = "redirect:driverUpdate";
+		} 
+			
+		rttr.addFlashAttribute("msg",msg);
+		System.out.println("리턴직전");
+
+		return view;
 	}
 
 }

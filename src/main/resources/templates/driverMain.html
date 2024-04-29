@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<title>Taeum</title>
+<link rel="shortcut icon" href="#">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+<script
+  src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script
+  src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+
+<script th:inline="javascript">
+  $(document).ready(function() {
+    // bxSlider configuration
+    $(".slider").bxSlider({
+      auto : true, // Auto slide
+      slideWidth : 600
+    // Slide width
+    });
+
+    // Message handling
+    const msg = null;
+    if (msg != null) {
+      alert(message);
+    }
+  });
+  
+  function redirectToDriverModify() {
+    window.location.href = '/driverModify';
+  }
+  function redirectToDriverUpdate() {
+    window.location.href = '/driverUpdate';
+  }
+  $(function() {
+    const msg = /*[[${msg}]]*/null;
+    if (msg != null) {
+      alert(msg);
+    }
+  });
+</script>
+
+<th:block th:insert="~{fragments::header}" />
+</head>
+<body>
+  <section>
+    <div class="content-home">
+      <div class="slider">
+        <div>
+          <img src="images/markus-winkler-3vlGNkDep4E-unsplash.jpg">
+        </div>
+        <div>
+          <img src="images/martin-kallur-ig-mkallur-l4m_o4aFOn8-unsplash.jpg">
+        </div>
+        <div>
+          <img src="images/mealpro-uFIfEb-fPA4-unsplash.jpg">
+        </div>
+        <div>
+          <img src="images/trinity-nguyen-dG0ZnlqKXEc-unsplash.jpg">
+        </div>
+      </div>
+    </div>
+    <div class="buttons-container">
+      <th:block sec:authorize="hasRole('DRIVER')">
+        <button onclick="redirectToDriverModify()">마이페이지</button>
+        <button onclick="redirectToDriverUpdate()">정보수정</button>
+        <button onclick="redirectTo">운행정보</button>
+        
+      </th:block>
+    </div>
+  </section>
+  <th:block th:insert="~{fragments::footer}" />
+</body>
+</html>

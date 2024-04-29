@@ -33,4 +33,8 @@
     select username from membertbl where m_name=#{m_name} and m_phone=#{m_phone}
   </select>
   
+  <update id="updateRole" parameterType="Integer">
+    update membertbl set role='DRIVER' where M_ID=#{mid}
+  </update>
+  
 </mapper>

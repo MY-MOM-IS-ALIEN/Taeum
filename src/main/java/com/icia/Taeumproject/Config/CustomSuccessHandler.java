@@ -18,7 +18,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
     private static final Map<String, String> ROLE_URL_MAP = new HashMap<>() {{
         put("ROLE_USER", "/");
         put("ROLE_ADMIN", "/adminMain");
-        put("ROLE_DRIVER", "/");
+        put("ROLE_DRIVER", "/driverMain");
        
     }};
 
@@ -39,12 +39,11 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
             if (role.equals("ROLE_ADMIN")) {
                 log.warn("*****SUPER ADMIN LOGGED IN*****");
             }
-            msg = "로그인 성공";
         } else {
           msg = "로그인 실패";
         }
 
-        request.getSession().setAttribute("msg", msg);
+        request.getSession().setAttribute(redirectUrl, msg);
 
         response.sendRedirect(redirectUrl);
     }

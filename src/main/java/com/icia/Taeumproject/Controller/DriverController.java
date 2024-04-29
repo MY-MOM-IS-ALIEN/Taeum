@@ -16,8 +16,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.icia.Taeumproject.Dto.DriverDto;
+import com.icia.Taeumproject.Dto.MemberDto;
 import com.icia.Taeumproject.Dto.SecurityUserDTO;
 import com.icia.Taeumproject.Service.DriverService;
+import com.icia.Taeumproject.Service.MemberService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -28,10 +30,29 @@ public class DriverController {
 
 	@Autowired
 	private DriverService drServ;
+	
+	@Autowired
+	private MemberService mServ;
+	
+	@GetMapping("driverMain")
+	public String driverMain(Model model) {
+		log.info("driverMain()");
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		// 로그인 시 정보 가져오기
+		Object principal = authentication.getPrincipal();
+		int m_id = ((SecurityUserDTO) principal).getM_ID();
+		log.info("m_id: {}", m_id);
+
+		drServ.getDriverInfo(m_id, model);
+		
+		return "driverMain";
+	}
 
 	// 로그인 후 출력될 기사 메인 화면 이동 및 기사 개인정보 가져오기
 	@GetMapping("driverModify")
-	public String driverMain(Model model) {
+	public String driverModify(Model model) {
 		log.info("driverModify()");
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -120,5 +141,49 @@ public class DriverController {
 
 		return view;
 	}
+	
+	@GetMapping("driverUpdate")
+	public String driverUpdate(Model model) {
+		log.info("driverUpdate()");
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+		Object principal = authentication.getPrincipal();
+		int m_id = ((SecurityUserDTO) principal).getM_ID();
+		log.info("m_id: {}", m_id);
+		
+		drServ.getDriverInfo(m_id, model);
+		System.out.println(model);
+		
+		
+		return "driverUpdate";
+	}
+
+	@PostMapping("driverUpdateProc")
+	public String driverUpdateProc(DriverDto driver,RedirectAttributes rttr,Model model) {
+		log.info("driverUpdateProc()");
+		String view = null;
+		
+		MemberDto member = new MemberDto();
+		int mid = driver.getM_ID();
+		String m_name = driver.getM_NAME();
+		String m_phone = driver.getM_PHONE();
+		member.setM_ID(mid);
+		member.setM_NAME(m_name);
+		member.setM_PHONE(m_phone);
+		
+		mServ.DriveMemberUpdate(member);
+		view = drServ.driverUpdateProc(driver,rttr,model);
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		Object principal = authentication.getPrincipal();
+		int m_id = ((SecurityUserDTO) principal).getM_ID();
+		log.info("m_id: {}", m_id);
+		
+		drServ.getDriverInfo(m_id, model);
+		System.out.println(model);
+		
+		return view;
+	}
 }

@@ -5,12 +5,12 @@
 
 	<!-- driverMain 관련 쿼리 -->
 	<select id="getDriverInfo" parameterType="Integer"
-		resultType="DriverDto">
-		SELECT dt.*, mt.*
-		FROM drivertbl dt, membertbl mt
-		WHERE mt.m_id
-		= #{m_id}
-	</select>
+	resultType="DriverDto">
+	SELECT dt.*, mt.*
+	FROM drivertbl dt, membertbl mt
+	WHERE mt.m_id = #{m_id}
+	LIMIT 1
+</select>
 
 	<select id="getTodayTraffic" parameterType="Integer"
 		resultType="Integer">
@@ -53,11 +53,10 @@
 	<!-- standBy 관련 쿼리 -->
 	<select id="getPassengerList" parameterType="Integer"
 		resultType="ApplyDto">
-		SELECT at.*
-		FROM applytbl at
-		INNER JOIN membertbl mt ON
-		at.M_ID = mt.M_ID
-		WHERE mt.M_ID = #{m_id}
+		SELECT nt.*
+		FROM nodetbl nt, membertbl mt
+		WHERE nt.M_ID = mt.M_ID
+		AND mt.M_ID = #{m_id}
 	</select>
 
 	<select id="getInfo" parameterType="Integer"
@@ -79,21 +78,21 @@
 
 
 	<!-- getDriverImage 관련 쿼리 -->
-	<!-- <select id="getDriverImage" parameterType="String"
-		resultType="String">
-		SELECT DR_IMAGE
-		FROM drivertbl
-		WHERE username = #{username}
-	</select> -->
+ 	 <select id="getDriverImage" parameterType="Integer" 
+ 		resultType="String"> 
+ 		SELECT DR_IMAGE 
+ 		FROM drivertbl 
+ 		WHERE M_ID = #{M_ID} 
+ 	</select> 
 
 	<insert id="insertDriver" parameterType="DriverDto">
     INSERT INTO drivertbl
-    VALUES(NULL,#{DR_ADDRESS},#{DR_CARNUM},#{DR_AREA},#{DR_M_ID})
+    VALUES(NULL,#{DR_ADDRESS},#{DR_CARNUM},#{DR_AREA},#{M_ID})
 </insert>
 
 <insert id="insertFile" parameterType="DriverFileDto">
     INSERT INTO driverprofile
-    VALUES(NULL,#{df_oriname},#{df_sysname},#{DR_M_ID})
+    VALUES(NULL,#{df_oriname},#{df_sysname},#{M_ID})
   </insert>
 
 </mapper>

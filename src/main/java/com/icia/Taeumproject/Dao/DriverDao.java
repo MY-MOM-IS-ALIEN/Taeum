@@ -31,6 +31,8 @@ public interface DriverDao {
 
 	void insertDriver(DriverDto driver);
 
+	void updateDriver(DriverDto driver);
+
 
 
 
