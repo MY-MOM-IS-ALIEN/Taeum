@@ -51,6 +51,9 @@ public class DriverService {
 		// 총 운행 건수 가져오기
 		int totalTraffic = drDao.getTotalTraffic(m_id);
 		model.addAttribute("totalTraffic", totalTraffic);
+		
+		String driverImage = drDao.getDriverImage(m_id);
+		model.addAttribute("driverImage", driverImage);
 
 	}
 
@@ -60,7 +63,7 @@ public class DriverService {
 		DriverDto mdto = drDao.getInfo(m_id);
 		model.addAttribute("driverName", mdto);
 	
-		List<ApplyDto> applyList = drDao.getPassengerList(m_id);
+		List<DriverDto> applyList = drDao.getPassengerList(m_id);
 		model.addAttribute("applyList", applyList);
 		log.info("applyList: {}", applyList);
 		
@@ -82,8 +85,12 @@ public class DriverService {
 		String driverImage = drDao.getDriverImage(M_ID);
 		model.addAttribute("driverImage", driverImage);
 		
+		log.info("driverImage: {}", driverImage);
+		
 		return driverImage;
 	}
+	
+
 	
 	public String insertDriver(List<MultipartFile> files,
 									HttpSession session ,
@@ -112,7 +119,7 @@ public class DriverService {
 			//commit 수행
 			manager.commit(status);
 			
-			view = "redirect:driverMain";
+			view = "redirect:driverModify";
 			msg = "저장 성공";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -148,11 +155,11 @@ public class DriverService {
 			String oriname = mf.getOriginalFilename();
 
 			DriverFileDto dfd = new DriverFileDto();
-			dfd.setDp_oriname(oriname);
+			dfd.setDP_ORINAME(oriname);
 			dfd.setM_ID(M_ID);
 			String sysname = System.currentTimeMillis() + oriname.substring(oriname.lastIndexOf("."));
 			//확장자 : 파일을 구분하기 위한 식별 체계. (예. xxxx.jpg)
-			dfd.setDp_sysname(sysname);
+			dfd.setDP_SYSNAME(sysname);
 
 			//파일 저장
 			File file = new File(realPath + sysname);

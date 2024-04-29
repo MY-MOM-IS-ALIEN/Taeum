@@ -3,6 +3,7 @@ package com.icia.Taeumproject.Dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.icia.Taeumproject.Dto.ApplyDto;
 import com.icia.Taeumproject.Dto.DriverDto;
@@ -17,12 +18,12 @@ public interface DriverDao {
 
 	int getTotalTraffic(int m_id);
 
-	List<ApplyDto> getPassengerList(int m_id);
+	List<DriverDto> getPassengerList(int m_id);
 
 	List<ApplyDto> getRouteList(int m_id);
 
-	String getDriverImage(int M_ID);
-
+	String getDriverImage(@Param("M_ID") int M_ID);
+	
 	DriverDto getDriverInfo(int m_id);
 
 	DriverDto getInfo(int m_id);

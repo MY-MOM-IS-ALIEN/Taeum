@@ -33,11 +33,11 @@
     }
 </style>
 
-</head>
+<head>
 
     <link rel="stylesheet" href="css/style.css">
      <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9c49835d1348562532a0d8a13f2f7bf3&libraries=clusterer"></script>
-    <th:block th:insert="~{fragments :: header}"></th:block>
+    <th:block th:insert="~{fragments :: header}" />
 </head>
 <body>
     <!-- 템플릿 본문 내용 -->
@@ -47,7 +47,7 @@
       <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="#4ae39c" viewBox="0 0 256 256" class="me-2">
         <path d="M232,128A104,104,0,1,1,128,24,104.13,104.13,0,0,1,232,128Z" fill="#3F7EFC"></path>
       </svg>
-      <span class="fs-5 fw-semibold">접수 현황</span>
+      <span class="fs-5 fw-semibold">접 수 현 황</span>
     </div>
       <div
       class="d-flex flex-wrap py-3 px-2 gap-3 align-items-center justify-content-center border-bottom">
@@ -63,7 +63,7 @@
       <div class="border-start border-2 h-50"></div>
       <div class="d-flex flex-column align-items-center">
         <div id="Count">0</div>
-        <div class="fw-light" style="font-size: 0.8rem">접수 현황</div>
+        <div class="fw-light" style="font-size: 0.8rem">접 수 현 황</div>
       </div>
       <div class="border-start border-2 h-50"></div>
     
@@ -71,38 +71,38 @@
   
         </div>
         <div style="display: flex; justify-content: center; align-items: center; background-color: #3F7EFC;">
-        <span class="fs-5 fw-semibold" style="margin-top: 5%; margin-bottom: 5%; color: #4D4D4D;" >M  E  N  U</span>
+        <span class="fs-5 fw-semibold" style="margin-top: 5%; margin-bottom: 5%; color: #ffffff;" >M  E  N  U</span>
         </div>
          <a href="driverJoin" class="list-group-item list-group-item-action py-3 lh-sm mt-3 border rounded-2" style="background-color: #f0f8ff;">
         <div class="d-flex w-100 align-items-center justify-content-start mb-1" style="margin-top: 8%; ">
-          <span class="badge text-bg-secondary" style=" margin-bottom: 6%; margin-right:25%;">등록</span><strong class="ms-1" style="margin-bottom: 6%;">기사 등록</strong>
-          <input type="hidden" value="${node.id}" id="node_id">
+          <span class="badge text-bg-secondary" style=" margin-bottom: 6%; margin-right:25%;">등록</span><strong class="ms-1" style="margin-bottom: 6%;">기 사 등 록</strong>
+      
         </div>
       </a>
-        <a href="mainCenter" class="list-group-item list-group-item-action py-3 lh-sm mt-3 border rounded-2" style="background-color: #f0f8ff;">
+        <a href="adminDriverList" class="list-group-item list-group-item-action py-3 lh-sm mt-3 border rounded-2" style="background-color: #f0f8ff;">
         <div class="d-flex w-100 align-items-center justify-content-start mb-1" style="margin-top: 8%">
-          <span class="badge text-bg-secondary" style=" margin-bottom: 6%;  margin-right:25%;">배정</span><strong class="ms-1" style=" margin-bottom: 6%;">기사 배정</strong>
-          <input type="hidden" value="${node.id}" id="node_id">
+          <span class="badge text-bg-secondary" style=" margin-bottom: 6%;  margin-right:25%;">배정</span><strong class="ms-1" style=" margin-bottom: 6%;">기 사 배 정</strong>
+    
         </div>
       </a>
       
          <a href="adminMain" class="list-group-item list-group-item-action py-3 lh-sm mt-3 border rounded-2" style="background-color: #f0f8ff;">
         <div class="d-flex w-100 align-items-center justify-content-start mb-1" style="margin-top: 8%">
-          <span class="badge text-bg-secondary" style=" margin-bottom: 6%; margin-right:25%;">접수</span><strong class="ms-1" style=" margin-bottom: 6%;">접수 현황</strong>
-          <input type="hidden" value="${node.id}" id="node_id">
+          <span class="badge text-bg-secondary" style=" margin-bottom: 6%; margin-right:25%;">관리</span><strong class="ms-1" style=" margin-bottom: 6%;">기 사 관 리</strong>
+      
         </div>
       </a>
       <a href="(미정)" class="list-group-item list-group-item-action py-3 lh-sm mt-3 border rounded-2" style="background-color: #f0f8ff;">
         <div class="d-flex w-100 align-items-center justify-content-start mb-1" style="margin-top: 8%">
           <span class="badge text-bg-secondary" style=" margin-bottom: 6%; margin-right:18%;">몰라</span><strong class="ms-1" style=" margin-bottom: 6%;">현황 및 특이사항</strong>
-          <input type="hidden" value="${node.id}" id="node_id">
+       
         </div>
       </a>
       
       <a href="(미정)" class="list-group-item list-group-item-action py-3 lh-sm mt-3 border rounded-2" style="background-color: #f0f8ff;">
         <div class="d-flex w-100 align-items-center justify-content-start mb-1" style="margin-top: 8%">
-          <span class="badge text-bg-secondary" style=" margin-bottom: 6%; margin-right:25%;">문의</span><strong class="ms-1" style=" margin-bottom: 6%;">문의 내역</strong>
-          <input type="hidden" value="${node.id}" id="node_id">
+          <span class="badge text-bg-secondary" style=" margin-bottom: 6%; margin-right:25%;">문의</span><strong class="ms-1" style=" margin-bottom: 6%;">문 의 내 역</strong>
+    
         </div>
       </a>
     </div>
@@ -114,7 +114,7 @@
     
     
 </div>
-    <div id="map" style="width:100%;height:920px;"></div>
+    <div id="map" style="width:100%;height:100%;"></div>
 </main>
     
 <script th:inline="javascript">
@@ -133,6 +133,7 @@ var markers = [];
 //nodeList를 사용하여 마커와 클러스터러를 추가합니다.
 var nodeList = /*[[${nodeList}]]*/ null;
 //console.log("nodeList = ", nodeList);
+
 
 
 // 노드 리스트를 반복하면서 각 노드에 대해 마커를 생성하고 markers 배열에 추가합니다.
@@ -157,13 +158,14 @@ function addMarker(node) {
     var marker = new kakao.maps.Marker({
         position: markerPosition
     });
-    markers.push(marker); // 마커를 markers 배열에 추가합니다.
+    markers.push(marker);
+    updateCount();// 마커를 markers 배열에 추가합니다.
 }
 
 //#Count 업데이트 함수
 function updateCount() {
     var count = nodeList.length; // nodeList의 길이가 접수 현황의 개수입니다.
-    console.log(nodeList.length);
+  //  console.log(nodeList.length);
     document.getElementById('Count').innerText = count; // #Count 업데이트
 }
 
@@ -186,8 +188,72 @@ window.onload = function () {
         document.getElementById('DATE-TIME').innerText = selectedDate;
     });
     displayCurrentDate();
-    updateCount(); // #Count 업데이트
+   
 };
+
+$(document).ready(function() {
+    // DATE-TIME 요소에서 현재 날짜 표시
+    var currentDate = new Date();
+    var dateString = currentDate.toLocaleDateString(); // 날짜 포맷을 조정할 수 있음
+    $('#DATE-TIME').text(dateString);
+
+    // 부트스트랩 달력 초기화
+    $('#datePickerButton').datepicker({
+        format: 'yyyy-mm-dd',
+        autoclose: true,
+        todayHighlight: true
+    }).on('changeDate', function(e) {
+        // 선택한 날짜를 DATE-TIME에 표시
+        var selectedDate = e.format();
+        console.log("selectedDate = " + selectedDate);
+        $('#DATE-TIME').text(selectedDate);
+        
+        // AJAX 요청
+        $.ajax({
+            url: 'selectLocaldate', // 컨트롤러의 URL
+            method: 'POST',
+            data: { date: selectedDate }, // 선택된 날짜를 데이터로 전송
+            success: function(response) {
+                // 성공적으로 서버로부터 응답을 받았을 때 수행할 작업
+         
+                updateCount(); // #Count 업데이트
+                console.log("selectLocaldate = " , response);
+                nodeList = response;
+                updateMarkers();
+                
+                
+                
+                
+                
+            },
+            error: function(xhr, status, error) {
+                // Ajax 요청이 실패했을 때 수행할 작업
+                alert('Ajax 요청이 실패하였습니다: ' + error);
+            }
+        });
+        
+    });
+    
+
+
+//마커를 업데이트하는 함수
+function updateMarkers() {
+    // 이전 마커를 모두 제거합니다.
+    for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(null);
+    }
+    
+    // 새로운 마커를 추가합니다.
+    markers = [];
+    for (const node of nodeList) {
+        addMarker(node);
+    }
+    
+    // 클러스터러를 다시 설정합니다.
+    clusterer.clear();
+    clusterer.addMarkers(markers);
+}
+});
 
 
 </script>
