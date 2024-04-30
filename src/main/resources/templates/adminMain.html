@@ -66,14 +66,11 @@
         <div class="fw-light" style="font-size: 0.8rem">접 수 현 황</div>
       </div>
       <div class="border-start border-2 h-50"></div>
-    
-        
-  
         </div>
         <div style="display: flex; justify-content: center; align-items: center; background-color: #3F7EFC;">
         <span class="fs-5 fw-semibold" style="margin-top: 5%; margin-bottom: 5%; color: #ffffff;" >M  E  N  U</span>
         </div>
-         <a href="driverJoin" class="list-group-item list-group-item-action py-3 lh-sm mt-3 border rounded-2" style="background-color: #f0f8ff;">
+         <a href="driverAutoJoin" class="list-group-item list-group-item-action py-3 lh-sm mt-3 border rounded-2" style="background-color: #f0f8ff;">
         <div class="d-flex w-100 align-items-center justify-content-start mb-1" style="margin-top: 8%; ">
           <span class="badge text-bg-secondary" style=" margin-bottom: 6%; margin-right:25%;">등록</span><strong class="ms-1" style="margin-bottom: 6%;">기 사 등 록</strong>
       
@@ -255,6 +252,12 @@ function updateMarkers() {
 }
 });
 
+$(function() {
+    const msg = /*[[${msg}]]*/null;
+    if (msg != null) {
+      alert(msg);
+    }
+  });
 
 </script>
 </body>

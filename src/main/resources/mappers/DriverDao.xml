@@ -88,7 +88,7 @@
 
 	<insert id="insertDriver" parameterType="DriverDto">
 		INSERT INTO drivertbl
-		VALUES(NULL,#{DR_ADDRESS},#{DR_CARNUM},#{DR_AREA},#{M_ID})
+		VALUES(NULL,#{DR_CARNUM},#{DR_AREA},#{M_ID})
 	</insert>
 
 	<insert id="insertFile" parameterType="DriverFileDto">

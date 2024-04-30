@@ -26,8 +26,8 @@ public interface MemberDao {
 
   String findById(String m_name, String m_phone);
 
-  void updateRole(int mid);
+  int updateRole(int m_id);
 
-void updateDriveMemberUpdate(MemberDto member);
+  void updateDriveMemberUpdate(MemberDto member);
 
 }

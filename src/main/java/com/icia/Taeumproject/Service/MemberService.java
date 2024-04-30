@@ -148,6 +148,12 @@ public class MemberService {
   		
   		mDao.updateDriveMemberUpdate(member);  		
 }
+  	
+  	public void updateRole(int m_id) {
+  		log.info("updateRole()");
+  		
+  		mDao.updateRole(m_id);
+  	}
 
   
   

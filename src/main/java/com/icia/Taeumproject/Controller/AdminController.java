@@ -97,11 +97,11 @@ public List<dispatchDto> GetDriverList(int DR_ID, Model model) {
   model.addAttribute("GetDriverList",dispatchDtoList);
   return dispatchDtoList;
 }
-
+	
 
 	  @GetMapping("/mainCenter")
 	  public String test(Model model) {
-	    int rideOne = 6;
+	    int rideOne = 1;
 	    List< List<Node>> rideNodeList = new ArrayList<>();
 	    List<Node> innerList1 = new ArrayList<>();
 	    List<Node> innerList2 = new ArrayList<>();
