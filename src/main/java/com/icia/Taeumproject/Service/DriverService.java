@@ -182,5 +182,11 @@ public class DriverService {
         session.invalidate();
 	    return "redirect:/";
 	}
+
+	public void updateDriverProfile(int mid) {
+		// TODO Auto-generated method stub
+		drDao.updateDriverProfile(mid);
+		
+	}
 	
 }

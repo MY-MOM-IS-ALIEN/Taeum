@@ -177,8 +177,14 @@ public class DriverController {
 		member.setM_NAME(m_name);
 		member.setM_PHONE(m_phone);
 		
+		// 기사 정보 업데이트
 		mServ.DriveMemberUpdate(member);
-		view = drServ.driverUpdateProc(files,driver,rttr,session);
+		
+		// 프로필 이미지 업데이트
+		drServ.updateDriverProfile(mid);
+		
+		// 그 외 업데이트 처리
+		view = drServ.driverUpdateProc(files, driver, rttr, session);
 		
 		return view;
 	}
@@ -222,4 +228,5 @@ public class DriverController {
 	    return "mainCenter"; // 적절한 응답 처리
 	}
 	 
+	
 }

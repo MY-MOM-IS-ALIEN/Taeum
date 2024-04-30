@@ -50,33 +50,7 @@
 	</select>
 
 
-	<!-- standBy 관련 쿼리 -->
-	<select id="getPassengerList" parameterType="Integer"
-		resultType="DriverDto">
-		SELECT dt.*
-		FROM drivertbl at, membertbl mt
-		WHERE dt.M_ID =
-		mt.M_ID
-		AND mt.M_ID = #{m_id}
-	</select>
 
-	<select id="getInfo" parameterType="Integer"
-		resultType="DriverDto">
-		SELECT dt.*
-		FROM drivertbl dt, membertbl mt
-		WHERE mt.m_id
-		=
-		#{m_id}
-	</select>
-
-	<!-- routeCheck 관련 쿼리 -->
-	<select id="getRouteList" parameterType="Integer"
-		resultType="ApplyDto">
-		SELECT at.*
-		FROM applytbl at, membertbl mt
-		WHERE mt.M_ID =
-		#{m_id}
-	</select>
 
 	<!-- getDriverImage 관련 쿼리 -->
 	<select id="getDriverImage" parameterType="Integer"
@@ -99,4 +73,8 @@
   <update id="updateDriver" parameterType="DriverDto">
     update drivertbl set DR_CARNUM=#{DR_CARNUM},DR_AREA=#{DR_AREA} WHERE M_ID=#{M_ID}
   </update>
+  
+  <delete id="updateDriverProfile" parameterType="Integer">
+  	delete from driverprofile where M_ID = #{mid}
+  </delete>
 </mapper>
