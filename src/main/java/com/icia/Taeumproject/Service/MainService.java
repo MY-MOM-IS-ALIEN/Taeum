@@ -117,6 +117,13 @@ public class MainService {
     return dispatchDtoList;
   }
 
+  public List<dispatchDto> getDispatch(String date) {
+    List<dispatchDto> getDispatch = mDao.getDispatch(date);
+    return getDispatch;
+  }
+
+ 
+
 
    
   }
