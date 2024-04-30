@@ -55,4 +55,8 @@ FROM NodeTbl ORDER BY distance ASC;
   <select id="GetDriverList" resultType="dispatchDto">
     SELECT * FROM dispatchtbl WHERE DR_ID = #{DR_ID}
   </select>
+  
+  <select id="getDispatch" resultType="dispatchDto">
+    select * from dispatchtbl WHERE D_SELECT LIKE CONCAT('%', #{date}, '%');
+  </select>
 </mapper>

@@ -90,41 +90,22 @@ public class DriverService {
 	
 
 	
-	public String insertDriver(List<MultipartFile> files,
-									HttpSession session ,
-									DriverDto driver, 
-									RedirectAttributes rttr) {
+	public String insertDriver(DriverDto driver, 
+							   RedirectAttributes rttr) {
 		log.info("insertDriver()");
-		
-		TransactionStatus status = manager.getTransaction(definition);
 		String view = null;
 		String msg = null;
 		
 		
 		try {
-			//정보글 저장
 			drDao.insertDriver(driver);
 			log.info("driver: {}", driver);
-			
-			int mid = driver.getM_ID();
-			mDao.updateRole(mid);
-			
-			//파일 저장
-			if(!files.get(0).isEmpty()) {//업로드 파일이 있다면
-				fileUpload(files, session, driver.getM_ID()); // 여기는 컬럼을 어떻게할지 정해야함
-			}
-			
-			//commit 수행
-			manager.commit(status);
-			
-			view = "redirect:driverModify";
+			view = "redirect:adminMain";
 			msg = "저장 성공";
+			
 		} catch (Exception e) {
 			e.printStackTrace();
-			//rollback 수행
-			manager.rollback(status);
-			
-			view = "redirect:driverJoin";
+			view = "redirect:adminMain";
 			msg = "저장 실패";
 		}
 		
@@ -188,7 +169,7 @@ public class DriverService {
 			
 			//commit 수행
 			manager.commit(status);
-
+			
 	        // 드라이버 정보 가져오기
 	    } catch (Exception e) {
 	        e.printStackTrace();
@@ -201,4 +182,5 @@ public class DriverService {
         session.invalidate();
 	    return "redirect:/";
 	}
+	
 }

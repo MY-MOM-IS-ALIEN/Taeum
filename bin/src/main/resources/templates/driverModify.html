@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Taeum</title>
-    <script src="js/jquery-3.7.1.min.js"></script>
-    <link rel="stylesheet" href="css/style.css">
-    <script th:inline="javascript">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Taeum</title>
+<script src="js/jquery-3.7.1.min.js"></script>
+<link rel="stylesheet" href="css/style.css">
+<script th:inline="javascript">
         $(function () {
             let m = /*[[${msg}]]*/ null;
             if (m != null) {
@@ -15,54 +15,54 @@
             }
         });
     </script>
-    <th:block th:insert="~{fragments :: header}" />
+<th:block th:insert="~{fragments :: header}" />
 </head>
 <body>
-<section>
-    <div class="box-layout">
-        <fieldset class="profile">
-            <div class="driverInfo-1">
-                <div class="driver-image">
-					<span id="userImage"></span>                
-                </div>
-                <p>
-                    <span th:text="${driver.M_NAME}"></span>
-                </p>
-            </div>
-            <div class="driverInfo">
-                <p>
-                    <span th:text="${driver.M_PHONE}"></span>
-                </p>
-                <p>
-                    <span th:text="${driver.DR_CARNUM}"></span>
-                </p>
-                <p>
-                    <span th:text="${driver.DR_ADDRESS}"></span>
-                </p>
-                <button>운행시작</button>
-            </div>
-        </fieldset>
-        <fieldset class="raceInfo">
-            <div class="traffic-area">
-                <p>
-                    <span class="span-1" th:text="${todayTraffic}"></span> <br>
-                    오늘 운행
-                </p>
+	<section>
+		<div class="box-layout">
+			<fieldset class="profile">
+				<div class="driverInfo-1">
+					<div class="driver-image">
+						<img th:src="@{/upload/}+${driverImage}" alt="프로필 이미지">
+					</div>
+					<p>
+						<span th:text="${driver.M_NAME}"></span>
+					</p>
+				</div>
+				<div class="driverInfo">
+					<p>
+						<span th:text="${driver.M_PHONE}"></span>
+					</p>
+					<p>
+						<span th:text="${driver.DR_CARNUM}"></span>
+					</p>
+					<p>
+						<span th:text="${driver.DR_ADDRESS}"></span>
+					</p>
+					<button>운행시작</button>
+				</div>
+			</fieldset>
+			<fieldset class="raceInfo">
+				<div class="traffic-area">
+					<p>
+						<span class="span-1" th:text="${todayTraffic}"></span> <br>
+						오늘 운행
+					</p>
 
-                <p>
-                    <span class="span-1" th:text="${monthTraffic}"></span> <br>
-                    이번 달 운행
-                </p>
+					<p>
+						<span class="span-1" th:text="${monthTraffic}"></span> <br>
+						이번 달 운행
+					</p>
 
-                <p>
-                    <span class="span-1" th:text="${totalTraffic}"></span> <br> 총
-                    운행
-                </p>
-            </div>
-            <input type="button" id="moveToStandBy" value="운행정보">
-        </fieldset>
-    </div>
-</section>
+					<p>
+						<span class="span-1" th:text="${totalTraffic}"></span> <br> 총
+						운행
+					</p>
+				</div>
+				<input type="button" id="moveToStandBy" value="운행정보">
+			</fieldset>
+		</div>
+	</section>
 </body>
 <script th:inline="javascript">
     // 파일 제목 처리
@@ -84,27 +84,12 @@
 
 
     $("#moveToStandBy").click(function(){
-        location.href = `/standBy`;
+        location.href = `/routeCheck`;
     });
     
     
-    var driverM_ID = "${driverImage.M_ID}";
-	var userImage = document.getElementById("userImage");
-	$.ajax({
-		url : '<%=request.getContextPath()%>/getDriverImage',
-		type : 'post', 
-		data : {
-			m_id : driverM_ID
-		},
-		success : function(profileAjax) { 
-			console.log(profileAjax);
-			var imagePath = '<%=request.getContextPath()%>/resources/images/' + profileAjax;
-			userImage.innerHTML = '<img src="' + imagePath + '">';
-		},
-		error : function() {
-			alert("에러입니다");
-		}
-	});
-	
+
+    
+
 </script>
 </html>

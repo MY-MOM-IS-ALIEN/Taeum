@@ -17,7 +17,7 @@
 	crossorigin="anonymous"></script>
 	
 	
-	
+	<title>노드 할당</title>
 	<link rel="stylesheet" href="css/style.css">
 	 <th:block th:insert="~{fragments :: header}" />
 	
@@ -182,7 +182,18 @@ function spinOn() {
     var cycle = document.getElementById('cycle').value;
     var selectedDriver = [[${drID}]];
     var currentTime = new Date(); // 현재 시간을 가져옵니다.
-    var formattedTime = currentTime.toLocaleString();
+ // 년도, 월, 일
+    var year = currentTime.getFullYear();
+    var month = ('0' + (currentTime.getMonth() + 1)).slice(-2); // 월은 0부터 시작하므로 +1 필요
+    var day = ('0' + currentTime.getDate()).slice(-2);
+
+    // 시간, 분, 초
+    var hours = ('0' + currentTime.getHours()).slice(-2);
+    var minutes = ('0' + currentTime.getMinutes()).slice(-2);
+    var seconds = ('0' + currentTime.getSeconds()).slice(-2);
+
+    // 형식 지정
+    var formattedTime = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
     
     
     $.ajax({

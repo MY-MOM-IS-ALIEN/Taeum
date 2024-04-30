@@ -35,8 +35,8 @@
 	function redirectToAdminMain() {
 		window.location.href = '/adminMain';
 	}
-	function redirectToDriverModify() {
-		window.location.href = '/driverModify';
+	function redirectToDriverMain() {
+		window.location.href = '/driverMain';
 	}
 	function redirectToJoinForm() {
 		window.location.href = '/joinForm';
@@ -45,11 +45,11 @@
 		window.location.href = 'ApplyForm';
 	}
 	$(function() {
-		const msg = /*[[${session.msg}]]*/null;
-		if (msg != null) {
-			alert(msg);
-		}
-	});
+	    const msg = /*[[${msg}]]*/null;
+	    if (msg != null) {
+	      alert(msg);
+	    }
+	  });
 </script>
 
 <th:block th:insert="~{fragments::header}" />
@@ -87,7 +87,7 @@
 				<button onclick="redirectToAdminMain()">배차 관리하기</button>
 			</th:block>
 			<th:block sec:authorize="hasRole('DRIVER')">
-				<button onclick="redirectToDriverModify()">운행하기</button>
+				<button onclick="redirectToDriverMain()">운행하기</button>
 			</th:block>
 		</div>
 	</section>

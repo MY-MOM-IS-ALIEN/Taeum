@@ -50,6 +50,10 @@ public interface MainDao {
 
 
   public List<dispatchDto> GetDriverList(Integer dr_ID);
+
+
+
+  public List<dispatchDto> getDispatch(String date);
   
   
   
