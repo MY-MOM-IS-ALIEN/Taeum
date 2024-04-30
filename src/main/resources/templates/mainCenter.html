@@ -11,8 +11,7 @@
 <link
   href="https://getbootstrap.com/docs/5.3/examples/sidebars/sidebars.css"
   rel="stylesheet">
-<script type="text/javascript"
-  src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9c49835d1348562532a0d8a13f2f7bf3"></script>
+ <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9c49835d1348562532a0d8a13f2f7bf3&libraries=clusterer"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"
   integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
   crossorigin="anonymous"></script>
@@ -588,7 +587,6 @@ function secondsToHoursMinutes(seconds) {
    //nodeList를 사용하여 마커와 클러스터러를 추가합니다.
      var nodeList = /*[[${nodeList}]]*/ null;
      //console.log("nodeList = ", nodeList);
-
 
 
      // 노드 리스트를 반복하면서 각 노드에 대해 마커를 생성하고 markers 배열에 추가합니다.
