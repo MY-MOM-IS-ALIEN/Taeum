@@ -50,7 +50,7 @@ public class DriverService {
 		// 총 운행 건수 가져오기
 		int totalTraffic = drDao.getTotalTraffic(m_id);
 		model.addAttribute("totalTraffic", totalTraffic);
-		
+
 		String driverImage = drDao.getDriverImage(m_id);
 		model.addAttribute("driverImage", driverImage);
 	}
@@ -60,11 +60,11 @@ public class DriverService {
 
 		DriverDto mdto = drDao.getInfo(m_id);
 		model.addAttribute("driverName", mdto);
-	
+
 		List<DriverDto> applyList = drDao.getPassengerList(m_id);
 		model.addAttribute("applyList", applyList);
 		log.info("applyList: {}", applyList);
-		
+
 	}
 
 	public String getRouteList(int m_id, String username, Model model) {
@@ -82,38 +82,34 @@ public class DriverService {
 	public String getDriverImage(int M_ID, Model model) {
 		String driverImage = drDao.getDriverImage(M_ID);
 		model.addAttribute("driverImage", driverImage);
-		
+
 		log.info("driverImage: {}", driverImage);
-		
+
 		return driverImage;
 	}
-	
 
-	
-	public String insertDriver(DriverDto driver, 
-							   RedirectAttributes rttr) {
+	public String insertDriver(DriverDto driver, RedirectAttributes rttr) {
 		log.info("insertDriver()");
 		String view = null;
 		String msg = null;
-		
-		
+
 		try {
 			drDao.insertDriver(driver);
 			log.info("driver: {}", driver);
 			view = "redirect:adminMain";
 			msg = "저장 성공";
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			view = "redirect:adminMain";
 			msg = "저장 실패";
 		}
-		
+
 		rttr.addFlashAttribute("msg", msg);
-		
+
 		return view;
 	}
-	
+
 	private void fileUpload(List<MultipartFile> files, HttpSession session, int M_ID) throws Exception {
 //파일 저장 실패 시 데이터베이스 롤백작업이 이루어지도록 예외를 throws 할 것.
 		log.info("fileUpload()");
@@ -130,63 +126,66 @@ public class DriverService {
 		}
 
 		for (MultipartFile mf : files) {
-			//파일명 추출
+			// 파일명 추출
 			String oriname = mf.getOriginalFilename();
 
 			DriverFileDto dfd = new DriverFileDto();
 			dfd.setDP_ORINAME(oriname);
 			dfd.setM_ID(M_ID);
 			String sysname = System.currentTimeMillis() + oriname.substring(oriname.lastIndexOf("."));
-			//확장자 : 파일을 구분하기 위한 식별 체계. (예. xxxx.jpg)
+			// 확장자 : 파일을 구분하기 위한 식별 체계. (예. xxxx.jpg)
 			dfd.setDP_SYSNAME(sysname);
 
-			//파일 저장
+			// 파일 저장
 			File file = new File(realPath + sysname);
 			mf.transferTo(file);
 
-			//파일 정보 저장
+			// 파일 정보 저장
 			drDao.insertFile(dfd);
 		}
 	}
 
-	public String driverUpdateProc(List<MultipartFile> files,
-									DriverDto driver,
-									RedirectAttributes rttr,
-									HttpSession session) {
+	public String driverUpdateProc(List<MultipartFile> files, DriverDto driver, RedirectAttributes rttr,
+			HttpSession session) {
 		log.info("driverUpdateProc()");
 		TransactionStatus status = manager.getTransaction(definition);
 		String msg = null;
-		
+
 		try {
-	        // 드라이버 정보 업데이트
-	        drDao.updateDriver(driver);
-	        log.info("업데이트 완료");
-	        msg = "업데이트 완료 다시 로그인 후 이용해주세요";
-	        
-	        if(!files.get(0).isEmpty()) {//업로드 파일이 있다면
+			// 드라이버 정보 업데이트
+			drDao.updateDriver(driver);
+			log.info("업데이트 완료");
+			msg = "업데이트 완료 다시 로그인 후 이용해주세요";
+
+			if (!files.get(0).isEmpty()) {// 업로드 파일이 있다면
 				fileUpload(files, session, driver.getM_ID()); // 여기는 컬럼을 어떻게할지 정해야함
 			}
-			
-			//commit 수행
+
+			// commit 수행
 			manager.commit(status);
-			
-	        // 드라이버 정보 가져오기
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        manager.rollback(status);
-	        log.error("업데이트 실패");
-	        msg = "업데이트 실패";
-	    }
-		
+
+			// 드라이버 정보 가져오기
+		} catch (Exception e) {
+			e.printStackTrace();
+			manager.rollback(status);
+			log.error("업데이트 실패");
+			msg = "업데이트 실패";
+		}
+
 		rttr.addFlashAttribute("msg", msg);
-        session.invalidate();
-	    return "redirect:/";
+		session.invalidate();
+		return "redirect:/";
 	}
 
 	public void updateDriverProfile(int mid) {
-		// TODO Auto-generated method stub
+
 		drDao.updateDriverProfile(mid);
-		
+
 	}
-	
+
+	public void deleteTraffic(int mid) {
+		
+		drDao.deleteTraffic(mid);
+	}
+
 }

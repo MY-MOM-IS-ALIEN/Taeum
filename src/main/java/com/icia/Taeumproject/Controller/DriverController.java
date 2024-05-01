@@ -183,6 +183,9 @@ public class DriverController {
 		// 프로필 이미지 업데이트
 		drServ.updateDriverProfile(mid);
 		
+		// 운행 건수 초기화
+		drServ.deleteTraffic(mid);
+		
 		// 그 외 업데이트 처리
 		view = drServ.driverUpdateProc(files, driver, rttr, session);
 		

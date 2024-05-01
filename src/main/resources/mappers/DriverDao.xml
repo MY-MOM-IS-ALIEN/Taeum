@@ -8,44 +8,50 @@
 		resultType="DriverDto">
 		SELECT dt.*, mt.*
 		FROM drivertbl dt, membertbl mt
-		WHERE mt.m_id = #{m_id}
+		WHERE
+		mt.m_id = #{m_id}
 		LIMIT 1
 	</select>
 
 	<select id="getTodayTraffic" parameterType="Integer"
 		resultType="Integer">
 		SELECT count(D_ID)
-		FROM dispatchtbl, membertbl mt
+		FROM dispatchtbl dt JOIN drivertbl drt
+		ON dt.dr_id = drt.dr_id
+		JOIN membertbl mt
+		ON drt.m_id = mt.m_id
 		WHERE
-		DATE(D_SELECT) = CURDATE()
-		AND D_SELECT &lt; NOW()
-		AND D_STATUS = '1'
+		DATE(dt.D_SELECT) = CURDATE()
+		AND dt.D_SELECT &lt; NOW()
+		AND dt.D_STATUS = '1'
 		AND mt.M_ID = #{m_id};
 	</select>
 
 	<select id="getMonthTraffic" parameterType="Integer"
 		resultType="Integer">
 		SELECT COUNT(D_ID)
-		FROM dispatchtbl, membertbl mt
+		FROM dispatchtbl dt JOIN drivertbl drt
+		ON dt.dr_id = drt.dr_id
+		JOIN membertbl mt
+		ON drt.m_id = mt.m_id
 		WHERE
-		YEAR(D_SELECT) =
-		YEAR(CURDATE())
-		AND MONTH(D_SELECT) = MONTH(CURDATE())
-		AND D_SELECT &lt; NOW()
-		AND D_STATUS = '1'
-		AND mt.m_id =
-		#{m_id}
+		YEAR(dt.D_SELECT) = YEAR(CURDATE())
+		AND MONTH(dt.D_SELECT) = MONTH(CURDATE())
+		AND dt.D_SELECT &lt; NOW()
+		AND dt.D_STATUS = '1'
+		AND mt.m_id = #{m_id}
 	</select>
 
 	<select id="getTotalTraffic" parameterType="Integer"
 		resultType="Integer">
-		SELECT count(D_ID)
-		FROM dispatchtbl, membertbl mt
-		WHERE
-	 	D_SELECT &lt; NOW()
-		AND D_STATUS = '1'
-		AND mt.m_id =
-		#{m_id}
+		SELECT COUNT(D_ID)
+		FROM dispatchtbl dt JOIN drivertbl drt
+		ON dt.dr_id = drt.dr_id
+		JOIN membertbl mt
+		ON drt.m_id = mt.m_id
+		WHERE dt.D_SELECT &lt; NOW()
+		AND dt.D_STATUS = '1'
+		AND mt.M_ID = #{m_id}
 	</select>
 
 	<!-- getDriverImage 관련 쿼리 -->
@@ -53,7 +59,8 @@
 		resultType="String">
 		SELECT DP_SYSNAME
 		FROM driverprofile
-		WHERE M_ID = #{M_ID} LIMIT 1
+		WHERE M_ID = #{M_ID}
+		LIMIT 1
 	</select>
 
 	<insert id="insertDriver" parameterType="DriverDto">
@@ -66,11 +73,26 @@
 		VALUES(NULL,#{DP_ORINAME},#{DP_SYSNAME},#{M_ID})
 	</insert>
 
-  <update id="updateDriver" parameterType="DriverDto">
-    update drivertbl set DR_CARNUM=#{DR_CARNUM},DR_AREA=#{DR_AREA} WHERE M_ID=#{M_ID}
-  </update>
-  
-  <delete id="updateDriverProfile" parameterType="Integer">
-  	delete from driverprofile where M_ID = #{mid}
-  </delete>
+	<update id="updateDriver" parameterType="DriverDto">
+		update drivertbl set
+		DR_CARNUM=#{DR_CARNUM},DR_AREA=#{DR_AREA} WHERE
+		M_ID=#{M_ID}
+	</update>
+
+	<delete id="updateDriverProfile" parameterType="Integer">
+		delete from
+		driverprofile where M_ID = #{mid}
+	</delete>
+
+	<delete id="deleteTraffic" parameterType="Integer">
+		DELETE FROM dispatchtbl
+		WHERE M_ID = #{mid}
+		AND M_ID IN (
+		SELECT M_ID
+		FROM membertbl
+		WHERE M_NAME
+		= '드라이버1'
+		)
+	</delete>
+
 </mapper>
