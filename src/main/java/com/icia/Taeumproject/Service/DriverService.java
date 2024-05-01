@@ -183,9 +183,9 @@ public class DriverService {
 
 	}
 
-	public void deleteTraffic(int mid) {
-		
-		drDao.deleteTraffic(mid);
-	}
+//	public void deleteTraffic(String name) {
+//		
+//		drDao.deleteTraffic(name);
+//	}
 
 }

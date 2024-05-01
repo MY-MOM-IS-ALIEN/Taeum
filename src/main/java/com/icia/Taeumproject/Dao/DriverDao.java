@@ -36,7 +36,7 @@ public interface DriverDao {
 
 	void updateDriverProfile(int mid);
 
-	void deleteTraffic(int mid);
+//	void deleteTraffic(String name);
 
 
 

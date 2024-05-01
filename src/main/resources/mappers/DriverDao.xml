@@ -17,13 +17,15 @@
 		resultType="Integer">
 		SELECT count(D_ID)
 		FROM dispatchtbl dt JOIN drivertbl drt
-		ON dt.dr_id = drt.dr_id
+		ON
+		dt.dr_id = drt.dr_id
 		JOIN membertbl mt
 		ON drt.m_id = mt.m_id
 		WHERE
 		DATE(dt.D_SELECT) = CURDATE()
 		AND dt.D_SELECT &lt; NOW()
-		AND dt.D_STATUS = '1'
+		AND dt.D_STATUS
+		= '1'
 		AND mt.M_ID = #{m_id};
 	</select>
 
@@ -31,25 +33,30 @@
 		resultType="Integer">
 		SELECT COUNT(D_ID)
 		FROM dispatchtbl dt JOIN drivertbl drt
-		ON dt.dr_id = drt.dr_id
+		ON
+		dt.dr_id = drt.dr_id
 		JOIN membertbl mt
 		ON drt.m_id = mt.m_id
 		WHERE
 		YEAR(dt.D_SELECT) = YEAR(CURDATE())
-		AND MONTH(dt.D_SELECT) = MONTH(CURDATE())
+		AND MONTH(dt.D_SELECT) =
+		MONTH(CURDATE())
 		AND dt.D_SELECT &lt; NOW()
 		AND dt.D_STATUS = '1'
-		AND mt.m_id = #{m_id}
+		AND
+		mt.m_id = #{m_id}
 	</select>
 
 	<select id="getTotalTraffic" parameterType="Integer"
 		resultType="Integer">
 		SELECT COUNT(D_ID)
 		FROM dispatchtbl dt JOIN drivertbl drt
-		ON dt.dr_id = drt.dr_id
+		ON
+		dt.dr_id = drt.dr_id
 		JOIN membertbl mt
 		ON drt.m_id = mt.m_id
-		WHERE dt.D_SELECT &lt; NOW()
+		WHERE
+		dt.D_SELECT &lt; NOW()
 		AND dt.D_STATUS = '1'
 		AND mt.M_ID = #{m_id}
 	</select>
@@ -82,17 +89,6 @@
 	<delete id="updateDriverProfile" parameterType="Integer">
 		delete from
 		driverprofile where M_ID = #{mid}
-	</delete>
-
-	<delete id="deleteTraffic" parameterType="Integer">
-		DELETE FROM dispatchtbl
-		WHERE M_ID = #{mid}
-		AND M_ID IN (
-		SELECT M_ID
-		FROM membertbl
-		WHERE M_NAME
-		= '드라이버1'
-		)
 	</delete>
 
 </mapper>

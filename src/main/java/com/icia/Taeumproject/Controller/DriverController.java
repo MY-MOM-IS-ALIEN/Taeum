@@ -183,8 +183,13 @@ public class DriverController {
 		// 프로필 이미지 업데이트
 		drServ.updateDriverProfile(mid);
 		
+		// 로그인 시 저장된 이름 정보 추출
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Object principal = authentication.getPrincipal();
+		String name = ((SecurityUserDTO) principal).getM_NAME();
+	    
 		// 운행 건수 초기화
-		drServ.deleteTraffic(mid);
+//		drServ.deleteTraffic(name);
 		
 		// 그 외 업데이트 처리
 		view = drServ.driverUpdateProc(files, driver, rttr, session);
