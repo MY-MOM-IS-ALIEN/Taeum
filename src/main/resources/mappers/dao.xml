@@ -20,8 +20,8 @@ FROM NodeTbl ORDER BY distance ASC;
     SELECT * FROM endNodetbl
   </select>
   
-  <update id ="updateDelivery" parameterType="Integer">
-    UPDATE NodeTbl SET ride=#{ride}, cycle=#{cycle} WHERE node_id=#{id}
+  <update id ="updateDelivery" parameterType="Node">
+    UPDATE NodeTbl SET ride=#{ride}, cycle=#{cycle}, status =#{status}, D_ID=#{D_ID} WHERE node_id=#{node_id}
   </update>
   
     <select id="selectRideList" resultType="Node">
@@ -45,12 +45,19 @@ FROM NodeTbl ORDER BY distance ASC;
 </select>
 
   <insert id="insertDispatch" parameterType="dispatchDto">
-    INSERT INTO dispatchtbl
-    VALUES (
-     null, #{dateTime}, #{status}, null, null, null, #{ridding}
-    )
-  </insert>
-  
+    <!-- 데이터 삽입 -->
+    INSERT INTO dispatchtbl (D_SELECT, D_STATUS, DR_ID)
+    VALUES (#{D_SELECT}, #{D_STATUS}, #{DR_ID})
+    
+    <!-- 자동 생성된 키 값을 DTO의 D_ID 필드에 매핑하는 selectKey -->
+    <selectKey keyProperty="D_ID" order="AFTER" resultType="java.lang.Long">
+        SELECT LAST_INSERT_ID() AS D_ID
+    </selectKey>
+</insert>
+
+  <select id="getDispatchList" resultType="dispatchDto">
+    SELECT D_ID FROM dispatchtbl WHERE LAST_INSERT_ID();
+  </select>
   
   <select id="GetDriverList" resultType="dispatchDto">
     SELECT * FROM dispatchtbl WHERE DR_ID = #{DR_ID}

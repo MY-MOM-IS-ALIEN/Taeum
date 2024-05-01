@@ -1,8 +1,6 @@
 package com.icia.Taeumproject.Controller;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -17,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.icia.Taeumproject.Dto.DispatchDto;
 import com.icia.Taeumproject.Dto.DriverDto;
 import com.icia.Taeumproject.Dto.MemberDto;
 import com.icia.Taeumproject.Dto.Node;
@@ -223,8 +222,21 @@ public class DriverController {
 	public String acceptNode(@RequestBody List<Node> data) {
 	    log.info("acceptNode()");
 	    
-	    System.out.println("여기지롱" + data);
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+		Object principal = authentication.getPrincipal();
+		int m_id = ((SecurityUserDTO) principal).getM_ID();
+		log.info("m_id: {}", m_id);
+		int DR_ID = (m_id-1);
+		System.out.println("DR_ID = "+DR_ID);
+	    
+	    System.out.println("여기지롱" + data);
+	    for(int i=0; i<=data.size(); i++) {
+	    	DispatchDto dispatch = new DispatchDto();
+	    	
+	    	
+	    	
+	    }
 	    return "mainCenter"; // 적절한 응답 처리
 	}
 	 

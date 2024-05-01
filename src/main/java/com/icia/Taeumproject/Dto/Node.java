@@ -20,6 +20,7 @@ public class Node {
 	private int ride;
 	private int kind;
 	private int cycle;
+	private String status;
 	private String A_DATE;
-	private Timestamp A_LOCALDATE;
+	private long D_ID;
 }
