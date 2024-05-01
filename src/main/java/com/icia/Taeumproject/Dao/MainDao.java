@@ -1,14 +1,14 @@
 package com.icia.Taeumproject.Dao;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.icia.Taeumproject.Dto.DriverDto;
+import com.icia.Taeumproject.Dto.DrivermanagementDto;
 import com.icia.Taeumproject.Dto.Node;
-import com.icia.Taeumproject.Dto.dispatchDto;
+import com.icia.Taeumproject.Dto.DispatchDto;
 
 @Mapper
 public interface MainDao {
@@ -25,7 +25,7 @@ public interface MainDao {
 
 
 
-  public void updateDelivery(@Param("ride") int ride, @Param("id") Integer nodeId, @Param("cycle") Integer cycle);
+  public void updateDelivery(Node node);
 
 
 
@@ -45,15 +45,31 @@ public interface MainDao {
 
 
 
-  public void insertDispatch(Integer ridding, String dateTime, int status);
+  public void insertDispatch(DispatchDto dispatchDto);
 
 
 
-  public List<dispatchDto> GetDriverList(Integer dr_ID);
+  public List<DispatchDto> GetDriverList(Integer dr_ID);
 
 
 
-  public List<dispatchDto> getDispatch(String date);
+  public List<DispatchDto> getDispatch(String date);
+
+
+
+  public List<DrivermanagementDto> DRMTList(Integer dR_ID);
+
+
+
+
+
+
+
+
+
+
+
+
   
   
   

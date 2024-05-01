@@ -21,10 +21,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.icia.Taeumproject.Dto.DriverDto;
+import com.icia.Taeumproject.Dto.DrivermanagementDto;
 import com.icia.Taeumproject.Dto.Node;
 import com.icia.Taeumproject.Dto.NodeCost;
 import com.icia.Taeumproject.Dto.TourActivity;
-import com.icia.Taeumproject.Dto.dispatchDto;
+import com.icia.Taeumproject.Dto.DispatchDto;
 import com.icia.Taeumproject.Service.ApplyService;
 import com.icia.Taeumproject.Service.MainService;
 import com.icia.Taeumproject.Service.MemberService;
@@ -87,40 +88,54 @@ public class AdminController {
 	  
 @PostMapping("GetDriverList")
 @ResponseBody
-public List<dispatchDto> GetDriverList(int DR_ID, Model model) {
+public List<DispatchDto> GetDriverList(int DR_ID, Model model) {
   log.info("GetDriverList");
    
     System.out.println("DR_IDDR_IDDR_IDDR_IDDR_IDDR_IDDR_IDDR_IDDR_IDDR_IDDR_ID = " + DR_ID) ;
-  List<dispatchDto> dispatchDtoList = maServ.GetDriverList(DR_ID);
+  List<DispatchDto> dispatchDtoList = maServ.GetDriverList(DR_ID);
   model.addAttribute("GetDriverList",dispatchDtoList);
   return dispatchDtoList;
 }
 	 
-	  @PostMapping("updateDelivery")
-	  public String updateDelivery(String ride , String node_id, Integer cycle, String dateTime) {
-	    log.info("updateDeliveryPROC");
-	    if (ride == null || node_id == null) {
-	      // ride 또는 m_id가 null인 경우에 대한 처리
-	      System.out.println("ride = " + ride);
-	      System.out.println("m_id/null = " + node_id);
-	  } else {
-	      System.out.println("ride = " + ride);
-	      System.out.println("m_id = " + node_id);
-	      String[] numbersAsString = node_id.split(", ");
-	      
-	      for (String num : numbersAsString) {
-	          Integer nodeId = Integer.parseInt(num);
-	          Integer riding = Integer.parseInt(ride);
-	          
-	          maServ.updateDelivery(riding, nodeId, cycle);
-	      }
-	        Integer ridding = Integer.parseInt(ride);
-	        int status = 0;
-	          maServ.isnertConfirm(ridding, dateTime,status);
-	  }
+@PostMapping("updateDelivery")
+public String updateDelivery(String ride , String node_id, Integer cycle, String dateTime) {
+  log.info("updateDeliveryPROC");
+  int status = 0;
+  String statusStr = "0";
+  if (ride == null || node_id == null) {
+    // ride 또는 m_id가 null인 경우에 대한 처리
+    System.out.println("ride = " + ride);
+    System.out.println("m_id/null = " + node_id);
+} else {
+    System.out.println("ride = " + ride);
+    System.out.println("m_id = " + node_id);
+    String[] numbersAsString = node_id.split(", ");
+    Integer ridding = Integer.parseInt(ride);
+    
+ // DTO에 데이터를 넣고 insertConfirm 메서드 호출
+    DispatchDto dto = new DispatchDto();
+    System.out.println("dateTimedateTimedateTimedateTimedateTimedateTime = " + dateTime);
+    
+    dto.setD_SELECT(dateTime);
+    dto.setD_STATUS(statusStr);
+    dto.setDR_ID(ridding);
+    maServ.isnertConfirm(dto);
+      
+    long D_ID = dto.getD_ID();
+    System.out.println("D_IDD_IDD_IDD_IDD_IDD_IDD_IDD_ID + " + D_ID);
  
-	    return "adminDriverList";
-	  }
+    
+    for (String num : numbersAsString) {
+        Integer nodeId = Integer.parseInt(num);
+        Integer riding = Integer.parseInt(ride);
+        
+        maServ.updateDelivery(riding, nodeId, cycle, statusStr, D_ID);
+    }
+   
+}
+
+  return "adminDriverList";
+}
 
   @GetMapping("/mainCenter")
   public String test(Model model) {
@@ -553,9 +568,9 @@ public List<dispatchDto> GetDriverList(int DR_ID, Model model) {
     model.addAttribute("dispathTwoListsize", dispathTwoListSize);
     model.addAttribute("TotalBechaCount", TotalBechaCount);
     // ---------------------------------------------------------------------------------------------------
-    List<dispatchDto> dispatchNowList = maServ.getDispatch(currentDateStr);
-    List<dispatchDto> dispatchPrevList = maServ.getDispatch(previousMonth);
-    List<dispatchDto> dispatchTwoList = maServ.getDispatch(twoMonthsAgo);
+    List<DispatchDto> dispatchNowList = maServ.getDispatch(currentDateStr);
+    List<DispatchDto> dispatchPrevList = maServ.getDispatch(previousMonth);
+    List<DispatchDto> dispatchTwoList = maServ.getDispatch(twoMonthsAgo);
     
     
     int dispatchNowListSize1 = getDispatchListSize(dispatchNowList);
@@ -586,7 +601,7 @@ public List<dispatchDto> GetDriverList(int DR_ID, Model model) {
   private int getRideNodeListSize(List<Node> nodeList) {
     int count = 0;
     for (Node node : nodeList) {
-        if (node.getRide() != 0) {
+        if (node.getDr_id() != 0) {
             count++;
         }
     }
@@ -594,9 +609,9 @@ public List<dispatchDto> GetDriverList(int DR_ID, Model model) {
 }
   
   // 배차 현황 리스트 사이즈 가져오기
-  private int getDispatchListSize(List<dispatchDto> dispatchList) {
+  private int getDispatchListSize(List<DispatchDto> dispatchList) {
     int count = 0;
-    for (dispatchDto dispatch : dispatchList) {
+    for (DispatchDto dispatch : dispatchList) {
         if (dispatch.getD_STATUS().equals("1")) {
             count++;
         }
@@ -605,13 +620,37 @@ public List<dispatchDto> GetDriverList(int DR_ID, Model model) {
 }
   
   // 배차 현황 리스트 사이즈 가져오기
-  private int getDispatchListSize1(List<dispatchDto> dispatchList) {
+  private int getDispatchListSize1(List<DispatchDto> dispatchList) {
     int count = 0;
-    for (dispatchDto dispatch : dispatchList) {
+    for (DispatchDto dispatch : dispatchList) {
         if (dispatch.getD_STATUS().equals("2")) {
             count++;
         }
     }
     return count;
 }
+  
+  @GetMapping("adminDRMT")
+  public String adminDRMT(Model model) {
+ // 현재 날짜를 가져오기
+//    LocalDate currentDate = LocalDate.now();
+//    // 날짜를 yyyy-MM-dd 형식의 문자열로 변환
+//    String currentDateStr = currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"));
+//    
+//    
+  //  List<DrivermanagementDto> startworkList = maServ.driverStartTim(DR_ID);
+   // List<DrivermanagementDto> endworkList = maServ.driverEndtTime();
+    
+    
+    return "adminDRMT";
+  }
+  
+  @PostMapping("adminDRMTproc")
+  @ResponseBody
+  public List<DrivermanagementDto> adminDRMTproc(Integer DR_ID) {
+    
+    List<DrivermanagementDto> DRMTList = maServ.DRMTList(DR_ID);
+    System.out.println("DRMTList = " + DRMTList);
+    return DRMTList;
+  }
 }

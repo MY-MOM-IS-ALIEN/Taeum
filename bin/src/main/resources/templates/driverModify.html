@@ -36,10 +36,6 @@
 					<p>
 						<span th:text="${driver.DR_CARNUM}"></span>
 					</p>
-					<p>
-						<span th:text="${driver.DR_ADDRESS}"></span>
-					</p>
-					<button>운행시작</button>
 				</div>
 			</fieldset>
 			<fieldset class="raceInfo">
@@ -59,7 +55,7 @@
 						운행
 					</p>
 				</div>
-				<input type="button" id="moveToStandBy" value="운행정보">
+				<input type="button" id="moveTomainCenter" value="운행시작">
 			</fieldset>
 		</div>
 	</section>
@@ -83,8 +79,8 @@
     });
 
 
-    $("#moveToStandBy").click(function(){
-        location.href = `/routeCheck`;
+    $("#moveTomainCenter").click(function(){
+        location.href = `/mainCenter`;
     });
     
     

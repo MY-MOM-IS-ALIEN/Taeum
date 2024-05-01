@@ -3,8 +3,8 @@ package com.icia.Taeumproject.Dto;
 import lombok.Data;
 
 @Data
-public class dispatchDto {
-  private int D_ID;
+public class DispatchDto {
+  private Long D_ID;
   private String D_SELECT;
   private String D_STATUS;
   private String D_CONFIRM;

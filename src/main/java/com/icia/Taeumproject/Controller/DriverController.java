@@ -216,7 +216,7 @@ public class DriverController {
 		}
 			
 		
-		return "adminMain";
+		return "redirect:/adminMain";
 	}
 	
 	@PostMapping("/acceptNode")

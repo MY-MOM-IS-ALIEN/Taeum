@@ -61,7 +61,7 @@
 		</div>
 			<div th:each="node, count : ${nodeList}" class="abc">
 			
-				<th:block th:if="${node.kind == 1 and node.ride == 0}">
+				<th:block th:if="${node.kind == 1 and node.dr_id == 0}">
 				
 
 					<a href="#" id="bechaList"
@@ -437,7 +437,7 @@ function displayData(data) {
           <span> 도착지</span>
           </div> 
           </div>
-          <div class="d-flex align-items-center"><span class="badge text-bg-light border border-secondary-subtle me-2">배정 기사</span> <span>${node.ride}</span></div>
+          <div class="d-flex align-items-center"><span class="badge text-bg-light border border-secondary-subtle me-2">배정 기사</span> <span>${node.dr_id}</span></div>
             </div>
           </div>
         </div>

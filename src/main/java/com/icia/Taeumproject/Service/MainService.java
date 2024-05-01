@@ -12,8 +12,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.icia.Taeumproject.Dao.MainDao;
 import com.icia.Taeumproject.Dto.ApplyDto;
 import com.icia.Taeumproject.Dto.DriverDto;
+import com.icia.Taeumproject.Dto.DrivermanagementDto;
 import com.icia.Taeumproject.Dto.Node;
-import com.icia.Taeumproject.Dto.dispatchDto;
+import com.icia.Taeumproject.Dto.DispatchDto;
 import com.icia.Taeumproject.util.KakaoApiUtil.Point;
 
 import lombok.extern.slf4j.Slf4j;
@@ -25,11 +26,21 @@ public class MainService {
   @Autowired
   private MainDao mDao;
   
-  public void updateDelivery(int ride, Integer nodeId, Integer cycle){
-    mDao.updateDelivery(ride, nodeId, cycle);
+public void updateDelivery(Integer ride, Integer nodeId, Integer cycle, String status, long D_ID){
+    
+    
+    Node node = new Node();
+    node.setDr_id(ride);
+    node.setNode_id(nodeId);
+    node.setCycle(cycle);
+    node.setStatus(status);
+    node.setD_ID(D_ID);
+    
+    mDao.updateDelivery(node);
   }
+
   
-  public void insertServ(int m_id,String fromAddress,Point startPoint,int sOrE,RedirectAttributes rttr, LocalDateTime A_DATE, Timestamp A_DateTime) {
+  public void insertServ(int m_id,String fromAddress,Point startPoint,int sOrE,RedirectAttributes rttr, LocalDateTime A_DATE) {
       log.info("insertServ()");
       Node node = new Node();
       
@@ -43,7 +54,7 @@ public class MainService {
       node.setAddress(fromAddress);
       node.setKind(sOrE);
       node.setA_DATE(aDateAsString);
-      node.setA_LOCALDATE(A_DateTime);
+      
       
       mDao.insert(node);
       
@@ -107,20 +118,29 @@ public class MainService {
     return selectNodeArea;
   }
 
-  public void isnertConfirm(Integer ridding, String dateTime, int status) {
-    mDao.insertDispatch(ridding, dateTime, status);
-    
-  }
 
-  public List<dispatchDto> GetDriverList(Integer dr_ID) {
-      List<dispatchDto> dispatchDtoList = mDao.GetDriverList(dr_ID);
+
+  public List<DispatchDto> GetDriverList(Integer dr_ID) {
+      List<DispatchDto> dispatchDtoList = mDao.GetDriverList(dr_ID);
     return dispatchDtoList;
   }
 
-  public List<dispatchDto> getDispatch(String date) {
-    List<dispatchDto> getDispatch = mDao.getDispatch(date);
+  public List<DispatchDto> getDispatch(String date) {
+    List<DispatchDto> getDispatch = mDao.getDispatch(date);
     return getDispatch;
   }
+
+  public List<DrivermanagementDto> DRMTList(Integer dR_ID) {
+    List<DrivermanagementDto> DRMTList = mDao.DRMTList(dR_ID);
+    return DRMTList;
+  }
+
+  public void isnertConfirm(DispatchDto dispatchDto) {
+    mDao.insertDispatch(dispatchDto);
+    
+  }
+
+
 
  
 

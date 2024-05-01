@@ -11,15 +11,16 @@ import lombok.ToString;
 @ToString
 public class Node {
 
-	private Integer node_id;
-	private Double x;
-	private Double y;
-	private String Name;
-	private String Address;
-	private int m_id;
-	private int ride;
-	private int kind;
-	private int cycle;
-	private String A_DATE;
-	private Timestamp A_LOCALDATE;
+  private Integer node_id;
+  private Double x;
+  private Double y;
+  private String Name;
+  private String Address;
+  private int m_id;
+  private int dr_id;
+  private int kind;
+  private int cycle;
+  private String status;
+  private String A_DATE;
+  private long D_ID;
 }
