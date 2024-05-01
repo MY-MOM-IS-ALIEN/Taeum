@@ -15,25 +15,24 @@
 	<select id="getTodayTraffic" parameterType="Integer"
 		resultType="Integer">
 		SELECT count(D_ID)
-		FROM dispatchtbl, drivertbl dt
+		FROM dispatchtbl, membertbl mt
 		WHERE
 		DATE(D_SELECT) = CURDATE()
-		AND D_SELECT &lt; CURDATE()
-		AND D_STATUS !=
-		'취소'
-		AND dt.dr_id = #{dr_id};
+		AND D_SELECT &lt; NOW()
+		AND D_STATUS = '1'
+		AND mt.M_ID = #{m_id};
 	</select>
 
 	<select id="getMonthTraffic" parameterType="Integer"
 		resultType="Integer">
-		SELECT count(D_ID)
+		SELECT COUNT(D_ID)
 		FROM dispatchtbl, membertbl mt
 		WHERE
 		YEAR(D_SELECT) =
 		YEAR(CURDATE())
 		AND MONTH(D_SELECT) = MONTH(CURDATE())
-		AND D_SELECT &lt; CURDATE()
-		AND D_STATUS != '취소'
+		AND D_SELECT &lt; NOW()
+		AND D_STATUS = '1'
 		AND mt.m_id =
 		#{m_id}
 	</select>
@@ -41,16 +40,13 @@
 	<select id="getTotalTraffic" parameterType="Integer"
 		resultType="Integer">
 		SELECT count(D_ID)
-		FROM dispatchtbl dt, membertbl mt
+		FROM dispatchtbl, membertbl mt
 		WHERE
-		D_SELECT &lt; CURDATE()
-		AND D_STATUS != '취소'
+	 	D_SELECT &lt; NOW()
+		AND D_STATUS = '1'
 		AND mt.m_id =
 		#{m_id}
 	</select>
-
-
-
 
 	<!-- getDriverImage 관련 쿼리 -->
 	<select id="getDriverImage" parameterType="Integer"
