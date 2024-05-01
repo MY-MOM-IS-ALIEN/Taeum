@@ -26,11 +26,13 @@ public class MainService {
   @Autowired
   private MainDao mDao;
   
-public void updateDelivery(Integer ride, Integer nodeId, Integer cycle, String status, long D_ID){
+
+  public void updateDelivery(Integer ride, Integer nodeId, Integer cycle, String status, long D_ID){
     
     
     Node node = new Node();
-    node.setDr_id(ride);
+    node.setDR_ID(ride);
+
     node.setNode_id(nodeId);
     node.setCycle(cycle);
     node.setStatus(status);
@@ -48,7 +50,7 @@ public void updateDelivery(Integer ride, Integer nodeId, Integer cycle, String s
       
               String aDateAsString = A_DATE.toString();
               
-      node.setM_id(m_id);
+      node.setM_ID(m_id);
       node.setX(startPoint.getX());
       node.setY(startPoint.getY());
       node.setAddress(fromAddress);
@@ -57,11 +59,6 @@ public void updateDelivery(Integer ride, Integer nodeId, Integer cycle, String s
       
       
       mDao.insert(node);
-      
-      
-      
-      
-      
       
   }
 
@@ -117,7 +114,6 @@ public void updateDelivery(Integer ride, Integer nodeId, Integer cycle, String s
      List<Node> selectNodeArea = mDao.selectNodeArea(address, currentDate);
     return selectNodeArea;
   }
-
 
 
   public List<DispatchDto> GetDriverList(Integer dr_ID) {

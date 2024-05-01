@@ -25,7 +25,9 @@ public interface MainDao {
 
 
 
-  public void updateDelivery(Node node);
+
+  public void updateDelivery(Node node)  ;
+
 
 
 

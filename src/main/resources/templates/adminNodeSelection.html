@@ -22,6 +22,7 @@
 	 <th:block th:insert="~{fragments :: header}" />
 	
 	
+	
 <main class="d-flex flex-nowrap">
 	<div
 		class="d-flex flex-column align-items-stretch flex-shrink-0 bg-body-tertiary border border-r-1"
@@ -61,7 +62,7 @@
 		</div>
 			<div th:each="node, count : ${nodeList}" class="abc">
 			
-				<th:block th:if="${node.kind == 1 and node.dr_id == 0}">
+				<th:block th:if="${node.kind == 1 and node.dR_ID == 0}">
 				
 
 					<a href="#" id="bechaList"
@@ -84,7 +85,7 @@
 								<div class="d-flex align-items-center">
 									<span
 										class="badge text-bg-light border border-secondary-subtle me-2">m_id</span>
-									<span class="node_mid" th:text="${node.m_id}"></span>
+									<span class="node_mid" th:text="${node.m_ID}"></span>
 								</div>
 								<div class="d-flex align-items-center">
 									<span
@@ -318,7 +319,7 @@ function spinOn() {
        updateMIdInput(selectedMIds.join(', ')); 
           
        // nodeList에서 'm_id'가 nodeMId인 노드들을 찾습니다.
-       const connectedNodes = nodeList.filter(node => parseInt(node.m_id) === parseInt(nodeMId) && parseInt(node.kind) === 2);
+       const connectedNodes = nodeList.filter(node => parseInt(node.m_ID) === parseInt(nodeMId) && parseInt(node.kind) === 2);
        // 찾은 노드들의 마커를 추가합니다.
        connectedNodes.forEach(node => {
            console.log("add 통과 = " + node);
@@ -334,7 +335,7 @@ function spinOn() {
 // 클릭된 항목의 'm_id'와 같은 kind가 2인 노드의 마커를 제거하는 함수
    function removeConnectedMarker(nodeMId, nodeId) {
        // nodeList에서 'm_id'가 nodeMId이고 kind가 2인 노드들을 찾습니다.
-       const connectedNodes = nodeList.filter(node => parseInt(node.m_id) === parseInt(nodeMId)  && parseInt(node.kind) === 2);
+       const connectedNodes = nodeList.filter(node => parseInt(node.m_ID) === parseInt(nodeMId)  && parseInt(node.kind) === 2);
        const id = connectedNodes.map(node => node.node_id); // 선택된 노드들의 id 배열
        // 찾은 노드들의 마커를 제거합니다.
        id.forEach(nodeId => {
@@ -428,7 +429,7 @@ function displayData(data) {
         </div>
         <div class="mt-3 small">
         <div class="d-flex align-items-center justify-content-between">
-         <div class="d-flex align-items-center"><span class="badge text-bg-light border border-secondary-subtle me-2">m_id</span> <span id="node.m_id">${node.m_id}</span></div>
+         <div class="d-flex align-items-center"><span class="badge text-bg-light border border-secondary-subtle me-2">m_id</span> <span id="node.m_ID">${node.m_id}</span></div>
           <div class="d-flex align-items-center"><span class="badge text-bg-light border border-secondary-subtle me-2">출발 / 도착</span> 
           <div th:if="${node.kind == 1}">
           <span> 출발지</span>
@@ -437,7 +438,7 @@ function displayData(data) {
           <span> 도착지</span>
           </div> 
           </div>
-          <div class="d-flex align-items-center"><span class="badge text-bg-light border border-secondary-subtle me-2">배정 기사</span> <span>${node.dr_id}</span></div>
+          <div class="d-flex align-items-center"><span class="badge text-bg-light border border-secondary-subtle me-2">배정 기사</span> <span>${node.dR_ID}</span></div>
             </div>
           </div>
         </div>

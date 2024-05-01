@@ -2,6 +2,7 @@ package com.icia.Taeumproject.Dto;
 
 import lombok.Data;
 
+
 @Data
 public class DispatchDto {
   private Long D_ID;
@@ -11,6 +12,7 @@ public class DispatchDto {
   private String D_CANCLE;
   private String D_REASON;
   private int DR_ID;
+
   
 
   
