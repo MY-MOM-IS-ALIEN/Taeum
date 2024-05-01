@@ -34,6 +34,8 @@ public interface DriverDao {
 
 	void updateDriver(DriverDto driver);
 
+	void updateDriverProfile(int mid);
+
 
 
 

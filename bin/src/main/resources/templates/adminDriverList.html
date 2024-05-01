@@ -26,7 +26,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/css/bootstrap-datepicker.min.css" rel="stylesheet">
 <!-- Bootstrap Icons CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-
+<title>기사님 목록</title>
 <head>
 <style>
     #datePickerButton {
@@ -160,7 +160,13 @@
         document.getElementById('DATE-TIME').innerText = dateString;
     };
     
-    
+ // 주어진 날짜 객체를 yyyy-mm-dd 형식의 문자열로 변환하는 함수
+    function formatDate(date) {
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
     
     
     
@@ -171,7 +177,7 @@
         //날짜 들어가야함
         console.log("drIDValue = ", drIDValue);
     if(drIDValue != "" ){
-    	window.location.href = "nodeSelection?drID=" + drIDValue + "&selectedLocal=" + selectedLocal + "&selectDate=" + selectDate;
+    	window.location.href = "adminNodeSelection?drID=" + drIDValue + "&selectedLocal=" + selectedLocal + "&selectDate=" + selectDate;
     }else{
     	alert("기사 선정 해주세요.");
     }
@@ -286,13 +292,13 @@
         function displayDispatchList(driverInfo) {
             driverInfo.forEach(function(driver) {
             	 // 테이블 요소 생성
-                var table = $('<table class="table" style="width: 95%; height: auto;"></table>');
+                var table = $('<table class="table" style="width: 95%; height: auto; border: 2px solid #000;"></table>');
 
                 // 테이블 헤더 생성
                 var headerRow = $('<tr></tr>');
-                headerRow.append('<th style="width: 33%; height: 50px; border: 3px solid #000; text-align: center; background-color: #3F7EFC; color : white; ">최초 선정 시간</th>');
-                headerRow.append('<th style="width: 33%; height: 50px; border: 3px solid #000; text-align: center;  background-color: #3F7EFC; color : white;"> 배차 컨펌 시간</th>')
-                headerRow.append('<th style="width: 33%; height: 50px; border: 3px solid #000; text-align: center;  background-color: #3F7EFC; color : white;">선정 상태</th>');
+                headerRow.append('<th style="width: 33%; height: 50px; border: 2px solid #000; text-align: center; background-color: #3F7EFC; color : white; ">최초 선정 시간</th>');
+                headerRow.append('<th style="width: 33%; height: 50px; border: 2px solid #000; text-align: center;  background-color: #3F7EFC; color : white;"> 배차 컨펌 시간</th>')
+                headerRow.append('<th style="width: 33%; height: 50px; border: 2px solid #000; text-align: center;  background-color: #3F7EFC; color : white;">선정 상태</th>');
                 table.append(headerRow);
 
                 // 드라이버 정보를 테이블에 추가
@@ -302,12 +308,12 @@
                     // 배차 컨펌 시간 추가
                     
                     // 선정 시간 추가
-                    row.append('<td style="width: 33%; height: 17.9px; border: 3px solid #000; ">' + driver.d_SELECT + '</td>');
+                    row.append('<td style="width: 33%; height: 17.9px; border: 2px solid #000; ">' + driver.d_SELECT + '</td>');
 
                     if (driver.d_CONFIRM) {
-                        row.append('<td style="width: 33%; height: 17.9px; border: 3px solid #000;">' + driver.d_CONFIRM + '</td>');
+                        row.append('<td style="width: 33%; height: 17.9px; border: 2px solid #000;">' + driver.d_CONFIRM + '</td>');
                     } else {
-                        row.append('<td style="width: 33%; height: 17.9px; border: 3px solid #000;"></td>'); // 배차 컨펌 시간이 null이면 빈칸으로 처리
+                        row.append('<td style="width: 33%; height: 17.9px; border: 2px solid #000;"></td>'); // 배차 컨펌 시간이 null이면 빈칸으로 처리
                     }
                     // 선정 상태 추가
                     var statusText = "";
@@ -315,15 +321,18 @@
                     if (driver.d_STATUS === '0') {
                         statusText = "선정중";
                         
-                    row.append('<td style="width: 33%; height: 17.9px; border: 3px solid #000;">' + statusText + '<div class="circle" style="background-color: orange "></div>' + '</td>');
+                        row.append('<td style="width: 33%; height: 17.9px; border: 2px solid #000;">' + '<div class="circle" style="background-color: orange"></div>' + statusText + '</td>');
                     } else if (driver.d_STATUS === '1') {
                         statusText = "선정완료";
                         
-                        row.append('<td style="width: 33%; height: 17.9px; border: 3px solid #000;">' + statusText + '<div class="circle" style="background-color: green"></div>' + '</td>');
+                        row.append('<td style="width: 33%; height: 17.9px; border: 2px solid #000;">' + '<div class="circle" style="background-color: green"></div>' + statusText + '</td>');
                     } else if (driver.d_STATUS === '2') {
-                        statusText = "거절";
+                        statusText = "거절" 
+                        if(driver.d_REASON != null){
+                        	statusText = "거절 / ( " + driver.d_REASON + " ) ";
+                        }
                         
-                        row.append('<td style="width: 33%; height: 17.9px; border: 3px solid #000;">' + statusText + '<div class="circle" style="background-color: red"></div>' + '</td>');
+                        row.append('<td style="width: 33%; height: 17.9px; border: 2px solid #000;">' + '<div class="circle" style="background-color: red"></div>' + statusText + '</td>');
                     }
                     // 테이블에 행 추가
                     table.append(row);
