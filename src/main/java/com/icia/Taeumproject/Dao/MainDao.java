@@ -53,15 +53,16 @@ public interface MainDao {
 
   public List<DispatchDto> GetDriverList(Integer dr_ID);
 
-
-
   public List<DispatchDto> getDispatch(String date);
-
 
 
   public List<DrivermanagementDto> DRMTList(Integer dR_ID);
   
   public List<Node> getNodeList(int M_ID);
+
+
+  // 신청 내역 취소 시 Node도 삭제
+  public void cancelNode(int m_Id, String a_Date);
 
 
 

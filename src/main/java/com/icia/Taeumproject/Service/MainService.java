@@ -61,12 +61,13 @@ public class MainService {
         
         mDao.insert(node);
       }else {
+    	  String aDateAsString = string.toString();
         node.setM_ID(m_id);
         node.setX(startPoint.getX());
         node.setY(startPoint.getY());
         node.setAddress(fromAddress);
         node.setKind(sOrE);
-        node.setA_DATE(null);
+        node.setA_DATE(aDateAsString);
         
         
         mDao.insert(node);
