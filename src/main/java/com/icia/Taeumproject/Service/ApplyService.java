@@ -155,7 +155,7 @@ public class ApplyService {
 
           if (endPoint != null) {
             int kind = 2;
-            maServ.insertServ(apply.getM_ID(), apply.getA_ENDADRESS(), endPoint, kind, rttr, null);
+            maServ.insertServ(apply.getM_ID(), apply.getA_ENDADRESS(), endPoint, kind, rttr, apply.getA_DATE());
           }
         }
 
@@ -195,9 +195,11 @@ public class ApplyService {
   }
 
   // 신청 삭제
-  public void cancelApply(int applyId) {
+  public void cancelApply(int A_Id, int M_Id, String A_Date) {
     log.info("cancelApply");
-    aDao.cancelApply(applyId);
+    aDao.cancelApply(A_Id);
+    maDao.cancelNode(M_Id,A_Date);
+  
 
   }
   
