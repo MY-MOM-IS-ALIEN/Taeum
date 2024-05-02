@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.icia.Taeumproject.Dto.ApplyDto;
+import com.icia.Taeumproject.Dto.DispatchDto;
 import com.icia.Taeumproject.Dto.DriverDto;
 import com.icia.Taeumproject.Dto.DriverFileDto;
 
@@ -35,6 +36,16 @@ public interface DriverDao {
 	void updateDriver(DriverDto driver);
 
 	void updateDriverProfile(int mid);
+
+	void updateConfirm(DispatchDto dispatch);
+	
+	void updateNodeConfirm(DispatchDto dispatch);
+
+	void updateCancle(DispatchDto dispatch);
+
+	void updateNodeCancle(DispatchDto dispatch);
+
+
 
 //	void deleteTraffic(String name);
 
