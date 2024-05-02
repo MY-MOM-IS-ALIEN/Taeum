@@ -1,8 +1,7 @@
 package com.icia.Taeumproject.Controller;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -17,11 +16,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.icia.Taeumproject.Dto.DispatchDto;
 import com.icia.Taeumproject.Dto.DriverDto;
 import com.icia.Taeumproject.Dto.MemberDto;
 import com.icia.Taeumproject.Dto.Node;
 import com.icia.Taeumproject.Dto.SecurityUserDTO;
 import com.icia.Taeumproject.Service.DriverService;
+import com.icia.Taeumproject.Service.MainService;
 import com.icia.Taeumproject.Service.MemberService;
 
 import jakarta.servlet.http.HttpSession;
@@ -36,6 +37,9 @@ public class DriverController {
 	
 	@Autowired
 	private MemberService mServ;
+	
+	@Autowired
+	private MainService maServ;
 	
 	@GetMapping("driverMain")
 	public String driverMain(Model model) {
@@ -66,6 +70,7 @@ public class DriverController {
 		log.info("m_id: {}", m_id);
 
 		drServ.getDriverInfo(m_id, model);
+		System.out.println("엉엉엉"+model);
 
 		return "driverModify";
 	}
@@ -183,11 +188,63 @@ public class DriverController {
 		// 프로필 이미지 업데이트
 		drServ.updateDriverProfile(mid);
 		
+		// 로그인 시 저장된 이름 정보 추출
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Object principal = authentication.getPrincipal();
+		String name = ((SecurityUserDTO) principal).getM_NAME();
+	    
+		// 운행 건수 초기화
+//		drServ.deleteTraffic(name);
+		
 		// 그 외 업데이트 처리
 		view = drServ.driverUpdateProc(files, driver, rttr, session);
 		
 		return view;
 	}
+	
+	@GetMapping("/mainCenter")
+  public String test(Model model) {
+	  
+	  Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	  
+	  Object principal = authentication.getPrincipal();
+    int m_id = ((SecurityUserDTO) principal).getM_ID();
+    
+    log.info("m_id: {}", m_id);
+    int DR_ID = (m_id-1);
+    System.out.println("DR_ID = "+DR_ID);
+	  
+    int rideOne = DR_ID;
+    List<List<Node>> rideNodeList = new ArrayList<>();
+    List<Node> innerList1 = new ArrayList<>();
+    List<Node> innerList2 = new ArrayList<>();
+    List<Node> innerList3 = new ArrayList<>();
+
+    List<Node> nodeList = maServ.selectNodeList(DR_ID);
+
+    for (Node node : nodeList) {
+      if (node.getCycle() == 1) {
+        innerList1.add(node);
+      } else if (node.getCycle() == 2) {
+        innerList2.add(node);
+      } else {
+        innerList3.add(node);
+      }
+    }
+    rideNodeList.add(innerList1);
+    rideNodeList.add(innerList2);
+    rideNodeList.add(innerList3);
+    System.out.println("rideNodeList ==  == = = = =- = = " + rideNodeList);
+    model.addAttribute("rideNodeList", rideNodeList);
+
+    System.out.println(innerList1);
+    System.out.println(innerList2);
+    System.out.println(innerList3);
+    // model.addAttribute("innerList1", innerList1);
+    model.addAttribute("nodeList", nodeList);
+
+    return "mainCenter"; // 뷰 이름 반환
+  }
 	
 	@GetMapping("driverAutoJoin")
 	public String driverAutoJoin(RedirectAttributes rttr) {
@@ -216,15 +273,28 @@ public class DriverController {
 		}
 			
 		
-		return "adminMain";
+		return "redirect:/adminMain";
 	}
 	
 	@PostMapping("/acceptNode")
 	public String acceptNode(@RequestBody List<Node> data) {
 	    log.info("acceptNode()");
 	    
-	    System.out.println("여기지롱" + data);
+	  Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+		Object principal = authentication.getPrincipal();
+		int m_id = ((SecurityUserDTO) principal).getM_ID();
+		log.info("m_id: {}", m_id);
+		int DR_ID = (m_id-1);
+		System.out.println("DR_ID = "+DR_ID);
+	    
+	    System.out.println("여기지롱" + data);
+	    for(int i=0; i<=data.size(); i++) {
+	    	DispatchDto dispatch = new DispatchDto();
+	    	
+	    	
+	    	
+	    }
 	    return "mainCenter"; // 적절한 응답 처리
 	}
 	 

@@ -26,8 +26,11 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/css/bootstrap-datepicker.min.css" rel="stylesheet">
 <!-- Bootstrap Icons CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-<title>기사님 목록</title>
+
+<title>기사 관리</title>
 <head>
+<!-- 그래프 -->
+ <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
     #datePickerButton {
         background-color: #3F7EFC;
@@ -60,6 +63,12 @@
         opacity: 0.4; /* 투명도 설정 */
     }
   
+ #myChart {
+    margin-left : 15px;
+    margin-top : 30px;
+    width: 1500px !important;
+    height: 720px !important;
+}
 </style>
  <th:block th:insert="~{fragments :: header}" style = "z-index : 9999"/>
 
@@ -124,42 +133,20 @@
             <!--  -->
         </div>
         <div style="width: 100%; height: 100%;"> 
-       <div style="display: flex; align-items: flex-start; margin-top: 3%; margin-left: 3%; width: 100%; " >
-    <img src="images/nullprofile.png" style="width: 300px; height: auto;">
-    <div style="margin-left: 3%;"> <!-- 여백 조정 -->
-      
-            <ul style="font-weight: bold; font-size: 25px;">
-                <li id="driverName">이름 : </li>
-                <br>
-                 <br>
-                <li id="driverPhone">전화번호  : </li>
-                <br>
-                <br>
-                <li id="driverLocal">주 운행지 : </li>
-                <br>
-                 <br>
-                <li id="driverCarnum">차량 번호 : </li>
-       
-                <li style="display:none;" id="driverId"></li>
-            </ul>
 
-    </div>
-    
-</div>
-  <button type="button" class="btn btn-success"
-      style="position: fixed; top: 15px; right: 20px; z-index: 1030; background-color: #3F7EFC;"
-      id="send" >전송</button>
 
      <div id="driverInfoList123" style="margin-left: 3%;">
         <!-- 여기에 운행 리스트가 나타날 것입니다. -->
     </div>
 
+			<canvas id="myChart"></canvas>
     </div>
-
-    </main>
-
-    <script th:inline="javascript">
-   
+    
+			
+    </main>    
+</body>
+<script th:inline="javascript">
+  
     window.onload = function() {
         // 부트스트랩 달력 초기화
         $('#datePickerButton').datepicker({
@@ -190,21 +177,7 @@
     
     
     
-    $(document).on('click', '#send', function(event){
-        var drIDValue = $("#driverId").text();
-        var selectedLocal = $("#local").val();
-        var selectDate = $("#DATE-TIME").text();
-        //날짜 들어가야함
-        console.log("drIDValue = ", drIDValue);
-    if(drIDValue != "" ){
-    	window.location.href = "adminNodeSelection?drID=" + drIDValue + "&selectedLocal=" + selectedLocal + "&selectDate=" + selectDate;
-    }else{
-    	alert("기사 선정 해주세요.");
-    }
-           
-    });
-    
-    
+
     
         $(document).ready(function() {
             $('#local').change(function() {
@@ -223,7 +196,7 @@
                         console.log('응답 데이터:', response);
                         // 드라이버 목록 업데이트
                         updateDriverList(response);
-                        displayDriverList();
+                       
                     },
                     error: function(xhr, status, error) {
                         // Ajax 요청이 실패했을 때 수행할 작업
@@ -283,91 +256,163 @@
      
     var driverID = parseInt($(this).find('#dr_ID').val());
 //     var GetDriverList = [[${GetDriverList}]];
-    
-    $.ajax({
-                url: 'GetDriverList', // 컨트롤러의 URL
-                method: 'POST',
-                data: {
-                    DR_ID : driverID
-                }, // 선택된 값 전송
-                success: function(response) {
-                    // 성공적으로 서버로부터 응답을 받았을 때 수행할 작업
-                   $('#driverInfoList123').empty()
-                  
-                   displayDispatchList(response);
+
+
+
+      $.ajax({
+                    url: 'adminDRMTproc', // 컨트롤러의 URL
+                    method: 'POST',
+                    data: {
+                        DR_ID: driverID
+                    }, // 선택된 값 전송
+                    success: function(response) {
+                        // 성공적으로 서버로부터 응답을 받았을 때 수행할 작업
+                        console.log('AJAX 요청이 성공적으로 전송되었습니다.');
+                        console.log('응답 데이터:', response);
+                        // 드라이버 목록 업데이트
+                       
+                       
+                    },
+                    error: function(xhr, status, error) {
+                        // Ajax 요청이 실패했을 때 수행할 작업
+                        console.error('AJAX 요청이 실패하였습니다:', error);
+                    }
+                });
+
+    // 출근 시간 데이터 생성
+    function generateArrivalData() {
+        const currentDate = new Date();
+        const arrivalData = [];
+
+        // 오늘 날짜 기준으로 -14일까지의 출근 시간 데이터 생성
+        for (let i = 14; i >= 0; i--) {
+            const date = new Date(currentDate);
+            date.setDate(date.getDate() - i); // i일 전의 날짜로 설정
+            
+            
+            const hours = Math.floor(Math.random() * 3) + 7; // 7 ~ 9 사이의 임의의 시간 (정수)
+            const minutes = Math.floor(Math.random() * 60); // 0 ~ 59 사이의 임의의 분
+            const time = hours + minutes / 60; // 시간을 소수점으로 표현 (예: 8시 27분 => 8.45)
+
+            arrivalData.push(time);
+        }
+
+        return arrivalData;
+    }
+
+    // 퇴근 시간 데이터 생성
+    function generateDepartureData() {
+        const currentDate = new Date();
+        const departureData = [];
+
+        // 오늘 날짜 기준으로 -14일까지의 퇴근 시간 데이터 생성
+        for (let i = 14; i >= 0; i--) {
+            const date = new Date(currentDate);
+            date.setDate(date.getDate() - i); // i일 전의 날짜로 설정
+            const hours = Math.floor(Math.random() * 3) + 17; // 17 ~ 19 사이의 임의의 시간 (정수)
+            const minutes = Math.floor(Math.random() * 60); // 0 ~ 59 사이의 임의의 분
+            const time = hours + minutes / 60; // 시간을 소수점으로 표현 (예: 8시 27분 => 8.45)
+
+            departureData.push(time);
+        }
+
+        return departureData;
+    }
+
+    // 출근 시간 데이터 생성
+    const arrivalData = generateArrivalData();
+
+    // 퇴근 시간 데이터 생성
+    const departureData = generateDepartureData();
+
+    // 날짜 라벨 생성
+    const currentDate = new Date();
+    const labels = [];
+    for (let i = 14; i >= 0; i--) {
+        const date = new Date(currentDate);
+        date.setDate(date.getDate() - i); // i일 전의 날짜로 설정
+        labels.push(`${date.getMonth() + 1}/${date.getDate()}`);
+    }
+
+ 
+
+    const chartData = {
+        labels: labels,
+        datasets: [
+            {
+                label: '출근 시간',
+                data: arrivalData,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            },
+            {
+                label: '퇴근 시간',
+                data: departureData,
+                borderColor: 'rgb(255, 159, 64)',
+                tension: 0.1
+            }
+        ]
+    };
+
+    const options = {
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: '시간',
+                    fontSize: 16,
+                    fontWeight: 'bold'
                 },
-                error: function(xhr, status, error) {
-                    // Ajax 요청이 실패했을 때 수행할 작업
-                    console.error('AJAX 요청이 실패하였습니다:', error);
-                   
+                min: 6,
+                max: 20,
+                stepSize: 1,
+                ticks: {
+                    fontSize: 14,
+                    fontWeight: 'bold'
                 }
-            });
+            },
+            x: {
+                title: {
+                    display: true,
+                    text: '날짜',
+                    fontSize: 16,
+                    fontWeight: 'bold'
+                },
+                ticks: {
+                    fontSize: 14,
+                    fontWeight: 'bold'
+                }
+            }
+        }
+    };
+
+    // 캔버스 요소 가져오기
+    const canvas = document.getElementById('myChart');
+
+    // 캔버스 컨텍스트 가져오기
+    const ctx = canvas.getContext('2d');
+
+    // 선 그래프 생성
+    const myChart = new Chart(ctx, {
+        type: 'line',
+        data: chartData,
+        options: options
+    });
     
      
     });
     
     
-     }
-        // 운행정보를 화면에 출력하는 함수
-        function displayDispatchList(driverInfo) {
-            driverInfo.forEach(function(driver) {
-            	 // 테이블 요소 생성
-                var table = $('<table class="table" style="width: 95%; height: auto; border: 2px solid #000;"></table>');
+ }
 
-                // 테이블 헤더 생성
-                var headerRow = $('<tr></tr>');
-                headerRow.append('<th style="width: 33%; height: 50px; border: 2px solid #000; text-align: center; background-color: #3F7EFC; color : white; ">최초 선정 시간</th>');
-                headerRow.append('<th style="width: 33%; height: 50px; border: 2px solid #000; text-align: center;  background-color: #3F7EFC; color : white;"> 배차 컨펌 시간</th>')
-                headerRow.append('<th style="width: 33%; height: 50px; border: 2px solid #000; text-align: center;  background-color: #3F7EFC; color : white;">선정 상태</th>');
-                table.append(headerRow);
-
-                // 드라이버 정보를 테이블에 추가
-                driverInfo.forEach(function(driver) {
-                    var row = $('<tr></tr>');
-                    
-                    // 배차 컨펌 시간 추가
-                    
-                    // 선정 시간 추가
-                    row.append('<td style="width: 33%; height: 17.9px; border: 2px solid #000; ">' + driver.d_SELECT + '</td>');
-
-                    if (driver.d_CANCLE == null && driver.d_CONFIRM != null) {
-                        row.append('<td style="width: 33%; height: 17.9px; border: 2px solid #000;">' + driver.d_CONFIRM + '</td>');
-                    } else if(driver.d_CANCLE != null && driver.d_CONFIRM == null ) {
-                        row.append('<td style="width: 33%; height: 17.9px; border: 2px solid #000;">' + driver.d_CANCLE + '</td>'); // 배차 컨펌 시간이 null이면 빈칸으로 처리
-                    }else {
-                    	row.append('<td style="width: 33%; height: 17.9px; border: 2px solid #000;"></td>'); 
-                    }
-                    // 선정 상태 추가
-                    var statusText = "";
-                   
-                    if (driver.d_STATUS === '0') {
-                        statusText = "선정중";
-                        
-                        row.append('<td style="width: 33%; height: 17.9px; border: 2px solid #000;">' + '<div class="circle" style="background-color: orange"></div>' + statusText + '</td>');
-                    } else if (driver.d_STATUS === '1') {
-                        statusText = "선정완료";
-                        
-                        row.append('<td style="width: 33%; height: 17.9px; border: 2px solid #000;">' + '<div class="circle" style="background-color: green"></div>' + statusText + '</td>');
-                    } else if (driver.d_STATUS === '2') {
-                        statusText = "거절" 
-                        if(driver.d_REASON != null){
-                        	statusText = "거절 / ( " + driver.d_REASON + " ) ";
-                        }
-                        
-                        row.append('<td style="width: 33%; height: 17.9px; border: 2px solid #000;">' + '<div class="circle" style="background-color: red"></div>' + statusText + '</td>');
-                    }
-
-                    // 테이블에 행 추가
-                    table.append(row);
-                });
-
-                // 이전 내용을 지우고 테이블을 추가
-                $('#driverInfoList123').empty().append(table);
-            });
-        }
+    
         
         
-      
+  
     </script>
-</body>
+   
+    
+  
+
 </html>

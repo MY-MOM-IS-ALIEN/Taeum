@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Taeum</title>
+<!-- External libraries -->
+<script src="js/jquery-3.7.1.min.js"></script>
+<script
+  src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<!-- CSS styles -->
+<!--  <link rel="stylesheet" href="css/style.css"> -->
+<link rel="stylesheet" href="css/style.css">
+<!-- Include header fragment -->
+<th:block th:insert="~{fragments :: header}" />
+</head>
+
+<body>
+  <section>
+    <div class="content">
+      <form th:action="@{UserUpdateProc}" class="write-form" method="post"
+        enctype="multipart/form-data">
+        <h2 class="login-header">사용자 정보수정</h2>
+        <!-- 작성자(로그인 한 id), 제목, 내용, 파일  -->
+        <div class="apply-content">
+          <input type="hidden" name="M_ID"
+            th:value="${#authentication.principal != null ? #authentication.principal.M_ID : ''}">
+          이메일:<input class="write-input" name="username" id="username"
+            th:value="${#authentication.principal != null ? #authentication.principal.username : ''}"readonly>
+          성함:<input class="write-input" name="M_NAME" id="M_NAME"
+            th:value="${#authentication.principal != null ? #authentication.principal.M_NAME : ''}">
+          연락처:<input class="write-input" name="M_PHONE" id="M_PHONE"
+            th:value="${#authentication.principal != null ? #authentication.principal.M_PHONE : ''}">
+
+
+       
+
+        <div class="btn-area">
+          <input type="submit" class="btn-write" value="저장"> 
+          <input type="button" class="btn-write" value="뒤로가기" id="backbtn">
+        </div> <!-- btn-area End -->
+      </form> <!-- content End -->
+    </div>
+  </section>
+
+
+  <th:block th:insert="~{fragments::footer}" />
+
+
+
+  <script th:inline="javascript">
+    
+
+    
+
+    $(function() {
+      let msg = /*[[${msg}]]*/null;
+      if (msg != null) {
+        alert(msg);
+      }
+    });
+
+    $("#backbtn").click(function() {
+      let url = "/";
+
+      location.href = url;
+    });
+
+    
+  </script>
+
+</body>
+
+</html>
+
+
+
+
+
+
+
+

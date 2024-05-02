@@ -1,20 +1,13 @@
 package com.icia.Taeumproject.Config;
 
-
-
-
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-
 import org.springframework.security.web.SecurityFilterChain;
 import org.thymeleaf.extras.springsecurity6.dialect.SpringSecurityDialect;
 
@@ -26,35 +19,30 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 @EnableWebSecurity(debug = false)
 @RequiredArgsConstructor
-public class SecurityConfig {
+public class SecurityConfig{
   
   private final CustomUserDetailsService customUserDetailsService;
   
 
   @Autowired
   public SecurityBeansConfig securityBeansConfig;
-  
-  @Autowired
-  public WebSocketConfig webSocketConfig;
-
-                        
-
+                  
   @Autowired
   public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
       auth.userDetailsService(customUserDetailsService).passwordEncoder(securityBeansConfig.passwordEncoder());
   }
   
-
-  
   @Bean // StaticResources  파일 보안 무시 
-    public WebSecurityCustomizer webSecurityCustomizer(){
-        return (web) -> web.ignoring()
-                .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
-    }
+  public WebSecurityCustomizer webSecurityCustomizer(){
+      return (web) -> web.ignoring()
+              .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+  }
+  
   @Bean
   public SpringSecurityDialect securityDialect(){
     return new SpringSecurityDialect();
   }
+  
   
   @Bean      // 경로 권한 설정 
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -101,12 +89,47 @@ public class SecurityConfig {
       .requestMatchers("/selectLocaldate").permitAll()
       .requestMatchers("/selectedLocal").permitAll()
       .requestMatchers("/nodeSelection").permitAll()
+      .requestMatchers("/applyList").hasRole("USER")
+      .requestMatchers("/getApplyList").hasRole("USER")
+      .requestMatchers("/board/**").permitAll()
+      .requestMatchers("/updateApplyStatusWithNodeList").permitAll()
+      // 페이지관련 끝 
+      
+      
+      // 웹소켓 관련
+      .requestMatchers("/afterConnectionEstablished").permitAll()
+      .requestMatchers("/handleMessage").permitAll()
+      .requestMatchers("/handleTransportError").permitAll()
+      .requestMatchers("/afterConnectionClosed").permitAll()
+      .requestMatchers("/applysupportsPartialMessagesWrite").permitAll()
+      
+      .requestMatchers("/MemberPrincipal").permitAll()
+      .requestMatchers("/getAuthorities").permitAll()
+      .requestMatchers("/getPassword").permitAll()
+      .requestMatchers("/getUsername").permitAll()
+      .requestMatchers("/isAccountNonExpired").permitAll()
+      .requestMatchers("/isAccountNonLocked").permitAll()
+      .requestMatchers("/isCredentialsNonExpired").permitAll()
+      .requestMatchers("/isEnabled").permitAll()
+      
+      .requestMatchers("/WebSocketConfig").permitAll()
+      .requestMatchers("/registerStompEndpoints").permitAll()
+      .requestMatchers("/configureMessageBroker").permitAll()
+      
+     
+      .requestMatchers("/popList").permitAll()
+   
+      .requestMatchers("/pop").permitAll()
+      .requestMatchers("/window.open").permitAll()
       
       
       
-      
+   
+      // WebSocket 핸들러에 대한 접근 권한 설정
+      .requestMatchers("/ws").permitAll()
       .anyRequest().authenticated()
-      );
+    );
+      
       
     
     http.formLogin((auth)-> auth.loginPage("/loginForm").permitAll()
@@ -127,4 +150,6 @@ public class SecurityConfig {
     
     return http.build();
   }
+  
+  
 }
