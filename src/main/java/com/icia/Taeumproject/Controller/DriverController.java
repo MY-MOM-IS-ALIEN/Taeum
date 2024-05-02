@@ -34,17 +34,17 @@ public class DriverController {
 
 	@Autowired
 	private DriverService drServ;
-	
+
 	@Autowired
 	private MemberService mServ;
-	
+
 	@Autowired
 	private MainService maServ;
-	
+
 	@GetMapping("driverMain")
 	public String driverMain(Model model) {
 		log.info("driverMain()");
-		
+
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 		// 로그인 시 정보 가져오기
@@ -53,7 +53,7 @@ public class DriverController {
 		log.info("m_id: {}", m_id);
 
 		drServ.getDriverInfo(m_id, model);
-		
+
 		return "driverMain";
 	}
 
@@ -70,7 +70,7 @@ public class DriverController {
 		log.info("m_id: {}", m_id);
 
 		drServ.getDriverInfo(m_id, model);
-		System.out.println("엉엉엉"+model);
+		System.out.println("엉엉엉" + model);
 
 		return "driverModify";
 	}
@@ -128,7 +128,6 @@ public class DriverController {
 		return drServ.getDriverImage(M_ID, model);
 
 	}
-	
 
 	@GetMapping("driverJoin")
 	public String driverJoin() {
@@ -148,32 +147,29 @@ public class DriverController {
 	 * 
 	 * return view; }
 	 */
-	
+
 	@GetMapping("driverUpdate")
 	public String driverUpdate(Model model) {
 		log.info("driverUpdate()");
-		
+
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 		Object principal = authentication.getPrincipal();
 		int m_id = ((SecurityUserDTO) principal).getM_ID();
 		log.info("m_id: {}", m_id);
-		
+
 		drServ.getDriverInfo(m_id, model);
 		System.out.println(model);
-		
-		
+
 		return "driverUpdate";
 	}
 
 	@PostMapping("driverUpdateProc")
-	public String driverUpdateProc(List<MultipartFile> files,
-									DriverDto driver,
-									RedirectAttributes rttr,
-									HttpSession session) {
+	public String driverUpdateProc(List<MultipartFile> files, DriverDto driver, RedirectAttributes rttr,
+			HttpSession session) {
 		log.info("driverUpdateProc()");
 		String view = null;
-		
+
 		MemberDto member = new MemberDto();
 		int mid = driver.getM_ID();
 		String m_name = driver.getM_NAME();
@@ -181,106 +177,104 @@ public class DriverController {
 		member.setM_ID(mid);
 		member.setM_NAME(m_name);
 		member.setM_PHONE(m_phone);
-		
+
 		// 기사 정보 업데이트
 		mServ.DriveMemberUpdate(member);
-		
+
 		// 프로필 이미지 업데이트
 		drServ.updateDriverProfile(mid);
-		
+
 		// 로그인 시 저장된 이름 정보 추출
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Object principal = authentication.getPrincipal();
 		String name = ((SecurityUserDTO) principal).getM_NAME();
-	    
-		// 운행 건수 초기화
-//		drServ.deleteTraffic(name);
-		
+
 		// 그 외 업데이트 처리
 		view = drServ.driverUpdateProc(files, driver, rttr, session);
-		
+
 		return view;
 	}
+
 	
+
 	@GetMapping("/mainCenter")
-  public String test(Model model) {
-	  
-	  Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	  
-	  Object principal = authentication.getPrincipal();
-    int m_id = ((SecurityUserDTO) principal).getM_ID();
-    
-    log.info("m_id: {}", m_id);
-    int DR_ID = (m_id-1);
-    System.out.println("DR_ID = "+DR_ID);
-	  
-    int rideOne = DR_ID;
-    List<List<Node>> rideNodeList = new ArrayList<>();
-    List<Node> innerList1 = new ArrayList<>();
-    List<Node> innerList2 = new ArrayList<>();
-    List<Node> innerList3 = new ArrayList<>();
+	public String test(Model model) {
 
-    List<Node> nodeList = maServ.selectNodeList(DR_ID);
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    for (Node node : nodeList) {
-      if (node.getCycle() == 1) {
-        innerList1.add(node);
-      } else if (node.getCycle() == 2) {
-        innerList2.add(node);
-      } else {
-        innerList3.add(node);
-      }
-    }
-    rideNodeList.add(innerList1);
-    rideNodeList.add(innerList2);
-    rideNodeList.add(innerList3);
-    System.out.println("rideNodeList ==  == = = = =- = = " + rideNodeList);
-    model.addAttribute("rideNodeList", rideNodeList);
+		Object principal = authentication.getPrincipal();
+		int m_id = ((SecurityUserDTO) principal).getM_ID();
 
-    System.out.println(innerList1);
-    System.out.println(innerList2);
-    System.out.println(innerList3);
-    // model.addAttribute("innerList1", innerList1);
-    model.addAttribute("nodeList", nodeList);
+		log.info("m_id: {}", m_id);
+		int DR_ID = (m_id - 1);
+		System.out.println("DR_ID = " + DR_ID);
 
-    return "mainCenter"; // 뷰 이름 반환
-  }
-	
+		int rideOne = DR_ID;
+		List<List<Node>> rideNodeList = new ArrayList<>();
+		List<Node> innerList1 = new ArrayList<>();
+		List<Node> innerList2 = new ArrayList<>();
+		List<Node> innerList3 = new ArrayList<>();
+
+		List<Node> nodeList = maServ.selectNodeList(DR_ID);
+
+		for (Node node : nodeList) {
+			if (node.getCycle() == 1) {
+				innerList1.add(node);
+			} else if (node.getCycle() == 2) {
+				innerList2.add(node);
+			} else {
+				innerList3.add(node);
+			}
+		}
+		rideNodeList.add(innerList1);
+		rideNodeList.add(innerList2);
+		rideNodeList.add(innerList3);
+		System.out.println("rideNodeList ==  == = = = =- = = " + rideNodeList);
+		model.addAttribute("rideNodeList", rideNodeList);
+
+		System.out.println(innerList1);
+		System.out.println(innerList2);
+		System.out.println(innerList3);
+		// model.addAttribute("innerList1", innerList1);
+		model.addAttribute("nodeList", nodeList);
+
+		return "mainCenter"; // 뷰 이름 반환
+	}
+
 	@GetMapping("driverAutoJoin")
 	public String driverAutoJoin(RedirectAttributes rttr) {
 		log.info("driverAutoJoin()");
-		
-		for(int i=2; i<=4; i++) {
+
+		for (int i = 2; i <= 4; i++) {
 			MemberDto member = new MemberDto();
-			member.setUsername("alsdn547"+i+"@naver.com");
+			member.setUsername("alsdn547" + i + "@naver.com");
 			member.setPassword("1111");
-			member.setM_NAME("드라이버"+(i-1));
+			member.setM_NAME("드라이버" + (i - 1));
 			member.setM_PHONE("null");
 			member.setRole("DRIVER");
-			
-			mServ.memberJoin(member,rttr);
+
+			mServ.memberJoin(member, rttr);
 			int m_id = i;
 			mServ.updateRole(m_id);
 		}
-		
-		for(int i=1; i<=3; i++) {
+
+		for (int i = 1; i <= 3; i++) {
 			DriverDto driver = new DriverDto();
-			driver.setDR_CARNUM(15+"더"+(9018+i));
+			driver.setDR_CARNUM(15 + "더" + (9018 + i));
 			driver.setDR_AREA("부평구");
-			driver.setM_ID(i+1);
-			
+			driver.setM_ID(i + 1);
+
 			drServ.insertDriver(driver, rttr);
 		}
-			
-		
+
 		return "redirect:/adminMain";
 	}
-	
+
 	@PostMapping("/acceptNode")
 	public String acceptNode(@RequestBody List<Node> data) {
-	    log.info("acceptNode()");
-	    
-	  Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		log.info("acceptNode()");
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 		Object principal = authentication.getPrincipal();
 		int m_id = ((SecurityUserDTO) principal).getM_ID();
@@ -304,8 +298,13 @@ public class DriverController {
 	    drServ.updateCancle(dataToSend,DR_ID);
 
 	    return "mainCenter"; // 적절한 응답 처리
-	}
+
+
+
+
+
 	 
+
+	}
 }
-	
 

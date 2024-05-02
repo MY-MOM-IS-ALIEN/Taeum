@@ -1,5 +1,6 @@
 package com.icia.Taeumproject.Dao;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -37,6 +38,7 @@ public interface DriverDao {
 
 	void updateDriverProfile(int mid);
 
+
 	void updateConfirm(DispatchDto dispatch);
 	
 	void updateNodeConfirm(DispatchDto dispatch);
@@ -45,9 +47,6 @@ public interface DriverDao {
 
 	void updateNodeCancle(DispatchDto dispatch);
 
-
-
-//	void deleteTraffic(String name);
 
 
 
