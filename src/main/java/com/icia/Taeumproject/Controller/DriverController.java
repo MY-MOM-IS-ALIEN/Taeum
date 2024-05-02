@@ -70,6 +70,7 @@ public class DriverController {
 		log.info("m_id: {}", m_id);
 
 		drServ.getDriverInfo(m_id, model);
+		System.out.println("엉엉엉"+model);
 
 		return "driverModify";
 	}
@@ -208,6 +209,7 @@ public class DriverController {
 	  
 	  Object principal = authentication.getPrincipal();
     int m_id = ((SecurityUserDTO) principal).getM_ID();
+    
     log.info("m_id: {}", m_id);
     int DR_ID = (m_id-1);
     System.out.println("DR_ID = "+DR_ID);
@@ -218,7 +220,7 @@ public class DriverController {
     List<Node> innerList2 = new ArrayList<>();
     List<Node> innerList3 = new ArrayList<>();
 
-    List<Node> nodeList = maServ.selectNodeList(rideOne);
+    List<Node> nodeList = maServ.selectNodeList(DR_ID);
 
     for (Node node : nodeList) {
       if (node.getCycle() == 1) {

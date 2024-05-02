@@ -42,23 +42,37 @@ public class MainService {
   }
 
   
-  public void insertServ(int m_id,String fromAddress,Point startPoint,int sOrE,RedirectAttributes rttr, LocalDateTime A_DATE) {
+  public void insertServ(int m_id,String fromAddress,Point startPoint,int sOrE,RedirectAttributes rttr, String string) {
       log.info("insertServ()");
       Node node = new Node();
       
             
       
-              String aDateAsString = A_DATE.toString();
+      
+      if(sOrE == 1) {
+        String aDateAsString = string.toString();
+        node.setM_ID(m_id);
+        node.setX(startPoint.getX());
+        node.setY(startPoint.getY());
+        node.setAddress(fromAddress);
+        node.setKind(sOrE);
+        node.setA_DATE(aDateAsString);
+        
+        
+        mDao.insert(node);
+      }else {
+        node.setM_ID(m_id);
+        node.setX(startPoint.getX());
+        node.setY(startPoint.getY());
+        node.setAddress(fromAddress);
+        node.setKind(sOrE);
+        node.setA_DATE(null);
+        
+        
+        mDao.insert(node);
+      }
               
-      node.setM_ID(m_id);
-      node.setX(startPoint.getX());
-      node.setY(startPoint.getY());
-      node.setAddress(fromAddress);
-      node.setKind(sOrE);
-      node.setA_DATE(aDateAsString);
-      
-      
-      mDao.insert(node);
+ 
       
   }
 

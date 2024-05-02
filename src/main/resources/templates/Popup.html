@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Popup</title>
+    <!-- External libraries -->
+    <script src="js/jquery-3.7.1.min.js"></script>
+    <!-- CSS styles -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Include header fragment -->
+   <th:block th:insert="~{fragments::header}" />
+</head>
+<body>
+<section>
+    <div class="content">
+        <h2>알림 내용</h2>
+        <div>
+            <!-- nList가 비어 있는 경우 -->
+            <div th:if="${#lists.isEmpty(nList)}">
+                <div style="width: 100%">알림이 없습니다.</div>
+            </div>
+            <div th:unless="${#lists.isEmpty(nList)}">
+                <div th:each="popup : ${nList}">
+                    <div>
+                        <span th:text="${popup.message}"></span>
+                        <span th:text="${#dates.format(popup.CREATED_AT, 'yyyy-MM-dd HH:mm')}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<footer>
+   <th:block th:insert="~{fragments::footer}" />
+</footer>
+</body>
+</html>

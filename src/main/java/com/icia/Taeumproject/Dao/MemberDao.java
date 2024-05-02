@@ -1,33 +1,39 @@
 package com.icia.Taeumproject.Dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.icia.Taeumproject.Dto.MemberDto;
+import com.icia.Taeumproject.Dto.Node;
 
 @Mapper
 public interface MemberDao {
 
-  // 회원가입 메서드
-  void insertMember(MemberDto member);
+	// 회원가입 메서드
+	void insertMember(MemberDto member);
 
-  // 로그인 비밀번호를 가져오는 메서드
-  String selectPassword(String username);
+	// 로그인 비밀번호를 가져오는 메서드
+	String selectPassword(String username);
 
-  // 로그인 후 회원 정보를 가져오는 메서드
-  MemberDto selectMember(String username);
+	// 로그인 후 회원 정보를 가져오는 메서드
+	MemberDto selectMember(String username);
 
-  // 이메일 중복 체크 메서드
-  int emailCheck(String memail);
-  
-  //메일주소를 가져오는 메서드
-  String selectEmail(String M_NAME);
+	// 이메일 중복 체크 메서드
+	int emailCheck(String memail);
 
-  MemberDto findUserByEmail(String username);
+	// 메일주소를 가져오는 메서드
+	String selectEmail(String M_NAME);
 
-  String findById(String m_name, String m_phone);
+	MemberDto findUserByEmail(String username);
 
-  int updateRole(int m_id);
+	String findById(String m_name, String m_phone);
 
-  void updateDriveMemberUpdate(MemberDto member);
+	void updateRole(int mid);
 
+	void updateDriveMemberUpdate(MemberDto member);
+
+	void UserUpdate(String username, String m_NAME, String m_PHONE);
+
+	List<MemberDto> getAllUsers();
 }

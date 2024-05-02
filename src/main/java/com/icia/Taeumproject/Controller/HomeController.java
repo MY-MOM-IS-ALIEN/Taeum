@@ -11,54 +11,83 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.icia.Taeumproject.Dto.ApplyDto;
 import com.icia.Taeumproject.Dto.SearchDto;
+import com.icia.Taeumproject.Dto.SecurityUserDTO;
 import com.icia.Taeumproject.Service.ApplyService;
-import com.icia.Taeumproject.Service.MainService;
+
 
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
-
+@PreAuthorize("hasRole('USER')")
 @Controller
 @Slf4j
 public class HomeController {
       @Autowired
       private ApplyService aServ;
       
-      @Autowired
-      private MainService maServ;
-      
       @GetMapping("applyList")
-      public String applyList(SearchDto sdto, HttpSession session , Model model) {
-        log.info("applyList()");
-        String view = aServ.getApplyList(sdto,session,model);
-        return view;
-      }
+  		public String applyList(Model model) {
+  		log.info("applyList()");
+  		
+  		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+  		// 로그인 시 정보 가져오기
+  		Object principal = authentication.getPrincipal();
+  		int m_id = ((SecurityUserDTO) principal).getM_ID();
+  		log.info("m_id: {}", m_id);
+
+  		// aServ.getApplyList(m_id, model);
+  		aServ.updateApplyStatusWithNodeList(m_id,model);
+  		
+  		return "applyList";
+  		}
+
       
-      @GetMapping("mainOfmain")
-      public String mainOfmain() {
-    	  return "mainOfmain";
-      }
-      
-     @GetMapping("applyForm")
-     public String applyForm() {
+     @GetMapping("ApplyForm")
+     public String ApplyForm() {
        
-         return "applyForm";
+         return "ApplyForm";
      }
-         @PostMapping("applyProc")
-         public String applyProc(ApplyDto apply, RedirectAttributes rttr) {
-             log.info("applyProc");
-
-             // 현재 로그인한 사용자 정보 가져오기
-             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-             String view = aServ.applyWrite(apply, rttr);
+     
+     @PostMapping("ApplyProc")
+     public String ApplyProc(ApplyDto apply, RedirectAttributes rttr) {
+         log.info("ApplyProcApplyProcApplyProcApplyProcApplyProc  = " + apply);
+         
+         // 현재 로그인한 사용자 정보 가져오기
+         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+         String username = authentication.getName(); // 현재 로그인한 사용자의 아이디
+         
+         String view = aServ.applyWrite(apply, rttr, username);
+         
+        // 만약 글 작성이 성공하고, 현재 로그인한 사용자의 역할이 USER라면 알림 전송
+         if (view.equals("redirect:/")) {
             
-             
-             
-             return view;
          }
+         
+         return view;
      }
+     
+     @PostMapping("/cancelApply")
+     public String cancelApply(@RequestParam("applyId") int applyId, RedirectAttributes redirectAttributes) {
+         log.info("cancelApply");
+         aServ.cancelApply(applyId);
+         return "redirect:/"; // 홈으로 리다이렉트
+     }
+     
+     @GetMapping("Popup")
+     public String pop(SearchDto sdto , HttpSession session , Model model) {
+       
+       log.info("pop()");
+       
+       String view = aServ.popList(sdto,session,model);
+       
+       return view;
+     }
+     
+     
+}

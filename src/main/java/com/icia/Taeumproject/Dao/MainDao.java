@@ -60,6 +60,8 @@ public interface MainDao {
 
 
   public List<DrivermanagementDto> DRMTList(Integer dR_ID);
+  
+  public List<Node> getNodeList(int M_ID);
 
 
 

@@ -1,5 +1,6 @@
 package com.icia.Taeumproject.Service;
 
+import java.security.Principal;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -26,135 +27,145 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class MemberService {
-  @Autowired
-  private MemberDao mDao;
-  @Autowired
-  private CustomUserDetailsService customUserDetailsService;
-  // 비밀번호 암호와 인코더
-  private BCryptPasswordEncoder pEncoder = new BCryptPasswordEncoder();
-  @Autowired
-  private PasswordEncoder passwordEncoder;
+	@Autowired
+	private MemberDao mDao;
+	@Autowired
+	private CustomUserDetailsService customUserDetailsService;
+	// 비밀번호 암호와 인코더
+	private BCryptPasswordEncoder pEncoder = new BCryptPasswordEncoder();
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 //로그인 처리 메소드
-  public String loginProc(Model model, RedirectAttributes rttr, MemberDto member) {
-    log.info("loginProc");
+	public String loginProc(Model model, RedirectAttributes rttr, MemberDto member) {
+		log.info("loginProc");
 
-    String view = null;
-    String msg = null;
+		String view = null;
+		String msg = null;
 
-    // 사용자 입력 이메일로 UserDetails 가져오기
-    UserDetails userDetails;
-    try {
-      userDetails = customUserDetailsService.loadUserByUsername(member.getUsername());
-    } catch (UsernameNotFoundException e) {
-      msg = "해당 이메일을 가진 사용자를 찾을 수 없습니다.";
-      model.addAttribute("msg", msg);
-      return "loginForm"; // 사용자를 찾을 수 없으면 다시 로그인 폼으로 이동
-    }
+		// 사용자 입력 이메일로 UserDetails 가져오기
+		UserDetails userDetails;
+		try {
+			userDetails = customUserDetailsService.loadUserByUsername(member.getUsername());
+		} catch (UsernameNotFoundException e) {
+			msg = "해당 이메일을 가진 사용자를 찾을 수 없습니다.";
+			model.addAttribute("msg", msg);
+			return "loginForm"; // 사용자를 찾을 수 없으면 다시 로그인 폼으로 이동
+		}
 
-    // 입력한 비밀번호와 UserDetails에서 가져온 암호화된 비밀번호 비교
-    if (passwordEncoder.matches(member.getPassword(), userDetails.getPassword())) {
-      // 인증 성공
-      Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
-          userDetails.getAuthorities());
-      SecurityContextHolder.getContext().setAuthentication(authentication); // Spring Security에 인증 정보 저장
+		// 입력한 비밀번호와 UserDetails에서 가져온 암호화된 비밀번호 비교
+		if (passwordEncoder.matches(member.getPassword(), userDetails.getPassword())) {
+			// 인증 성공
+			Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
+					userDetails.getAuthorities());
+			SecurityContextHolder.getContext().setAuthentication(authentication); // Spring Security에 인증 정보 저장
 
-      msg = "로그인에 성공했습니다.";
-      view = "redirect:/"; // 로그인 성공 시 홈페이지로 리다이렉트
-    } else {
-      // 비밀번호가 일치하지 않음
-      msg = "비밀번호가 일치하지 않습니다.";
-      model.addAttribute("msg", msg);
-      view = "loginForm"; // 비밀번호가 일치하지 않으면 다시 로그인 폼으로 이동
-    }
+			msg = "로그인에 성공했습니다.";
+			view = "redirect:/"; // 로그인 성공 시 홈페이지로 리다이렉트
+		} else {
+			// 비밀번호가 일치하지 않음
+			msg = "비밀번호가 일치하지 않습니다.";
+			model.addAttribute("msg", msg);
+			view = "loginForm"; // 비밀번호가 일치하지 않으면 다시 로그인 폼으로 이동
+		}
 
-    return view;
-  }
+		return view;
+	}
 
-  public String logout(HttpSession session, RedirectAttributes rttr) {
-    log.info("logout()");
-    session.invalidate();
-    rttr.addFlashAttribute("msg", "로그아웃되었습니다.");
-    return "redirect:/";
-  }
+	public String logout(HttpSession session, RedirectAttributes rttr) {
+		log.info("logout()");
+		session.invalidate();
+		rttr.addFlashAttribute("msg", "로그아웃되었습니다.");
+		return "redirect:/";
+	}
 
-  public String memberJoin(MemberDto member, RedirectAttributes rttr) {
+	public String memberJoin(MemberDto member, RedirectAttributes rttr) {
 
-    log.info("memberJoin()");
-    // 가입 성공 시 첫페이지(또는 로그인페이지)로, 실패 시 가입 페이지로 이동
-    String view = null;
-    String msg = null;
+		log.info("memberJoin()");
+		// 가입 성공 시 첫페이지(또는 로그인페이지)로, 실패 시 가입 페이지로 이동
+		String view = null;
+		String msg = null;
 
-    // 비밀번호 암호화 처리
-    String encPwd = pEncoder.encode(member.getPassword());
-    log.info(encPwd);
-    member.setPassword(encPwd);// 암호화된 비밀번호 다시 저장.
+		// 비밀번호 암호화 처리
+		String encPwd = pEncoder.encode(member.getPassword());
+		log.info(encPwd);
+		member.setPassword(encPwd);// 암호화된 비밀번호 다시 저장.
 
-    try {
-      mDao.insertMember(member);
-      
-      view = "redirect:/";
-      msg = "가입 성공";
-    } catch (Exception e) {
-      e.printStackTrace();
-      view = "redirect:joinForm";
-      msg = "가입 실패";
-    }
+		try {
+			mDao.insertMember(member);
 
-    rttr.addFlashAttribute("msg", msg);
+			view = "redirect:/";
+			msg = "가입 성공";
+		} catch (Exception e) {
+			e.printStackTrace();
+			view = "redirect:joinForm";
+			msg = "가입 실패";
+		}
 
-    return view;
-  }
+		rttr.addFlashAttribute("msg", msg);
 
-  public String emailCheck(String username) {
-    log.info("emailCheck()");
-    String result = null;
+		return view;
+	}
 
-    int memCnt = mDao.emailCheck(username);
-    if (memCnt == 0) {
-      result = "ok";
-    } else {
-      result = "fail";
-    }
+	public String emailCheck(String username) {
+		log.info("emailCheck()");
+		String result = null;
 
-    return result;
+		int memCnt = mDao.emailCheck(username);
+		if (memCnt == 0) {
+			result = "ok";
+		} else {
+			result = "fail";
+		}
 
-  }
+		return result;
 
-  public String findById(String m_name,String m_phone, RedirectAttributes rttr) {
-    log.info("findById()");
-    String view = null;
-    String msg = null;
-    String idResult = null;
+	}
+
+	public String findById(String m_name, String m_phone, RedirectAttributes rttr) {
+		log.info("findById()");
+		String view = null;
+		String msg = null;
+		String idResult = null;
+
+		idResult = mDao.findById(m_name, m_phone);
+		System.out.println("mServ" + idResult);
+
+		if (idResult != null) {
+			view = "redirect:/loginForm";
+			msg = "가입하신 아이디는" + idResult + "입니다.";
+		} else {
+			view = "redirect:/findEmail";
+			msg = "입력하신 정보로 확인되는 아이디가 없습니다. 다시한번 확인해주세요";
+		}
+
+		rttr.addFlashAttribute("msg", msg);
+
+		return view;
+	}
+
+	public void DriveMemberUpdate(MemberDto member) {
+		log.info("DriveMemberUpdate()");
+
+		mDao.updateDriveMemberUpdate(member);
+	}
+
+	// 사용자 수정 메서드
+	public void UserUpdate(String m_NAME, String m_PHONE, Principal principal) {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String username = authentication.getName();
+		String msg = null;
+
+		mDao.UserUpdate(username, m_NAME, m_PHONE);
+		msg = "수정하셨습니다";
+	}
+
+  
+  public void updateRole(int m_id) {
+    log.info("updateRole()");
     
-      idResult = mDao.findById(m_name,m_phone);
-         System.out.println("mServ"+idResult);
-         
-      if(idResult != null) {
-      view = "redirect:/loginForm";
-      msg = "가입하신 아이디는" + idResult + "입니다.";
-      } else {
-      view = "redirect:/findEmail";
-      msg = "입력하신 정보로 확인되는 아이디가 없습니다. 다시한번 확인해주세요";
-      }
-
-        rttr.addFlashAttribute("msg", msg);
-
-        return view;
-      }
-
-  	public void DriveMemberUpdate(MemberDto member) {
-  		log.info("DriveMemberUpdate()");
-  		
-  		mDao.updateDriveMemberUpdate(member);  		
-}
-  	
-  	public void updateRole(int m_id) {
-  		log.info("updateRole()");
-  		
-  		mDao.updateRole(m_id);
-  	}
-
-  
-  
+    mDao.updateRole(m_id);
+  }
+	
 }

@@ -6,7 +6,7 @@
   <insert id="insert" parameterType="Node">
     INSERT INTO NodeTbl
     VALUES (
-     null,#{Address},#{x},#{y},#{m_id},null,#{kind},null,null,#{A_DATE},null  
+     null,#{Address},#{x},#{y},#{M_ID},null,#{kind},null,null,#{A_DATE},null  
     )
   </insert>
   
@@ -78,5 +78,12 @@ FROM NodeTbl ORDER BY distance ASC;
   <select id="DRMTList" resultType="DrivermanagementDto">
     select * from drivermanagement where DR_ID = #{dR_ID}
   </select>
+  
+  <select id="getNodeList" parameterType="Integer" resultType="Node">
+        SELECT n.*
+        FROM NodeTbl n
+        JOIN applytbl a ON n.A_DATE = a.A_DATE
+        WHERE a.M_ID = #{M_ID}
+    </select>
   
 </mapper>
