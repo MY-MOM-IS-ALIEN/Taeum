@@ -45,13 +45,31 @@
   .green { background-color: green; }
   .orange { background-color: orange; }
   .red { background-color: red; }
+  
+      body {
+        margin: 0;
+        padding: 0;
+    }
+    .background-image {
+        position: fixed; /* 이미지를 고정된 위치에 배치 */
+        top: 100px;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -9999; /* 다른 요소들 보다 뒤로 */
+        opacity: 0.4; /* 투명도 설정 */
+    }
+  
 </style>
- <th:block th:insert="~{fragments :: header}" />
+ <th:block th:insert="~{fragments :: header}" style = "z-index : 9999"/>
 
 </head>
 <body>
     <!-- 템플릿 본문 내용 -->
-    <main class="d-flex flex-nowrap">
+ 
+
+    <main class="d-flex flex-nowrap" style= "z-index: 9999">
+   <!--  <img class="background-image" src="images/adminBackground.PNG" alt="배경 이미지">  --> 
         <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-body-tertiary border border-r-1" style="width: 380px; margin-top: 10px;">
             <div class="d-flex align-items-center flex-shrink-0 p-3 link-body-emphasis text-decoration-none">
                 <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="#4ae39c" viewBox="0 0 256 256" class="me-2">
@@ -113,14 +131,15 @@
             <ul style="font-weight: bold; font-size: 25px;">
                 <li id="driverName">이름 : </li>
                 <br>
+                 <br>
                 <li id="driverPhone">전화번호  : </li>
                 <br>
-                <li id="driverAdrees">주 소 : </li>
                 <br>
                 <li id="driverLocal">주 운행지 : </li>
                 <br>
+                 <br>
                 <li id="driverCarnum">차량 번호 : </li>
-                <br>
+       
                 <li style="display:none;" id="driverId"></li>
             </ul>
 
@@ -136,6 +155,7 @@
     </div>
 
     </div>
+
     </main>
 
     <script th:inline="javascript">
@@ -254,7 +274,7 @@
         function displayDriverInfo(driverInfo) {
             $('#driverName').text('이름 : ' + driverInfo.m_NAME);
             $('#driverPhone').text('전화번호 : ' + driverInfo.m_PHONE);
-            $('#driverAdrees').text('주소 : ' + driverInfo.dr_ADDRESS);
+         
             $('#driverLocal').text('주 운행지 : ' + driverInfo.dr_AREA);
             $('#driverCarnum').text('차량 번호 : ' + driverInfo.dr_CARNUM);
             $('#driverId').text(driverInfo.dr_ID);
@@ -310,10 +330,12 @@
                     // 선정 시간 추가
                     row.append('<td style="width: 33%; height: 17.9px; border: 2px solid #000; ">' + driver.d_SELECT + '</td>');
 
-                    if (driver.d_CONFIRM) {
+                    if (driver.d_CANCLE == null && driver.d_CONFIRM != null) {
                         row.append('<td style="width: 33%; height: 17.9px; border: 2px solid #000;">' + driver.d_CONFIRM + '</td>');
-                    } else {
-                        row.append('<td style="width: 33%; height: 17.9px; border: 2px solid #000;"></td>'); // 배차 컨펌 시간이 null이면 빈칸으로 처리
+                    } else if(driver.d_CANCLE != null && driver.d_CONFIRM == null ) {
+                        row.append('<td style="width: 33%; height: 17.9px; border: 2px solid #000;">' + driver.d_CANCLE + '</td>'); // 배차 컨펌 시간이 null이면 빈칸으로 처리
+                    }else {
+                    	row.append('<td style="width: 33%; height: 17.9px; border: 2px solid #000;"></td>'); 
                     }
                     // 선정 상태 추가
                     var statusText = "";
@@ -334,6 +356,7 @@
                         
                         row.append('<td style="width: 33%; height: 17.9px; border: 2px solid #000;">' + '<div class="circle" style="background-color: red"></div>' + statusText + '</td>');
                     }
+
                     // 테이블에 행 추가
                     table.append(row);
                 });

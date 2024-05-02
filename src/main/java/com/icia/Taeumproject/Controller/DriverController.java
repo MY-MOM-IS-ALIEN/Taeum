@@ -284,19 +284,28 @@ public class DriverController {
 
 		Object principal = authentication.getPrincipal();
 		int m_id = ((SecurityUserDTO) principal).getM_ID();
-		log.info("m_id: {}", m_id);
 		int DR_ID = (m_id-1);
-		System.out.println("DR_ID = "+DR_ID);
 	    
 	    System.out.println("여기지롱" + data);
-	    for(int i=0; i<=data.size(); i++) {
-	    	DispatchDto dispatch = new DispatchDto();
-	    	
-	    	
-	    	
-	    }
+	    drServ.updateConfirm(data,DR_ID);
+	    return "mainCenter"; // 적절한 응답 처리
+	}
+	
+	@PostMapping("/deniedNode")
+	public String deniedNode(@RequestBody List<DispatchDto> dataToSend) {
+	    log.info("deniedNode()");
+
+	    // 사용자 정보 확인
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    Object principal = authentication.getPrincipal();
+	    int m_id = ((SecurityUserDTO) principal).getM_ID();
+	    int DR_ID = (m_id - 1);
+
+	    drServ.updateCancle(dataToSend,DR_ID);
+
 	    return "mainCenter"; // 적절한 응답 처리
 	}
 	 
-	
 }
+	
+
