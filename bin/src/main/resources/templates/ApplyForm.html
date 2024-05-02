@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Taeum</title>
+<!-- External libraries -->
+<script src="js/jquery-3.7.1.min.js"></script>
+<script
+  src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<!-- CSS styles -->
+<link rel="stylesheet" href="css/style.css">
+<script th:inline="javascript">
+        $(function () {
+            let m = [[${msg}]];
+            if(m != null){
+                alert(m);
+            }
+        })
+    </script>
+<!-- Include header fragment -->
+<th:block th:insert="~{fragments :: header}" />
+</head>
+<body>
+  <section>
+    <div class="content">
+      <form th:action="@{/ApplyProc}" class="write-form" method="post"
+        enctype="multipart/form-data" id="yourFormId">
+        <h2 class="login-header">서비스 신청하기</h2>
+        <!-- 작성자(로그인 한 id), 제목, 내용, 파일  -->
+        <div class="apply-content">
+          <!-- Hidden input for M_ID -->
+          <input type="hidden" name="M_ID"
+            th:value="${#authentication.principal != null ? #authentication.principal.M_ID : ''}">
+
+          <!-- 신청자 정보 -->
+          <div class="applicant-info">
+            <label for="M_NAME">신청자 성함:</label> <input type="text"
+              class="write-input" id="M_NAME" name="M_NAME"
+              th:value="${#authentication.principal != null ? #authentication.principal.M_NAME : ''}"
+              readonly> <label for="M_PHONE">신청자 연락처:</label> <input
+              type="text" class="write-input" id="M_PHONE" name="M_PHONE"
+              th:value="${#authentication.principal != null ? #authentication.principal.M_PHONE : ''}"
+              readonly>
+          </div>
+          <!-- 탑승자 정보 -->
+          <div class="passenger-info">
+            <label for="A_NAME">탑승자 성함:</label> <input type="text"
+              class="write-input" id="A_NAME" name="A_NAME" autofocus
+              placeholder="탑승자 성함" required> <label for="A_PHONE">탑승자
+              연락처:</label> <input type="text" class="write-input" id="A_PHONE"
+              name="A_PHONE" autofocus placeholder="탑승자 연락처" required>
+          </div>
+          <!-- 출발지 정보 -->
+          <div class="start-address">
+            <label for="A_STARTADRESSNUM">탑승지 우편번호:</label>
+            <div class="find-address-group">
+              <input type="text" class="write-input" id="A_STARTADRESSNUM"
+                name="A_STARTADRESSNUM" placeholder="우편번호"> <input
+                type="button" class="write-input" id="find-start-address"
+                onclick="sample6_execDaumPostcode()" value="우편번호 찾기">
+            </div>
+            <input type="text" class="write-input" id="A_STARTADRESS"
+              name="A_STARTADRESS" placeholder="출발지 주소" readonly> <input
+              type="text" class="write-input" id="A_STARTDADRESS"
+              name="A_STARTDADRESS" placeholder="행정구를 입력하세요"> <input
+              type="text" class="write-input" id="A_STARTRADRESS"
+              name="A_STARTRADRESS" placeholder="참고항목">
+          </div>
+          <!-- 하차지 정보 -->
+          <div class="end-address">
+            <label for="A_ENDADRESSNUM">하차지 우편번호:</label>
+            <div class="find-address-group">
+              <input type="text" class="write-input" id="A_ENDADRESSNUM"
+                name="A_ENDADRESSNUM" placeholder="우편번호"> <input
+                type="button" class="write-input" id="find-end-address"
+                onclick="execDaumPostcode()" value="우편번호 찾기">
+            </div>
+            <input type="text" class="write-input" id="A_ENDADRESS"
+              name="A_ENDADRESS" placeholder="하차지 주소" readonly> <input
+              type="text" class="write-input" id="A_ENDDADRESS"
+              name="A_ENDDADRESS" placeholder="행정구를 입력하세요"> <input
+              type="text" class="write-input" id="A_ENDRADRESS"
+              name="A_ENDRADRESS" placeholder="참고항목">
+          </div>
+          <!-- 탑승일 -->
+          <div class="ride-date">
+            <label for="datetime">Choose a date and time (after
+              today):</label> <label for="A_DATE">탑승일:</label> <input
+              type="datetime-local" class="write-input" id="A_DATE"
+              name="A_DATE" min="today" required>
+          </div>
+          <!-- 특이사항 -->
+          <div class="additional-info">
+            <label for="A_CONTENTS">특이사항:</label>
+            <textarea rows="5" class="write-input" id="A_CONTENTS"
+              name="A_CONTENTS" placeholder="특이사항을 적어주세요." required></textarea>
+          </div>
+        </div>
+        <!-- 버튼 영역 -->
+        <div class="btn-area">
+          <button class="btn-write" onclick="return checkAddresses()">신청하기</button>
+          <a class="btn-write" th:href="@{/}">뒤로가기</a>
+        </div>
+      </form>
+    </div>
+  </section>
+  <!-- Include footer fragment -->
+  <th:block th:insert="~{fragments :: footer}" />
+  <script th:inline="javascript">
+    // 우편번호 찾기 팝업 호출 함수
+    function execDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function (data) {
+                var addr = ''; // 주소 변수
+                var extraAddr = ''; // 참고항목 변수
+
+                // 도로명 주소일 경우 참고항목을 조합
+                if (data.userSelectedType === 'R') {
+                    if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                        extraAddr += data.bname;
+                    }
+                    if (data.buildingName !== '' && data.apartment === 'Y') {
+                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                    }
+                    if (extraAddr !== '') {
+                        extraAddr = ' (' + extraAddr + ')';
+                    }
+                    document.getElementById("A_ENDRADRESS").value = extraAddr;
+                } else {
+                    document.getElementById("A_ENDADRESS").value = '';
+                }
+
+                // 우편번호와 주소 정보를 해당 필드에 넣음
+                document.getElementById('A_ENDADRESSNUM').value = data.zonecode;
+                document.getElementById("A_ENDADRESS").value = data.roadAddress;
+                document.getElementById("A_ENDDADRESS").focus(); // 상세주소 필드로 커서 이동
+            }
+        }).open();
+    }
+
+    // 출발지 우편번호 찾기 팝업 호출 함수
+    function sample6_execDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function (data) {
+                var addr = ''; // 주소 변수
+                var extraAddr = ''; // 참고항목 변수
+
+                // 도로명 주소일 경우 참고항목을 조합
+                if (data.userSelectedType === 'R') {
+                    if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                        extraAddr += data.bname;
+                    }
+                    if (data.buildingName !== '' && data.apartment === 'Y') {
+                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                    }
+                    if (extraAddr !== '') {
+                        extraAddr = ' (' + extraAddr + ')';
+                    }
+                    document.getElementById("A_STARTRADRESS").value = extraAddr;
+                } else {
+                    document.getElementById("A_STARTADRESS").value = '';
+                }
+
+                // 우편번호와 주소 정보를 해당 필드에 넣음
+                document.getElementById('A_STARTADRESSNUM').value = data.zonecode;
+                document.getElementById("A_STARTADRESS").value = data.roadAddress;
+                document.getElementById("A_STARTDADRESS").focus(); // 상세주소 필드로 커서 이동
+            }
+        }).open();
+    }
+    function checkAddresses() {
+        var startAddress = document.getElementById("A_STARTDADRESS").value;
+        var endAddress = document.getElementById("A_ENDDADRESS").value;
+
+        if (startAddress === endAddress) {
+            // 만약 시작 주소와 끝 주소가 같다면 form을 submit합니다.
+            document.getElementById("yourFormId").submit();
+        
+        } else {
+            // 그렇지 않다면 사용자에게 메시지를 표시하거나 다른 작업을 수행할 수 있습니다.
+            alert("동일 행정구가 아닙니다.");
+            
+            return false;
+        }
+    
+     // Get the current date and time
+     var now = new Date();
+
+     // Format the current date and time as required by datetime-local input
+     var year = now.getFullYear();
+     var month = (now.getMonth() + 1).toString().padStart(2, '0');
+     var day = now.getDate().toString().padStart(2, '0');
+     var hours = now.getHours().toString().padStart(2, '0');
+     var minutes = now.getMinutes().toString().padStart(2, '0');
+     var dateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+
+     // Set the min attribute of datetime-local input to the current date and time
+     document.getElementById("datetime").min = dateTime;
+   
+    }
+</script>
+</body>
+</html>
