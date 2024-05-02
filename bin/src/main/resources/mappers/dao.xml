@@ -6,7 +6,7 @@
   <insert id="insert" parameterType="Node">
     INSERT INTO NodeTbl
     VALUES (
-     null,#{Address},#{x},#{y},#{m_id},null,#{kind},null,#{A_DATE}, #{A_LOCALDATE}
+     null,#{Address},#{x},#{y},#{M_ID},null,#{kind},null,null,#{A_DATE},null  
     )
   </insert>
   
@@ -20,12 +20,14 @@ FROM NodeTbl ORDER BY distance ASC;
     SELECT * FROM endNodetbl
   </select>
   
-  <update id ="updateDelivery" parameterType="Integer">
-    UPDATE NodeTbl SET ride=#{ride}, cycle=#{cycle} WHERE node_id=#{id}
+
+ <update id ="updateDelivery" parameterType="Node">
+    UPDATE NodeTbl SET DR_ID=#{DR_ID}, cycle=#{cycle}, status =#{status}, D_ID=#{D_ID} WHERE node_id=#{node_id}
+
   </update>
   
     <select id="selectRideList" resultType="Node">
-    select * FROM NodeTbl WHERE ride=#{ride}
+    select * FROM NodeTbl WHERE DR_ID=#{ride}
   </select>
   
   <select id="selectLocaldate" resultType="Node">
@@ -44,13 +46,25 @@ FROM NodeTbl ORDER BY distance ASC;
   select * from nodetbl WHERE address LIKE CONCAT('%', #{address}, '%')AND A_DATE LIKE CONCAT('%', #{A_DATE}, '%');
 </select>
 
-  <insert id="insertDispatch" parameterType="dispatchDto">
-    INSERT INTO dispatchtbl
-    VALUES (
-     null, #{dateTime}, #{status}, null, null, null, #{ridding}
-    )
-  </insert>
+
+<insert id="insertDispatch" parameterType="dispatchDto">
+    <!-- 데이터 삽입 -->
+    INSERT INTO dispatchtbl (D_SELECT, D_STATUS, DR_ID)
+    VALUES (#{D_SELECT}, #{D_STATUS}, #{DR_ID})
+    
+    <!-- 자동 생성된 키 값을 DTO의 D_ID 필드에 매핑하는 selectKey -->
+    <selectKey keyProperty="D_ID" order="AFTER" resultType="java.lang.Long">
+        SELECT LAST_INSERT_ID() AS D_ID
+    </selectKey>
+</insert>
   
+
+
+
+  <select id="getDispatchList" resultType="dispatchDto">
+    SELECT D_ID FROM dispatchtbl WHERE LAST_INSERT_ID();
+  </select>
+
   
   <select id="GetDriverList" resultType="dispatchDto">
     SELECT * FROM dispatchtbl WHERE DR_ID = #{DR_ID}
@@ -59,4 +73,17 @@ FROM NodeTbl ORDER BY distance ASC;
   <select id="getDispatch" resultType="dispatchDto">
     select * from dispatchtbl WHERE D_SELECT LIKE CONCAT('%', #{date}, '%');
   </select>
+  
+  
+  <select id="DRMTList" resultType="DrivermanagementDto">
+    select * from drivermanagement where DR_ID = #{dR_ID}
+  </select>
+  
+  <select id="getNodeList" parameterType="Integer" resultType="Node">
+        SELECT n.*
+        FROM NodeTbl n
+        JOIN applytbl a ON n.A_DATE = a.A_DATE
+        WHERE a.M_ID = #{M_ID}
+    </select>
+  
 </mapper>

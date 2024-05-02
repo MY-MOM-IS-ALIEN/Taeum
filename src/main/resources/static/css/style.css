@@ -657,7 +657,7 @@ span.file-title {
 .btn-traffic[type="button"] {
 	background-color: #3F7EFC;
 	border-color: #3F7EFC;
-/* 	font-size: 1rem; */
+	/* 	font-size: 1rem; */
 	text-align: center;
 }
 
@@ -786,11 +786,12 @@ span.file-title {
 /*     width: 50%; 두 요소가 함께 차지할 공간을 48%로 설정 (간격을 주려면 여기를 조절하세요) */
 /* } */
 .traffic-area {
+	font-size: 3rem;
 	display: flex; /* 내부 요소들을 수평으로 배치하기 위해 Flexbox 사용 */
 	justify-content: space-between; /* 내부 요소들을 좌우로 분산 정렬 */
 	align-items: center; /* 내부 요소들을 수직 가운데 정렬 */
 	text-align: center;
-	padding: 15%;
+	padding: 13%;
 }
 
 .btn-traffic.btn-write-btn {
@@ -800,105 +801,109 @@ span.file-title {
 
 fieldset.raceInfo {
 	height: 700px;
-	border-left: 2px solid black;
-	border-top: none;
-	border-bottom: none;
-	border-right: none;
-	margin-top: 3%;
-}
-
-fieldset.profile {
 	border: none;
 }
 
+fieldset.profile {
+	height: 600px;
+	border-left: none;
+	border-top: none;
+	border-bottom: none;
+	border-right: 2px solid #e6e6fa;
+	margin-top: 5%;
+}
+/* fieldset.profile { */
+/* 	border: none; */
+/* 	margin-top: 50px; */
+/* } */
 .driverInfo {
 	font-size: 1.2rem;
-} 
-.traffic-area {
-	font-size: 3rem;
+	
 }
 
 /* dropdown css*/
-  .dropdown {
-    position: relative;
-    display: inline-block;
-  }
-  .dropdown-content {
-    display: none;
-    position: absolute;
-    z-index: 1; /*다른 요소들보다 앞에 배치*/
-    font-weight: 400;
-    background-color: #f9f9f9;
-    min-width: 200px;
-  }
-  .dropdown-content a {
-    display: block;
-    text-decoration: none;
-    color: rgb(37, 37, 37);
-    font-size: 16px;
-    padding: 12px 20px;
-  }
-  .dropdown-content a:hover {
-    background-color: #ececec
-  }
-  .dropdown:hover .dropdown-content {
-    display: block;
-  }
-    /* applyList*/
+.dropdown {
+	position: relative;
+	display: inline-block;
+}
+
+.dropdown-content {
+	display: none;
+	position: absolute;
+	z-index: 1; /*다른 요소들보다 앞에 배치*/
+	font-weight: 400;
+	background-color: #f9f9f9;
+	min-width: 200px;
+}
+
+.dropdown-content a {
+	display: block;
+	text-decoration: none;
+	color: rgb(37, 37, 37);
+	font-size: 16px;
+	padding: 12px 20px;
+}
+
+.dropdown-content a:hover {
+	background-color: #ececec
+}
+
+.dropdown:hover .dropdown-content {
+	display: block;
+}
+/* applyList*/
 .apply-list {
-  margin-top: 20px;
+	margin-top: 20px;
 }
 
 .apply-item {
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 15px;
-  margin-bottom: 20px;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	padding: 15px;
+	margin-bottom: 20px;
 }
 
 .apply-detail {
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 
 .apply-info {
-  margin-bottom: 10px;
+	margin-bottom: 10px;
 }
 
 .apply-info span {
-  font-weight: bold;
+	font-weight: bold;
 }
 
 .apply-info:last-child {
-  margin-bottom: 0;
+	margin-bottom: 0;
 }
 
 .apply-list button[type="submit"] {
-  background-color: #dc3545;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-top: 10px;
+	background-color: #dc3545;
+	color: #fff;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+	margin-top: 10px;
 }
 
 .apply-list button[type="submit"]:hover {
-  background-color: #c82333;
+	background-color: #c82333;
 }
 
 /* Responsive Styles */
 @media screen and (max-width: 768px) {
-  .apply-item {
-    padding: 10px;
-  }
-
-  .apply-info {
-    font-size: 14px;
-  }
-
-  .apply-list button[type="submit"] {
-    padding: 8px 16px;
-  }
+	.apply-item {
+		padding: 10px;
+	}
+	.apply-info {
+		font-size: 14px;
+	}
+	.apply-list button[type="submit"] {
+		padding: 8px 16px;
+	}
 }

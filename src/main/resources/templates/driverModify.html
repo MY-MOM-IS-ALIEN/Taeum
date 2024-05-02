@@ -36,21 +36,24 @@
 						<span th:text="${driver.DR_CARNUM}"></span>
 					</p>
 				</div>
+				<br>
+				<input class="btn-traffic btn-write-btn" type="button"
+					id="moveToModify" value="정보 수정">
 			</fieldset>
 			<fieldset class="raceInfo">
 				<div class="traffic-area">
 					<p>
-						<span class="span-1" th:text="${todayTraffic}"></span> <br>
+						<span class="span-1" th:text="${todayTraffic}"></span> <br> <br>
 						오늘 운행
 					</p>
 
 					<p>
-						<span class="span-1" th:text="${monthTraffic}"></span> <br>
+						<span class="span-1" th:text="${monthTraffic}"></span> <br> <br>
 						이번 달 운행
 					</p>
 
 					<p>
-						<span class="span-1" th:text="${totalTraffic}"></span> <br> 총
+						<span class="span-1" th:text="${totalTraffic}"></span> <br> <br> 총
 						운행
 					</p>
 				</div>
@@ -82,5 +85,10 @@
 	$("#moveTomainCenter").click(function() {
 		location.href = `/mainCenter`;
 	});
+		
+	$("#moveToModify").click(function() {
+		location.href = `/driverUpdate`;
+	});
+	
 </script>
 </html>
