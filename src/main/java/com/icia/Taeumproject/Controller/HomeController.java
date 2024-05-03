@@ -1,15 +1,19 @@
 package com.icia.Taeumproject.Controller;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+
 import com.icia.Taeumproject.Dto.ApplyDto;
+
 import com.icia.Taeumproject.Dto.SearchDto;
 import com.icia.Taeumproject.Dto.SecurityUserDTO;
 import com.icia.Taeumproject.Service.ApplyService;
@@ -23,12 +27,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
-@PreAuthorize("hasRole('USER')")
+
 @Controller
 @Slf4j
 public class HomeController {
       @Autowired
       private ApplyService aServ;
+    
       
       @GetMapping("applyList")
   		public String applyList(Model model) {
@@ -89,8 +94,9 @@ public class HomeController {
        
        String view = aServ.popList(sdto,session,model);
        
+       
        return view;
      }
      
-     
 }
+    
