@@ -8,28 +8,27 @@
 <script src="js/jquery-3.7.1.min.js"></script>
 <link rel="stylesheet" href="css/style.css">
 <script th:inline="javascript">
-        $(function () {
-            let m = /*[[${msg}]]*/ null;
-            if (m != null) {
-                alert(m);
-            }
-        });
-    </script>
+	$(function() {
+		let m = /*[[${msg}]]*/null;
+		if (m != null) {
+			alert(m);
+		}
+	});
+</script>
 <th:block th:insert="~{fragments :: header}" />
 </head>
 <body>
 	<section>
 		<div class="box-layout">
 			<fieldset class="profile">
-				<div class="driverInfo-1">
+				<div class="driverInfo">
 					<div class="driver-image">
-						<img th:src="@{/upload/}+${driverImage}" alt="프로필 이미지">
+						<img th:src="@{/upload/}+${driverImage}" alt="프로필 이미지"
+							width="300px">
 					</div>
 					<p>
 						<span th:text="${driver.M_NAME}"></span>
 					</p>
-				</div>
-				<div class="driverInfo">
 					<p>
 						<span th:text="${driver.M_PHONE}"></span>
 					</p>
@@ -55,37 +54,33 @@
 						운행
 					</p>
 				</div>
-				<input type="button" id="moveTomainCenter" value="운행시작">
+				<input class="btn-traffic btn-write-btn" type="button"
+					id="moveTomainCenter" value="운행 정보">
 			</fieldset>
 		</div>
 	</section>
+	<th:block th:insert="~{fragments::footer}" />
 </body>
 <script th:inline="javascript">
-    // 파일 제목 처리
-    $("#file").on("change", function () {
-        let files = $("#file")[0].files;
-        console.log(files);
+	// 파일 제목 처리
+	$("#file").on("change", function() {
+		let files = $("#file")[0].files;
+		console.log(files);
 
-        let fileName = ""; // 출력할 문장 저장 변수
+		let fileName = ""; // 출력할 문장 저장 변수
 
-        if (files.length > 1) {
-            fileName = `${files[0].name} 외 ${files.length - 1}개`;
-        } else if (files.length === 1) {
-            fileName = files[0].name;
-        } else {
-            fileName = "파일선택";
-        }
-        $(".upload-name").val(fileName);
-    });
+		if (files.length > 1) {
+			fileName = `${files[0].name} 외 ${files.length - 1}개`;
+		} else if (files.length === 1) {
+			fileName = files[0].name;
+		} else {
+			fileName = "파일선택";
+		}
+		$(".upload-name").val(fileName);
+	});
 
-
-    $("#moveTomainCenter").click(function(){
-        location.href = `/mainCenter`;
-    });
-    
-    
-
-    
-
+	$("#moveTomainCenter").click(function() {
+		location.href = `/mainCenter`;
+	});
 </script>
 </html>

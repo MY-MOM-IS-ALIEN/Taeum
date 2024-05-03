@@ -35,7 +35,10 @@ public class SecurityConfig{
   @Bean // StaticResources  파일 보안 무시 
   public WebSecurityCustomizer webSecurityCustomizer(){
       return (web) -> web.ignoring()
-              .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+              .requestMatchers(PathRequest
+                  .toStaticResources()
+                  .atCommonLocations());
+      
   }
   
   @Bean
@@ -48,8 +51,9 @@ public class SecurityConfig{
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     
     http.authorizeHttpRequests((auth) ->auth
+      
       .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-      .requestMatchers("/", "/home").hasRole("USER")
+      .requestMatchers("/", "/home").permitAll()
       .requestMatchers("/loginProc","/joinProc").permitAll()// "/","/login" 모든 사용자 접근
       .requestMatchers("/joinForm").permitAll()
       .requestMatchers("/ApplyForm").hasRole("USER")
@@ -93,6 +97,8 @@ public class SecurityConfig{
       .requestMatchers("/getApplyList").hasRole("USER")
       .requestMatchers("/board/**").permitAll()
       .requestMatchers("/updateApplyStatusWithNodeList").permitAll()
+            
+      
       // 페이지관련 끝 
       
       
@@ -127,7 +133,9 @@ public class SecurityConfig{
    
       // WebSocket 핸들러에 대한 접근 권한 설정
       .requestMatchers("/ws").permitAll()
+      
       .anyRequest().authenticated()
+      
     );
       
       

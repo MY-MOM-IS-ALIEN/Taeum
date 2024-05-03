@@ -1,6 +1,7 @@
 package com.icia.Taeumproject.Service;
 
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.icia.Taeumproject.Dao.DriverDao;
 import com.icia.Taeumproject.Dao.MemberDao;
 import com.icia.Taeumproject.Dto.ApplyDto;
+import com.icia.Taeumproject.Dto.DispatchDto;
 import com.icia.Taeumproject.Dto.DriverDto;
 import com.icia.Taeumproject.Dto.DriverFileDto;
+import com.icia.Taeumproject.Dto.Node;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -183,9 +186,32 @@ public class DriverService {
 
 	}
 
-//	public void deleteTraffic(String name) {
-//		
-//		drDao.deleteTraffic(name);
-//	}
+	public void updateConfirm(List<Node> data, int DR_ID) {
+		log.info("updateStatus()");
 
+		for (Node node : data) {
+			DispatchDto dispatch = new DispatchDto();
+			long D_ID = node.getD_ID();
+			dispatch.setD_ID(D_ID);
+			dispatch.setDR_ID(DR_ID);
+
+			drDao.updateConfirm(dispatch);
+			drDao.updateNodeConfirm(dispatch);
+		}
+	}
+
+	public void updateCancle(List<DispatchDto> dispatchDto,int DR_ID) {
+		log.info("updateCancle()");
+		
+		for (DispatchDto dispatch : dispatchDto) {
+			long D_ID = dispatch.getD_ID();
+			String D_REASON = dispatch.getD_REASON();
+			dispatch.setD_ID(D_ID);
+			dispatch.setDR_ID(DR_ID);
+			dispatch.setD_REASON(D_REASON);
+			
+			drDao.updateCancle(dispatch);
+			drDao.updateNodeCancle(dispatch);
+		}
+	}
 }

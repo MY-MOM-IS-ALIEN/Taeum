@@ -37,10 +37,9 @@ public class ApplyService {
   private ApplyDao aDao;
   @Autowired
   private MemberDao mDao;
-  
+
   @Autowired
   private NotificationDao nDao;
-
 
   private final SimpMessagingTemplate messagingTemplate;
 
@@ -48,11 +47,10 @@ public class ApplyService {
   public ApplyService(SimpMessagingTemplate messagingTemplate) {
     this.messagingTemplate = messagingTemplate;
   }
-  
-  
+
   @Autowired
   private MainDao maDao;
-  
+
   @Autowired
   private MemberService memberService;
   @Autowired
@@ -66,44 +64,42 @@ public class ApplyService {
   private int lcnt = 10;// 한 화면(페이지)에 보여질 게시글 개수
 
   public void updateApplyStatusWithNodeList(int m_id, Model model) {
-      // 노드 리스트 가져오기
-      List<Node> nodeList = maDao.getNodeList(m_id);
-      
-      // 신청 리스트 가져오기
-      List<ApplyDto> applyList = aDao.getApplyList(m_id);
-      
-      // 노드 내역을 맵으로 변환하여 효율적으로 검색하기
-      Map<String, Integer> nodeStatusMap = new HashMap<>(); // 상태를 정수로 저장할 맵으로 수정
-      for (Node node : nodeList) {
-          String key = node.getM_ID() + "-" + node.getA_DATE(); // M_ID와 A_DATE를 조합하여 고유한 키 생성
-          // 노드 내역의 M_ID와 A_DATE를 키로, 상태를 정수로 변환하여 맵에 추가
-          int status = 0; // 기본값 설정
-          if (node.getStatus() != null && !node.getStatus().isEmpty()) {
-              try {
-                  status = Integer.parseInt(node.getStatus());
-              } catch (NumberFormatException e) {
-                  // 예외 처리
-                  e.printStackTrace(); // 혹은 다른 처리 방법을 선택
-              }
-          }
-          nodeStatusMap.put(key, status);
+    // 노드 리스트 가져오기
+    List<Node> nodeList = maDao.getNodeList(m_id);
+
+    // 신청 리스트 가져오기
+    List<ApplyDto> applyList = aDao.getApplyList(m_id);
+
+    // 노드 내역을 맵으로 변환하여 효율적으로 검색하기
+    Map<String, Integer> nodeStatusMap = new HashMap<>(); // 상태를 정수로 저장할 맵으로 수정
+    for (Node node : nodeList) {
+      String key = node.getM_ID() + "-" + node.getA_DATE(); // M_ID와 A_DATE를 조합하여 고유한 키 생성
+      // 노드 내역의 M_ID와 A_DATE를 키로, 상태를 정수로 변환하여 맵에 추가
+      int status = 0; // 기본값 설정
+      if (node.getStatus() != null && !node.getStatus().isEmpty()) {
+        try {
+          status = Integer.parseInt(node.getStatus());
+        } catch (NumberFormatException e) {
+          // 예외 처리
+          e.printStackTrace(); // 혹은 다른 처리 방법을 선택
+        }
       }
-      // 신청 리스트의 각 항목에 대해 처리
-      for (ApplyDto apply : applyList) {
-          String key = apply.getM_ID() + "-" + apply.getA_DATE(); // 신청 내역의 M_ID와 A_DATE를 조합하여 키 생성
-          if (nodeStatusMap.containsKey(key)) { // 해당하는 노드 내역이 있는 경우
-              // 해당 신청 내역의 status 값을 노드 내역의 status 값으로 설정
-              apply.setSTATUS(nodeStatusMap.get(key));
-          }
+      nodeStatusMap.put(key, status);
+    }
+    // 신청 리스트의 각 항목에 대해 처리
+    for (ApplyDto apply : applyList) {
+      String key = apply.getM_ID() + "-" + apply.getA_DATE(); // 신청 내역의 M_ID와 A_DATE를 조합하여 키 생성
+      if (nodeStatusMap.containsKey(key)) { // 해당하는 노드 내역이 있는 경우
+        // 해당 신청 내역의 status 값을 노드 내역의 status 값으로 설정
+        apply.setSTATUS(nodeStatusMap.get(key));
       }
-      int applyCount = applyList.size();
-      
-      // 처리된 신청 리스트를 모델에 추가
-      model.addAttribute("applyList", applyList);
-      model.addAttribute("applyCount", applyCount);
+    }
+    int applyCount = applyList.size();
+
+    // 처리된 신청 리스트를 모델에 추가
+    model.addAttribute("applyList", applyList);
+    model.addAttribute("applyCount", applyCount);
   }
-
-
 
 //게시글 , 회원가입
   @Transactional
@@ -111,7 +107,6 @@ public class ApplyService {
     log.info("applyWriteapplyWriteapplyWriteapplyWriteapplyWrite =  " + apply.getA_LOCALDATE());
     // 현재 로그인한 사용자 정보 가져오기
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    
 
     String view = null;
     String msg = null;
@@ -129,7 +124,7 @@ public class ApplyService {
         // 게시글 저장
         apply.setSTATUS(0); // 0 배차중, 1 수락, 2 거절
         aDao.insertApply(apply);
-     // 발신자 정보 조회
+        // 발신자 정보 조회
         MemberDto user = mDao.findUserByEmail(username);
 
         // 알림 메시지 생성
@@ -140,7 +135,7 @@ public class ApplyService {
 
         // WebSocket을 통해 알림 전송
         messagingTemplate.convertAndSend("/topic/notifications", notificationMessage);
-        
+
         if (apply.getA_STARTADRESS() != null && !apply.getA_STARTADRESS().isEmpty()) {
           Point startPoint = KakaoApiUtil.getPointByAddress(apply.getA_STARTADRESS());
 
@@ -155,7 +150,7 @@ public class ApplyService {
 
           if (endPoint != null) {
             int kind = 2;
-            maServ.insertServ(apply.getM_ID(), apply.getA_ENDADRESS(), endPoint, kind, rttr, null);
+            maServ.insertServ(apply.getM_ID(), apply.getA_ENDADRESS(), endPoint, kind, rttr, apply.getA_DATE());
           }
         }
 
@@ -195,41 +190,34 @@ public class ApplyService {
   }
 
   // 신청 삭제
-  public void cancelApply(int applyId) {
+  public void cancelApply(int A_Id, int M_Id, String A_Date) {
     log.info("cancelApply");
-    aDao.cancelApply(applyId);
+    aDao.cancelApply(A_Id);
+    maDao.cancelNode(M_Id,A_Date);
+  
 
   }
-  
+
   private void saveNotificationMessageToDB(String notificationMessage) {
     NotificationDto notification = new NotificationDto();
     notification.setRole("ROLE_USER"); // 예시로 USER 역할로 설정
     notification.setMessage(notificationMessage);
     nDao.insertNotification(notification);
-}
+  }
 
- 
- 
+  public String popList(SearchDto sdto, HttpSession session, Model model) {
 
-public String popList(SearchDto sdto, HttpSession session, Model model) {
-    
     log.info("popList()");
-    
+
     String view = "Popup";
-    
-   
-    
+
     // 알림 목록 가져오기
     List<NotificationDto> nList = nDao.selectNotificationList(sdto);
-     
+
     // 모델에 알림 목록 추가
     model.addAttribute("nList", nList);
-   
-   
-  
-    
-    return view;
-}
 
+    return view;
+  }
 
 }

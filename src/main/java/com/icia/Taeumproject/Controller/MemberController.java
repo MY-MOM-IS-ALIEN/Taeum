@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.icia.Taeumproject.Service.MemberService;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+
 
 import com.icia.Taeumproject.Dto.MemberDto;
 
