@@ -28,7 +28,35 @@ public class BoardController {
 		log.info("boardProc");
 			
 		
-		return "board";
+		return "/board";
+	}
+	
+	@GetMapping("boardWrite")
+	public String boardWrite() {
+		log.info("boardWrite");
+		
+		return "boardWrite";
+	}
+	
+	@PostMapping("bWriteProc")
+	public String bWriteProc() {
+		log.info("bWriteProc");
+		
+		return "/bWriteProc";
 	}
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
