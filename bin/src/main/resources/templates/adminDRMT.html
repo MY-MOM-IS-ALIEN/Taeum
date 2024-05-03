@@ -270,8 +270,7 @@
                         console.log('AJAX 요청이 성공적으로 전송되었습니다.');
                         console.log('응답 데이터:', response);
                         // 드라이버 목록 업데이트
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 
                         // 출근 시간 데이터 생성
                        // const arrivalData =
@@ -344,119 +343,6 @@
     }
 
 
-
-=======
-                       
-                       
-                    },
-                    error: function(xhr, status, error) {
-                        // Ajax 요청이 실패했을 때 수행할 작업
-                        console.error('AJAX 요청이 실패하였습니다:', error);
-                    }
-                });
-
-    // 출근 시간 데이터 생성
-    function generateArrivalData() {
-        const currentDate = new Date();
-        const arrivalData = [];
-
-        // 오늘 날짜 기준으로 -14일까지의 출근 시간 데이터 생성
-        for (let i = 14; i >= 0; i--) {
-            const date = new Date(currentDate);
-            date.setDate(date.getDate() - i); // i일 전의 날짜로 설정
-            
-            
-            const hours = Math.floor(Math.random() * 3) + 7; // 7 ~ 9 사이의 임의의 시간 (정수)
-            const minutes = Math.floor(Math.random() * 60); // 0 ~ 59 사이의 임의의 분
-            const time = hours + minutes / 60; // 시간을 소수점으로 표현 (예: 8시 27분 => 8.45)
-
-            arrivalData.push(time);
-        }
-
-        return arrivalData;
-    }
-
-    // 퇴근 시간 데이터 생성
-    function generateDepartureData() {
-        const currentDate = new Date();
-        const departureData = [];
-
-        // 오늘 날짜 기준으로 -14일까지의 퇴근 시간 데이터 생성
-        for (let i = 14; i >= 0; i--) {
-            const date = new Date(currentDate);
-            date.setDate(date.getDate() - i); // i일 전의 날짜로 설정
-            const hours = Math.floor(Math.random() * 3) + 17; // 17 ~ 19 사이의 임의의 시간 (정수)
-            const minutes = Math.floor(Math.random() * 60); // 0 ~ 59 사이의 임의의 분
-            const time = hours + minutes / 60; // 시간을 소수점으로 표현 (예: 8시 27분 => 8.45)
-
-            departureData.push(time);
-        }
-
-        return departureData;
-    }
-
-    // 출근 시간 데이터 생성
-    const arrivalData = generateArrivalData();
-
-    // 퇴근 시간 데이터 생성
-    const departureData = generateDepartureData();
->>>>>>> refs/remotes/origin/seolha_240502
-=======
-                       
-                       
-                    },
-                    error: function(xhr, status, error) {
-                        // Ajax 요청이 실패했을 때 수행할 작업
-                        console.error('AJAX 요청이 실패하였습니다:', error);
-                    }
-                });
-
-    // 출근 시간 데이터 생성
-    function generateArrivalData() {
-        const currentDate = new Date();
-        const arrivalData = [];
-
-        // 오늘 날짜 기준으로 -14일까지의 출근 시간 데이터 생성
-        for (let i = 14; i >= 0; i--) {
-            const date = new Date(currentDate);
-            date.setDate(date.getDate() - i); // i일 전의 날짜로 설정
-            
-            
-            const hours = Math.floor(Math.random() * 3) + 7; // 7 ~ 9 사이의 임의의 시간 (정수)
-            const minutes = Math.floor(Math.random() * 60); // 0 ~ 59 사이의 임의의 분
-            const time = hours + minutes / 60; // 시간을 소수점으로 표현 (예: 8시 27분 => 8.45)
-
-            arrivalData.push(time);
-        }
-
-        return arrivalData;
-    }
-
-    // 퇴근 시간 데이터 생성
-    function generateDepartureData() {
-        const currentDate = new Date();
-        const departureData = [];
-
-        // 오늘 날짜 기준으로 -14일까지의 퇴근 시간 데이터 생성
-        for (let i = 14; i >= 0; i--) {
-            const date = new Date(currentDate);
-            date.setDate(date.getDate() - i); // i일 전의 날짜로 설정
-            const hours = Math.floor(Math.random() * 3) + 17; // 17 ~ 19 사이의 임의의 시간 (정수)
-            const minutes = Math.floor(Math.random() * 60); // 0 ~ 59 사이의 임의의 분
-            const time = hours + minutes / 60; // 시간을 소수점으로 표현 (예: 8시 27분 => 8.45)
-
-            departureData.push(time);
-        }
-
-        return departureData;
-    }
-
-    // 출근 시간 데이터 생성
-    const arrivalData = generateArrivalData();
-
-    // 퇴근 시간 데이터 생성
-    const departureData = generateDepartureData();
->>>>>>> refs/remotes/origin/ksk_0502
 
     // 날짜 라벨 생성
     const currentDate = new Date();
