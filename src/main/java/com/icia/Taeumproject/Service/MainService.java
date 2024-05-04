@@ -151,6 +151,12 @@ public class MainService {
     
   }
 
+public List<Node> selectNodeListToday(int dR_ID, String formattedDate) {
+	List<Node> nodeList = mDao.selectNodeListToday(dR_ID,formattedDate);
+	System.out.println(formattedDate);
+	return nodeList;
+}
+
 
 
  
