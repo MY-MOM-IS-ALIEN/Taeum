@@ -96,7 +96,7 @@
         <button type="button" class="btn btn-danger btn-sm reject-btn" id="reject-btn" 
                 data-node-list="${NodeList}" 
                 onclick="handleReject(this)">
-            거절[[${index.index}]]
+            거절
         </button>
     </div>
 </div>
@@ -124,6 +124,31 @@ mapOption = {
    level: 8 // 지도의 확대 레벨
 };
 var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+
+
+// 페이지가 로드될 때 부트스트랩 달력 초기화 ------------------------------------
+window.onload = function () {
+    $('#datePickerButton').datepicker({
+        format: 'yyyy-mm-dd',
+        autoclose: true,
+        todayHighlight: true
+    }).on('changeDate', function (e) {
+        const selectedDate = e.format();
+        document.getElementById('DATE-TIME').innerText = selectedDate;
+    });
+    displayCurrentDate();
+   
+};
+// 페이지가 로드될 때 기본값으로 현재 날짜를 표시하는 함수
+function displayCurrentDate() {
+    const currentDate = new Date();
+    const dateString = currentDate.toLocaleDateString(); 
+    console.log("dateString = " + dateString);// 날짜 포맷을 조정할 수 있음
+    document.getElementById('DATE-TIME').innerText = dateString;
+}
+// -----------------------------------------------------------------
+
 
 
 function spinOn() {
@@ -359,40 +384,6 @@ function toggleOnOff(innerList, isActive, idx) {
   
    // 각 노드에 대한 마커를 저장하기 위한 객체
    var markers = {};
-   
-   
-// 주변 약국 검색
-function searchPoi() {
-  // 지도의 중심좌표를 얻어옵니다
-  var latlng = map.getCenter();
-  const x = latlng.getLng();
-  const y = latlng.getLat();
-
-  spinOn();
-  $.ajax({
-    url: '/poi',
-    data: {
-      x: x,
-      y: y
-    },
-    <!-- 여기서 result는 그냥 변수 -->
-    success: function (result) { 
-      if (result.code != 'SUCC') {
-        alert("주변 약국 검색에 실패 하였습니다.");
-        spinOff();
-        return;
-      }
-      const data = result.data;
-      spinOff();
-      displayData(data);
-      
-    },
-    error: function () {
-        spinOff();
-      alert("주변 약국 검색에 실패 하였습니다.");
-    }
-  });
-}
 
 
 //ajax 응답 받은 데이터로 화면에 그리기.
@@ -414,13 +405,7 @@ function displayData(data) {
     let count = 0;
     for (const node of nodeList) {
         // 각 노드에 대한 HTML 코드 생성
-        /* html += `
-            <a href="#" class="list-group-item list-group-item-action py-3 lh-sm mt-3 border rounded-2">
-                <!-- 노드에 대한 정보를 여기에 추가 -->
-                <span>${node.address}</span>
-                <!-- 추가 정보가 있다면 이어서 추가 가능 -->
-            </a>
-        `; */
+       
     }
 
     // 생성된 HTML을 페이지의 목록 요소에 추가
@@ -432,56 +417,6 @@ function displayData(data) {
 
 
 
-$(document).ready(function() {
-    // 페이지 로딩 시 탑승 여부 표시
-    $('.ride').each(function() {
-        var rideValue = $(this).text().trim(); // 각각의 ride 요소에 있는 텍스트 가져오기
-        if (rideValue === '1') {
-            $(this).text("탑승완료");
-        } else if (rideValue === 'null') {
-            $(this).text("탑승여부");
-        }
-    });
-});
-
-
-function rideButton(button){
-  console.log("click성공");
-   // 버튼의 부모 요소에서 탑승 여부를 찾아서 변경합니다.
-    $(button).parent().find('#ride').html("탑승완료");
-   
-   var ride = 1
-     var node_id = $(button).closest('.list-group-item').find('#node_id').val();
-   console.log("node_id = " + node_id);
-   
-     spinOn();
-   
-   $.ajax({
-          url: '/ride',
-          data: {
-            ride : ride,
-            id : node_id
-          },
-
-          success: function (result) { 
-            if (result.code != 'SUCC') {
-            
-              return;
-            }
-            const data = result.data;
-            
-            displayData(data);
-    
-            
-          },
-          error: function () {
-             
-            alert("탑승성공 실패.....................");
-          }
-        });
-   
-
-}
 function secondsToHoursMinutes(seconds) {
      // 시간으로 변환
      const hours = Math.floor(seconds / 3600);
@@ -588,14 +523,12 @@ function secondsToHoursMinutes(seconds) {
           });
       }
      
-   //nodeList를 사용하여 마커와 클러스터러를 추가합니다.
-     var nodeList = /*[[${nodeList}]]*/ null;
-     //console.log("nodeList = ", nodeList);
+   
 
 
      // 노드 리스트를 반복하면서 각 노드에 대해 마커를 생성하고 markers 배열에 추가합니다.
      for (const node of nodeList) {
-        // console.log(node);
+        
          addMarker(node);
      }
      
@@ -626,27 +559,8 @@ function secondsToHoursMinutes(seconds) {
          document.getElementById('Count').innerText = count; // #Count 업데이트
      }
      
-  // 페이지가 로드될 때 기본값으로 현재 날짜를 표시하는 함수
-     function displayCurrentDate() {
-         const currentDate = new Date();
-         const dateString = currentDate.toLocaleDateString(); // 날짜 포맷을 조정할 수 있음
-         document.getElementById('DATE-TIME').innerText = dateString;
-     }
      
-  // 페이지가 로드될 때 부트스트랩 달력 초기화
-     window.onload = function () {
-         $('#datePickerButton').datepicker({
-             format: 'yyyy-mm-dd',
-             autoclose: true,
-             todayHighlight: true
-         }).on('changeDate', function (e) {
-             const selectedDate = e.format();
-             document.getElementById('DATE-TIME').innerText = selectedDate;
-         });
-         displayCurrentDate();
-        
-     };
-     
+
      /*<![CDATA[*/
      function handleAccept(button) {
          // 기본 동작 막기
@@ -826,66 +740,6 @@ function updateCount() {
     document.getElementById('Count').innerText = count; // #Count 업데이트
 }
 
-// 페이지가 로드될 때 기본값으로 현재 날짜를 표시하는 함수
-function displayCurrentDate() {
-    const currentDate = new Date();
-    const dateString = currentDate.toLocaleDateString(); // 날짜 포맷을 조정할 수 있음
-    document.getElementById('DATE-TIME').innerText = dateString;
-}
-
-//페이지가 로드될 때 부트스트랩 달력 초기화
-window.onload = function () {
-    $('#datePickerButton').datepicker({
-        format: 'yyyy-mm-dd',
-        autoclose: true,
-        todayHighlight: true
-    }).on('changeDate', function (e) {
-        const selectedDate = e.format();
-        document.getElementById('DATE-TIME').innerText = selectedDate;
-    });
-    displayCurrentDate();
-   
-};
-
-$(document).ready(function() {
-    // DATE-TIME 요소에서 현재 날짜 표시
-    var currentDate = new Date();
-    var dateString = currentDate.toLocaleDateString(); // 날짜 포맷을 조정할 수 있음
-    $('#DATE-TIME').text(dateString);
-
-    // 부트스트랩 달력 초기화
-    $('#datePickerButton').datepicker({
-        format: 'yyyy-mm-dd',
-        autoclose: true,
-        todayHighlight: true
-    }).on('changeDate', function(e) {
-        // 선택한 날짜를 DATE-TIME에 표시
-        var selectedDate = e.format();
-        console.log("selectedDate = " + selectedDate);
-        $('#DATE-TIME').text(selectedDate);
-        
-        // AJAX 요청
-        $.ajax({
-            url: 'selectLocaldate', // 컨트롤러의 URL
-            method: 'POST',
-            data: { date: selectedDate }, // 선택된 날짜를 데이터로 전송
-            success: function(response) {
-                // 성공적으로 서버로부터 응답을 받았을 때 수행할 작업
-         
-                updateCount(); // #Count 업데이트
-                console.log("selectLocaldate = " , response);
-                nodeList = response;
-                updateMarkers();
-                
-            },
-            error: function(xhr, status, error) {
-                // Ajax 요청이 실패했을 때 수행할 작업
-                alert('Ajax 요청이 실패하였습니다: ' + error);
-            }
-        });
-        
-    });
-
 
 //마커를 업데이트하는 함수
 function updateMarkers() {
@@ -904,7 +758,7 @@ function updateMarkers() {
     clusterer.clear();
     clusterer.addMarkers(markers);
 }
-});
+
     
      
 </script>

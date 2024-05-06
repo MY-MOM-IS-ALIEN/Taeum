@@ -81,22 +81,42 @@
 		$(".upload-name").val(fileName);
 	});
 
+	// 메인 센터 이동
 	$("#moveTomainCenter").click(function() {
 		location.href = `/mainCenter`;
 	});
 
+	// 정보 수정 페이지 이동 
 	$("#moveToModify").click(function() {
 		location.href = `/driverUpdate`;
 	});
 
+	// 출퇴근 버튼
 	function changeButton() {
-		const btn = document.getElementById('management');
+		let btn = document.getElementById('management');
+		let status = btn.value;
 
-		if (btn.value === "출근") {
-			btn.value = "퇴근";
-		} else if (btn.value === "퇴근") {
-			btn.value = "출근";
-		}
+		$.ajax({
+			type : "post",
+			url : "driverCommute",
+			data : {
+				status : status
+			},
+			success : function(response) {
+
+				//성공 시 버튼 텍스트 변경
+				if (btn.value === "출근") {
+					alert("출근이 완료되었습니다.");
+					btn.value = "퇴근";
+				} else if (btn.value === "퇴근") {
+					alert("퇴근이 완료되었습니다.");
+					btn.value = "출근";
+				} // if end
+			}, // success end
+			error : function(xhr, status, error){
+				console.log("error:(");
+			}
+		}); // ajax end
 	}
 </script>
 </html>
