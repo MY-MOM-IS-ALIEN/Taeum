@@ -25,7 +25,8 @@
 					<p>
 					<div class="driver-image">
 						<img th:src="@{/upload/}+${driverImage}" alt="프로필 이미지"
-							width="300px" height="300px">
+							width="300px" height="300px"
+							onerror="this.onerror=null; this.src='/images/noimage.png';">
 					</div>
 					</p>
 					<span th:text="${driver.M_NAME}"></span> <br> <span
@@ -113,7 +114,7 @@
 					btn.value = "출근";
 				} // if end
 			}, // success end
-			error : function(xhr, status, error){
+			error : function(xhr, status, error) {
 				console.log("error:(");
 			}
 		}); // ajax end
