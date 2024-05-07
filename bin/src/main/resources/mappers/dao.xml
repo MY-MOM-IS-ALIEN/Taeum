@@ -85,5 +85,10 @@ FROM NodeTbl ORDER BY distance ASC;
         JOIN applytbl a ON n.A_DATE = a.A_DATE
         WHERE a.M_ID = #{M_ID}
     </select>
+    
+    <delete id="cancelNode" parameterType="map">
+    	DELETE FROM NodeTbl
+    	WHERE M_Id = #{m_Id} AND A_Date = #{a_Date}
+	</delete>
   
 </mapper>

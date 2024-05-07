@@ -1,7 +1,6 @@
 package com.icia.Taeumproject.Service;
 
 import java.io.File;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -214,4 +213,22 @@ public class DriverService {
 			drDao.updateNodeCancle(dispatch);
 		}
 	}
+	
+
+	public int getDrId(int m_id) {
+
+		return drDao.getDrId(m_id);
+	}
+
+	public void insertCommute(int m_id, int dr_id) {
+		
+		drDao.insertCommute(m_id, dr_id);
+	}
+
+	public void updateCommute(int dr_id) {
+		
+		drDao.updateCommute(dr_id);
+	}
+
+
 }

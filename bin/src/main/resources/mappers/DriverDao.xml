@@ -91,4 +91,23 @@
 		driverprofile where M_ID = #{mid}
 	</delete>
 
+  <update id="updateConfirm" parameterType="DispatchDto">
+    update dispatchtbl set
+    D_STATUS='1',D_CONFIRM=now() where DR_ID=#{DR_ID} and D_ID=#{D_ID}
+  </update>
+  
+  <update id="updateNodeConfirm" parameterType="DispatchDto">
+    update nodetbl set
+    STATUS='1' where DR_ID=#{DR_ID} and D_ID=#{D_ID}
+  </update>
+  
+  <update id="updateCancle" parameterType="DispatchDto">
+    update dispatchtbl set
+    D_STATUS='2',D_CANCLE=now(), D_REASON=#{D_REASON} where DR_ID=#{DR_ID} and D_ID=#{D_ID}
+  </update>
+  
+  <update id="updateNodeCancle" parameterType="DispatchDto">
+    update nodetbl set
+    STATUS='2' where DR_ID=#{DR_ID} and D_ID=#{D_ID}
+  </update>
 </mapper>

@@ -1,5 +1,7 @@
 package com.icia.Taeumproject.Controller;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -195,11 +197,38 @@ public class DriverController {
 		return view;
 	}
 
-	
 
-  @GetMapping("/mainCenter")
+// 출퇴근 버튼 클릭 시 값 전송
+	@PostMapping("driverCommute")
+	@ResponseBody
+	public String driverCommute(@RequestParam("status") String status) {
+		log.info("driverCommute()");
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		Object principal = authentication.getPrincipal();
+		int m_id = ((SecurityUserDTO) principal).getM_ID();
+		log.info("m_id: {}", m_id);
+
+		int dr_id = drServ.getDrId(m_id);
+		log.info("dr_id: {}", dr_id);
+
+		if (status.equals("출근")) {
+			
+			drServ.insertCommute(m_id, dr_id);
+			
+		} else if (status.equals("퇴근")) {
+			
+			drServ.updateCommute(dr_id);
+			
+		}
+
+		return "redirect:driverModify";
+	}
+
+	@GetMapping("/mainCenter")
   public String test(Model model) {
-    
+
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     Object principal = authentication.getPrincipal();
@@ -237,6 +266,7 @@ public class DriverController {
 
     return "mainCenter"; // 뷰 이름 반환
   }
+	
 
 	@GetMapping("driverAutoJoin")
 	public String driverAutoJoin(RedirectAttributes rttr) {
@@ -275,33 +305,26 @@ public class DriverController {
 
 		Object principal = authentication.getPrincipal();
 		int m_id = ((SecurityUserDTO) principal).getM_ID();
-		int DR_ID = (m_id-1);
-	    
-	    System.out.println("여기지롱" + data);
-	    drServ.updateConfirm(data,DR_ID);
-	    return "mainCenter"; // 적절한 응답 처리
+		int DR_ID = (m_id - 1);
+
+		System.out.println("여기지롱" + data);
+		drServ.updateConfirm(data, DR_ID);
+		return "mainCenter"; // 적절한 응답 처리
 	}
-	
+
 	@PostMapping("/deniedNode")
 	public String deniedNode(@RequestBody List<DispatchDto> dataToSend) {
-	    log.info("deniedNode()");
+		log.info("deniedNode()");
 
-	    // 사용자 정보 확인
-	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	    Object principal = authentication.getPrincipal();
-	    int m_id = ((SecurityUserDTO) principal).getM_ID();
-	    int DR_ID = (m_id - 1);
+		// 사용자 정보 확인
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Object principal = authentication.getPrincipal();
+		int m_id = ((SecurityUserDTO) principal).getM_ID();
+		int DR_ID = (m_id - 1);
 
-	    drServ.updateCancle(dataToSend,DR_ID);
+		drServ.updateCancle(dataToSend, DR_ID);
 
-	    return "mainCenter"; // 적절한 응답 처리
-
-
-
-
-
-	 
+		return "mainCenter"; // 적절한 응답 처리
 
 	}
 }
-

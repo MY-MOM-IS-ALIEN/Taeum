@@ -51,7 +51,7 @@
         <div id="Count">0</div>
         <div class="fw-light" style="font-size: 0.8rem">접 수 현 황</div>
       </div>
-      <div class="border-start border-2 h-50" id="nodeCount"></div>
+      <div class="border-start border-2 h-50"></div>
         </div>
       <div
       class="d-flex flex-wrap py-3 px-2 gap-3 align-items-center justify-content-center border-bottom">
@@ -149,7 +149,6 @@ function displayCurrentDate() {
     const dateString = `${year}-${month}-${day}`;
     console.log("dateString = " + dateString);
     document.getElementById('DATE-TIME').innerText = dateString;
-    nodeCount();
 }
 
 // 달력에서 날짜가 변경될 때 호출되는 함수
@@ -157,24 +156,32 @@ function onDateChange(e) {
     const selectedDate = e.format();
     console.log("selectedDate = " + selectedDate);
     document.getElementById('DATE-TIME').innerText = selectedDate;
-    nodeCount();
   
+   
+  /*   // AJAX 요청 보내기
+    sendDateToServer(selectedDate); */
 }
 
-function nodeCount() {
-    var count = 0;
-    var dateTime = document.getElementById('DATE-TIME').innerText; // 페이지에서 선택된 날짜 가져오기
+/* function sendDateToServer(date) {
+    // 원하는 형식으로 날짜를 포맷팅
+    const formattedDate = date.split('/').join('-'); // "/"를 "-"로 변경
 
-    // 각 노드에서 날짜 부분 가져와서 비교
-    for(var i = 0; i < nodeList.length; i++) {
-        var nodeDate = nodeList[i].a_DATE.split(" ")[0]; // 각 노드의 날짜 부분 가져오기
-        if(dateTime === nodeDate) { // 날짜가 일치하는 경우 count 증가
-            count++;
+    $.ajax({
+        url: 'newNodeList',
+        type: 'POST',
+        data: { selectedDate: formattedDate }, // 포맷팅된 날짜를 전송
+        success: function(response) {
+            console.log('AJAX 요청 성공:');
+            nodeListDiv.innerHTML = response;
+
+           
+        },
+        error: function(xhr, status, error) {
+            console.error('AJAX 요청 에러:', error);
+            // 에러 발생 시 처리할 내용
         }
-    }
-
-    $("#Count").text(count); // count를 페이지에 표시
-}
+    });
+} */
 
 // 페이지가 로드될 때 이벤트 핸들러를 설정하여 초기화
 $(document).ready(function() {
@@ -186,7 +193,6 @@ $(document).ready(function() {
 
     // 페이지가 로드될 때 기본값으로 현재 날짜 표시
     displayCurrentDate();
-
 });
 // -----------------------------------------------------------------
 
@@ -779,7 +785,6 @@ function updateMarkers() {
     clusterer.clear();
     clusterer.addMarkers(markers);
 }
-
 
     
      

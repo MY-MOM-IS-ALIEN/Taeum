@@ -90,5 +90,9 @@ FROM NodeTbl ORDER BY distance ASC;
     	DELETE FROM NodeTbl
     	WHERE M_Id = #{m_Id} AND A_Date = #{a_Date}
 	</delete>
+	
+	<select id="selectNodeListToday" resultType="Node">
+		select * from nodetbl where DR_ID=#{dR_ID} AND A_DATE LIKE CONCAT('%', #{formattedDate}, '%');
+	</select>
   
 </mapper>

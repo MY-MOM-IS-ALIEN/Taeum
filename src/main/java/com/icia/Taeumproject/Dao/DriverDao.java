@@ -1,6 +1,5 @@
 package com.icia.Taeumproject.Dao;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -46,6 +45,16 @@ public interface DriverDao {
 	void updateCancle(DispatchDto dispatch);
 
 	void updateNodeCancle(DispatchDto dispatch);
+
+	void insertStwork(int m_id);
+
+	void updateEndwork(int m_id);
+
+	int getDrId(int m_id);
+
+	void insertCommute(int m_id, int dr_id);
+
+	void updateCommute(int dr_id);
 
 
 
