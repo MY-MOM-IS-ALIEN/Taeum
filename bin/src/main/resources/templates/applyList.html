@@ -48,10 +48,14 @@
                   th:text="${apply.STATUS == 0 ? '배차 중' : (apply.STATUS == 1 ? '배차완료' : '배차취소')}"></span>
               </div>
                <!-- 취소 버튼 -->  
+               <div th:if="${apply.STATUS == 0}" class="cancel-button">
                             <form action="/cancelApply" method="post">
-                                <input type="hidden" name="applyId" th:value="${apply.A_ID}" />
+                                <input type="hidden" name="A_Id" th:value="${apply.A_ID}"/>
+                                <input type="hidden" name="M_Id" th:value="${apply.M_ID}"/>
+                                <input type="hidden" name="A_Date" th:value="${apply.A_DATE}"/>
                                 <button type="submit" onclick="return confirm('정말로 취소하시겠습니까?')">취소</button>
                             </form>
+               </div><!-- 취소 버튼 end -->
             </div>
           </div>
         </div>

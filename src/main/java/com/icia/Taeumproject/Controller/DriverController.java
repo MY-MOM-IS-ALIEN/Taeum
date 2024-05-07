@@ -1,5 +1,9 @@
 package com.icia.Taeumproject.Controller;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -227,22 +231,25 @@ public class DriverController {
 
 	@GetMapping("/mainCenter")
 	public String test(Model model) {
-
+		
+		// 현재 날짜 가져오기
+        LocalDate currentDate = LocalDate.now();
+        
+        // 날짜를 원하는 형식으로 포맷팅하기
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formattedDate = currentDate.format(formatter);
+		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 		Object principal = authentication.getPrincipal();
 		int m_id = ((SecurityUserDTO) principal).getM_ID();
-
-		log.info("m_id: {}", m_id);
 		int DR_ID = (m_id - 1);
-		System.out.println("DR_ID = " + DR_ID);
 
-		int rideOne = DR_ID;
 		List<List<Node>> rideNodeList = new ArrayList<>();
 		List<Node> innerList1 = new ArrayList<>();
 		List<Node> innerList2 = new ArrayList<>();
 		List<Node> innerList3 = new ArrayList<>();
-
+		
 		List<Node> nodeList = maServ.selectNodeList(DR_ID);
 
 		for (Node node : nodeList) {
@@ -267,6 +274,43 @@ public class DriverController {
 		model.addAttribute("nodeList", nodeList);
 
 		return "mainCenter"; // 뷰 이름 반환
+	}
+	
+
+	@PostMapping("/newNodeList")
+	public List<List<Node>> newNodeList(@RequestParam("selectedDate") String dateString, Model model,RedirectAttributes rttr) {
+	    // 사용자 정보 가져오기
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    Object principal = authentication.getPrincipal();
+	    int m_id = ((SecurityUserDTO) principal).getM_ID();
+	    int DR_ID = (m_id - 1);
+	    String view = null;
+	    // 선택된 날짜에 해당하는 노드 리스트 가져오기
+	    List<Node> nodeList = maServ.selectNodeListToday(DR_ID, dateString);
+	    
+	    // 노드 리스트를 세 부분으로 분리하여 모델에 추가
+	    List<Node> innerList1 = new ArrayList<>();
+	    List<Node> innerList2 = new ArrayList<>();
+	    List<Node> innerList3 = new ArrayList<>();
+	    for (Node node : nodeList) {
+	        if (node.getCycle() == 1) {
+	            innerList1.add(node);
+	        } else if (node.getCycle() == 2) {
+	            innerList2.add(node);
+	        } else {
+	            innerList3.add(node);
+	        }
+	    }
+	    
+	    List<List<Node>> rideNodeList = new ArrayList<>();
+	    rideNodeList.add(innerList1);
+	    rideNodeList.add(innerList2);
+	    rideNodeList.add(innerList3);
+	    
+	    // 모델에 데이터 추가
+	    System.out.println(rideNodeList);
+	    
+	    return rideNodeList;
 	}
 
 	@GetMapping("driverAutoJoin")

@@ -8,7 +8,14 @@
     <!-- CSS styles -->
     <link rel="stylesheet" href="css/style.css">
     <!-- Include header fragment -->
-   <th:block th:insert="~{fragments::header}" />
+    <th:block th:insert="~{fragments::header}" />
+    <script>
+        $(document).ready(function() {
+            $('.popup-message').click(function() {
+                $(this).remove(); // 클릭한 메시지 요소 삭제
+            });
+        });
+    </script>
 </head>
 <body>
 <section>
@@ -21,7 +28,7 @@
             </div>
             <div th:unless="${#lists.isEmpty(nList)}">
                 <div th:each="popup : ${nList}">
-                    <div>
+                    <div class="popup-message">
                         <span th:text="${popup.message}"></span>
                         <span th:text="${#dates.format(popup.CREATED_AT, 'yyyy-MM-dd HH:mm')}"></span>
                     </div>
@@ -31,7 +38,7 @@
     </div>
 </section>
 <footer>
-   <th:block th:insert="~{fragments::footer}" />
+    <th:block th:insert="~{fragments::footer}" />
 </footer>
 </body>
 </html>
