@@ -20,6 +20,35 @@ section {
 	flex: 1;
 }
 
+/* pop up*/
+
+.p_content {
+	margin-top: 50px;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+	
+}
+
+.check-btn {
+	width: 70px;
+  height: 20px;
+	display: flex;
+	font-weight: bold; /* 글꼴을 볼드체로 설정 */
+  font-family: 'Open Sans', sans-serif; /* Open Sans 글꼴 사용 */
+  border: none; /* 윤곽선 제거 */
+  border-radius: 6px; /* 모서리를 둥글게 만듦 */
+  background-color: #3F7EFC; /* 버튼 배경색을 흰색으로 설정 */
+  color: #fff; /* 글자색을 3F7EFC로 설정 */
+  text-align: center;
+  padding-top: 2.5px;
+}
+
+/* pop up End*/
+
+
+
 .w-100 {
 	width: 100%;
 }
