@@ -91,23 +91,45 @@
 		driverprofile where M_ID = #{mid}
 	</delete>
 
-  <update id="updateConfirm" parameterType="DispatchDto">
-    update dispatchtbl set
-    D_STATUS='1',D_CONFIRM=now() where DR_ID=#{DR_ID} and D_ID=#{D_ID}
-  </update>
-  
-  <update id="updateNodeConfirm" parameterType="DispatchDto">
-    update nodetbl set
-    STATUS='1' where DR_ID=#{DR_ID} and D_ID=#{D_ID}
-  </update>
-  
-  <update id="updateCancle" parameterType="DispatchDto">
-    update dispatchtbl set
-    D_STATUS='2',D_CANCLE=now(), D_REASON=#{D_REASON} where DR_ID=#{DR_ID} and D_ID=#{D_ID}
-  </update>
-  
-  <update id="updateNodeCancle" parameterType="DispatchDto">
-    update nodetbl set
-    STATUS='2' where DR_ID=#{DR_ID} and D_ID=#{D_ID}
-  </update>
+	<update id="updateConfirm" parameterType="DispatchDto">
+		update dispatchtbl set
+		D_STATUS='1',D_CONFIRM=now() where DR_ID=#{DR_ID} and D_ID=#{D_ID}
+	</update>
+
+	<update id="updateNodeConfirm" parameterType="DispatchDto">
+		update nodetbl set
+		STATUS='1' where DR_ID=#{DR_ID} and D_ID=#{D_ID}
+	</update>
+
+	<update id="updateCancle" parameterType="DispatchDto">
+		update dispatchtbl set
+		D_STATUS='2',D_CANCLE=now(), D_REASON=#{D_REASON} where DR_ID=#{DR_ID} and D_ID=#{D_ID}
+	</update>
+
+	<update id="updateNodeCancle" parameterType="DispatchDto">
+		update nodetbl set
+		STATUS='2' where DR_ID=#{DR_ID} and D_ID=#{D_ID}
+	</update>
+
+	<select id="getDrId" parameterType="Integer"
+		resultType="Integer">
+		SELECT dt.dr_id
+		FROM drivertbl dt JOIN membertbl mt
+		ON
+		dt.m_id = mt.m_id
+		WHERE
+		mt.m_id = #{m_id}
+	</select>
+	
+	<insert id="insertCommute" parameterType="Integer">
+		INSERT INTO drivermanagement 
+		(DR_ID, DM_STWORK) 
+		values (#{dr_id}, NOW());
+	</insert>
+	
+	<update id="updateCommute" parameterType="Integer">
+		UPDATE drivermanagement 
+		SET DM_ENDWORK = NOW() 
+		WHERE DR_ID = #{dr_id};
+	</update>
 </mapper>

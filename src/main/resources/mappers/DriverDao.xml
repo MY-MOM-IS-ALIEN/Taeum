@@ -6,10 +6,10 @@
 	<!-- driverMain 관련 쿼리 -->
 	<select id="getDriverInfo" parameterType="Integer"
 		resultType="DriverDto">
-		SELECT dt.*, mt.*
-		FROM drivertbl dt, membertbl mt
-		WHERE
-		mt.m_id = #{m_id}
+		SELECT *
+		FROM drivertbl dt
+		JOIN membertbl mt ON dt.m_id = mt.m_id
+		WHERE mt.m_id = #{m_id}
 		LIMIT 1
 	</select>
 
@@ -103,7 +103,8 @@
 
 	<update id="updateCancle" parameterType="DispatchDto">
 		update dispatchtbl set
-		D_STATUS='2',D_CANCLE=now(), D_REASON=#{D_REASON} where DR_ID=#{DR_ID} and D_ID=#{D_ID}
+		D_STATUS='2',D_CANCLE=now(), D_REASON=#{D_REASON} where DR_ID=#{DR_ID}
+		and D_ID=#{D_ID}
 	</update>
 
 	<update id="updateNodeCancle" parameterType="DispatchDto">
@@ -120,16 +121,17 @@
 		WHERE
 		mt.m_id = #{m_id}
 	</select>
-	
+
 	<insert id="insertCommute" parameterType="Integer">
-		INSERT INTO drivermanagement 
-		(DR_ID, DM_STWORK) 
+		INSERT INTO
+		drivermanagement
+		(DR_ID, DM_STWORK)
 		values (#{dr_id}, NOW());
 	</insert>
-	
+
 	<update id="updateCommute" parameterType="Integer">
-		UPDATE drivermanagement 
-		SET DM_ENDWORK = NOW() 
+		UPDATE drivermanagement
+		SET DM_ENDWORK = NOW()
 		WHERE DR_ID = #{dr_id};
 	</update>
 </mapper>

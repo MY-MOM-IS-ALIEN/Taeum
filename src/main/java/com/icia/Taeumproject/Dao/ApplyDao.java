@@ -1,13 +1,10 @@
 package com.icia.Taeumproject.Dao;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
 import com.icia.Taeumproject.Dto.ApplyDto;
-import com.icia.Taeumproject.Dto.Node;
-import com.icia.Taeumproject.Dto.SearchDto;
 
 @Mapper
 public interface ApplyDao {
