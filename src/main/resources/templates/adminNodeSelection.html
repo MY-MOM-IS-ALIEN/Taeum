@@ -1,3 +1,12 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Taeum</title>
+
+
 <link
 	href="https://getbootstrap.com/docs/5.3/dist/css/bootstrap.min.css"
 	rel="stylesheet"
@@ -18,16 +27,21 @@
 	
 	<title>노드 할당</title>
 	<link rel="stylesheet" href="css/style.css">
+
 	 <th:block th:insert="~{fragments :: header}" />
+
+
 	
-	
-	
+
+	</head>
+	<body>
+
 <main class="d-flex flex-nowrap">
 	<div
 		class="d-flex flex-column align-items-stretch flex-shrink-0 bg-body-tertiary border border-r-1"
 		style="width: 380px;">
 		<div
-			class="d-flex align-items-center flex-shrink-0 p-3 link-body-emphasis text-decoration-none" >
+			class="d-flex align-items-center flex-shrink-0 p-3 link-body-emphasis text-decoration-none">
 			<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
 				fill="#4ae39c" viewBox="0 0 256 256" class="me-2">
        <path
@@ -145,7 +159,9 @@
 
 	<div id="map" class="w-100"></div>
 
+
 	
+
 
 	<div
 		class="w-100 h-100 fixed-top justify-content-center align-items-center bg-opacity-10 bg-success"
@@ -675,3 +691,5 @@ function secondsToHoursMinutes(seconds) {
 
 </script>
 
+</body>
+</html>

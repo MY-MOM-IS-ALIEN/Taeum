@@ -5,6 +5,50 @@
 <meta charset="UTF-8">
 <title>태움</title>
 <script src="script.js"></script>
+<script th:inline="javascript">
+		$(function() {
+			const msg = /*[[${msg}]]*/null;
+			if (msg != null) {
+				alert(msg);
+			}
+		});
+		
+		document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('driver1Button').addEventListener('click', function() {
+                sendNumberToServer(1);
+            });
+            document.getElementById('driver2Button').addEventListener('click', function() {
+                sendNumberToServer(2);
+            });
+            document.getElementById('driver3Button').addEventListener('click', function() {
+                sendNumberToServer(3);
+            });
+        });
+
+        // 숫자를 서버로 전송하는 함수 (POST 요청)
+        function sendNumberToServer(number) {
+            var formData = new FormData();
+            formData.append('num', number);
+
+            fetch('/loginChangeProc', {
+                method: 'POST',
+                body: formData
+            })
+            .then(function(response) {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(function(data) {
+                console.log('서버 응답:', data);
+                // 이곳에서 추가적인 작업을 할 수 있습니다.
+            })
+            .catch(function(error) {
+                console.error('Error:', error);
+            });
+        }
+	</script>
 <script>
 	function openPopup() {
 		var url = "/Popup";
@@ -54,11 +98,10 @@
 
 		<th:block sec:authorize="hasRole('ADMIN')">
     <div class="top-left">
-        <img src="images/bell.png" alt="로고" class="top-left logo">
+        <img src="images/notification.png" alt="로고" class="top-left logo">
         <a href="Popup" target="_blank">알림 확인</a>
     </div>
 </th:block>
-
 
 
 			<nav class="top-right">
@@ -84,8 +127,10 @@
 								<a href="/UserUpdate">내 정보 수정</a> <a href="/applyList">신청 내역</a>
 								<a href="/board">공지 및 문의사항</a>
 							</div>
+							<div class="dropdown-content" sec:authorize="hasAnyRole('DRIVER', 'ADMIN')">
+							<a th:href="@{loginChange}">계정전환</a>
 						</div>
-					</li>
+    </li>
 					<!--사용자 이름  End -->
 
 				</ul>
@@ -104,15 +149,6 @@
 			</div>
 		</div>
 	</div>
-
-	<script th:inline="javascript">
-		$(function() {
-			const msg = /*[[${msg}]]*/null;
-			if (msg != null) {
-				alert(msg);
-			}
-		});
-	</script>
 
 </body>
 </html>

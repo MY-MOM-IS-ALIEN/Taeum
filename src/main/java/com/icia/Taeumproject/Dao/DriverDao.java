@@ -37,7 +37,6 @@ public interface DriverDao {
 
 	void updateDriverProfile(int mid);
 
-
 	void updateConfirm(DispatchDto dispatch);
 	
 	void updateNodeConfirm(DispatchDto dispatch);

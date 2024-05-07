@@ -4,27 +4,23 @@ package com.icia.Taeumproject.Controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.icia.Taeumproject.Dao.NotificationDao;
 import com.icia.Taeumproject.Dto.ApplyDto;
-
 import com.icia.Taeumproject.Dto.SearchDto;
 import com.icia.Taeumproject.Dto.SecurityUserDTO;
 import com.icia.Taeumproject.Service.ApplyService;
 
-
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -38,7 +34,7 @@ public class HomeController {
     
       
       @GetMapping("applyList")
-  		public String applyList(Model model) {
+  		public String applyList(SearchDto sdto, Model model) {
   		log.info("applyList()");
   		
   		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -49,7 +45,7 @@ public class HomeController {
   		log.info("m_id: {}", m_id);
 
   		// aServ.getApplyList(m_id, model);
-  		aServ.updateApplyStatusWithNodeList(m_id,model);
+  		aServ.updateApplyStatusWithNodeList(sdto, m_id, model);
   		
   		return "applyList";
   		}

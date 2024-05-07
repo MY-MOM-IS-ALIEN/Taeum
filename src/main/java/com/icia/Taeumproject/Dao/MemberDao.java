@@ -37,5 +37,7 @@ public interface MemberDao {
 
 	List<MemberDto> getAllUsers();
 
-  List<MemberDto> selectAllMember();
+
+	void updateAdmin(int m_id);
+
 }
