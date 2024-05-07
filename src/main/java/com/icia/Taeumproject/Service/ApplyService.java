@@ -96,7 +96,7 @@ public class ApplyService {
       }
     }
     int applyCount = applyList.size();
-
+    
     // 처리된 신청 리스트를 모델에 추가
     model.addAttribute("applyList", applyList);
     model.addAttribute("applyCount", applyCount);

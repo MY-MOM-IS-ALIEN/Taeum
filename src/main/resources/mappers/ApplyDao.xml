@@ -9,7 +9,7 @@
     #{A_ENDADRESS},#{A_ENDDADRESS},#{A_ENDRADRESS},#{A_DATE},DEFAULT,#{A_CONTENTS},
     #{M_ID},#{STATUS})
   </insert>
-
+	
   <select id="sDuplicateApply" resultType="boolean"
     parameterType="java.util.Map">
     SELECT COUNT(*) > 0

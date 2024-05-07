@@ -1,10 +1,15 @@
 package com.icia.Taeumproject.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.icia.Taeumproject.Dto.BoardDto;
 import com.icia.Taeumproject.Service.BoardService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -17,19 +22,13 @@ public class BoardController {
 	 private BoardService bServ;
 	
 	@GetMapping("board")
-	public String board() {
+	public String board(Model model) {
 		log.info("board");
 		
+		bServ.boardList(model);
 		return "board";
 	}
 	
-	@PostMapping("boardProc")
-	public String boardProc() {
-		log.info("boardProc");
-			
-		
-		return "/board";
-	}
 	
 	@GetMapping("boardWrite")
 	public String boardWrite() {
@@ -38,11 +37,16 @@ public class BoardController {
 		return "boardWrite";
 	}
 	
+	// 게시글 작성하기 컨트롤러
 	@PostMapping("bWriteProc")
-	public String bWriteProc() {
-		log.info("bWriteProc");
-		
-		return "/bWriteProc";
+	public String bWriteProc(BoardDto board, RedirectAttributes rttr) {
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    String username = authentication.getName(); // 현재 로그인한 사용자의 아이디
+	    
+	    bServ.bWriteProc(board, rttr, username);
+	    
+	    // 게시글 작성 후 게시글 목록 페이지로 리다이렉트
+	    return "redirect:/board";
 	}
 	
 }

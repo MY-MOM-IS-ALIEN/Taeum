@@ -2,7 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.icia.Taeumproject.Dao.BoardDao">
 	
-
+	<insert id="insertBoard" parameterType="BoardDto">
+		 INSERT INTO boardtbl
+		  VALUES(#{B_ID},#{username},#{B_TITLE},#{B_CONTENTS},DEFAULT,#{M_ID},#{role})
+	</insert>
 	
-
+	 <select id="getBoardList" resultType="BoardDto">
+        SELECT * FROM boardtbl ORDER BY B_DATE DESC;
+    </select>
+    
+    
 </mapper>

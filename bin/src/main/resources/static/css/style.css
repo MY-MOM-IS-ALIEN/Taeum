@@ -820,6 +820,156 @@ fieldset.profile {
 	font-size: 1.2rem;
 }
 
+/* board css*/
+.board-title{
+	margin-left:80%;
+}
+.board {
+  border: 1px #a39485 solid;
+  font-size: .9em;
+  box-shadow: 0 2px 5px rgba(0,0,0,.25);
+  width: 80%;
+  border-collapse: collapse;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom:20px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.b-th {
+  text-align: left;
+  color: #000; /* 검은색으로 변경 */
+  font-weight: bold; /* 글씨 두껍게 설정 */
+}
+  
+.b-thead{
+  font-weight: bold;
+ color: #000; /* 검은색으로 변경 */
+  background: #fff; /* 흰색으로 변경 */
+   border-bottom: 2px solid rgba(0,0,0,.1);
+}
+  
+ .b-td, .b-th {
+  padding: 1em .5em;
+  vertical-align: middle;
+}
+  
+ .b-td {
+  border-bottom: 1px solid rgba(0,0,0,.1);
+  background: #fff;
+}
+
+.b-a {
+  color: #73685d;
+}
+  
+ @media all and (max-width: 768px) {
+    
+  .board, .b-thead, .b-tbody, .b-th, .b-td, .b-tr {
+    display: block;
+  }
+  
+  .b-th {
+    text-align: right;
+  }
+  
+  .board {
+    position: relative; 
+    padding-bottom: 0;
+    border: none;
+    box-shadow: 0 0 10px rgba(0,0,0,.2);
+  }
+  
+  .b-thead {
+    float: left;
+    white-space: nowrap;
+  }
+   
+  .b-tbody {
+    overflow-x: auto;
+  }
+  
+ }
+ 
+ 
+  /* board write */
+ 
+
+
+.bw-h1 {
+    text-align: center;
+    padding: 10px 10px;
+    padding-bottom: 30px;
+    border-bottom:1px solid #848484;
+}
+
+.b-write {
+    position: relative;
+}
+
+.board-top {
+    width : 80%;
+    height: 50px;
+    margin: 0 auto;
+    max-width: 100%;
+}
+
+.bw-hr{
+    width: 100%;
+}
+
+.b-write-form {
+    display: flex;
+    flex-direction: column;
+    width: 1200px;
+    margin: 0 auto;
+}
+
+.b-write-1 {
+    height: 50px;
+    border : none;
+    font-size: 40px;
+    background-color: #f5f6f7;
+    outline: none;
+}
+
+.b-write-2 {
+    margin-top: 30px;
+    font-size: 15px;
+    border: none;
+    background-color: #f5f6f7;
+    outline: none;
+}
+
+.b-write-3 {
+    margin-top: 10px;
+}
+
+.b-write-4 {
+    margin-top: 10px;
+
+    width: 70px;
+    height: 30px;
+    border: none;
+    background-color: #f5f6f7;
+    Cursor:pointer;
+}
+
+.b-write-5 {
+    position: absolute;
+    bottom: 0;
+    left: 200px;
+    width: 70px;
+    height: 30px;
+    border: none;
+    background-color: #f5f6f7;
+    Cursor:pointer;
+}
+ 
+ 
+ 
+
 /* dropdown css*/
 .dropdown {
 	position: relative;
@@ -942,3 +1092,17 @@ fieldset.profile {
 	background-color: #3F7EFC; /* 버튼 배경색을 흰색으로 설정 */
 	color: #fff; /* 글자색을 3F7EFC로 설정 */
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

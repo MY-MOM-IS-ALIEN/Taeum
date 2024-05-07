@@ -84,6 +84,13 @@
 								<a href="/UserUpdate">내 정보 수정</a> <a href="/applyList">신청 내역</a>
 								<a href="/board">공지 및 문의사항</a>
 							</div>
+							<div class="dropdown-content" sec:authorize="hasRole('DRIVER')">
+							<a href="/Driver">Driver</a> <a href="/Driver">Driver</a>
+								<a href="/Driver">Driver</a>
+						</div>
+						<div class="dropdown-content" sec:authorize="hasRole('ADMIN')">
+							<a href="/ADMIN">ADMIN</a> <a href="/ADMIN">ADMIN</a>
+								<a href="/ADMIN">ADMIN</a>
 						</div>
 					</li>
 					<!--사용자 이름  End -->

@@ -822,7 +822,7 @@ fieldset.profile {
 
 /* board css*/
 .board-title{
-	margin-left:80%;
+	margin-left:10%;
 }
 .board {
   border: 1px #a39485 solid;
@@ -837,6 +837,28 @@ fieldset.profile {
   margin-right: auto;
 }
 
+.board-btn-primary {
+	background-color: #dc3545;
+	color: #fff;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+	margin-top: 20px;
+	margin-left:80%;
+	display: inline-block;
+	text-decoration: none;
+	width: 80px; /* 자동으로 내용에 맞게 너비 조절 */
+	box-sizing: border-box; /* 패딩과 테두리를 포함한 전체 너비를 설정 */
+}
+
+.board-btn-primary:hover {
+	background-color: #c82333;
+}
+.board-btn-primary:focus {
+    outline: none; /* 포커스 효과 제거 */
+}
 .b-th {
   text-align: left;
   color: #000; /* 검은색으로 변경 */
