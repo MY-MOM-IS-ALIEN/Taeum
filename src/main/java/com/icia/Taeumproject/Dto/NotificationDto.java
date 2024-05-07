@@ -6,11 +6,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@ToString
+
 @Getter
 @Setter
+@ToString
 public class NotificationDto {
-    private int notificationId;
+    private int NOTIFICATION_ID;
     private String role;
     private String message;
     private Timestamp CREATED_AT; // 올바른 Timestamp 사용
