@@ -16,7 +16,8 @@ body {
 }
 
 section {
-	margin-bottom: 50px;
+	margin-bottom: 35px;
+	margin-top: 45px;
 	flex: 1;
 }
 
@@ -75,9 +76,7 @@ section {
 	color: inherit; /* 링크 색을 부모 요소의 색으로 상속 */
 }
 
-.top-left a:hover {
-	color: inherit; /* 호버 시 링크 색을 부모 요소의 색으로 상속 */
-}
+
 
 .logo {
 	margin-top: 4px;
@@ -130,7 +129,7 @@ section {
 	padding-left: 15px;
 	margin-right: auto;
 	margin-left: auto;
-	max-width: 800px;
+	max-width: 90%;
 }
 
 .content-home {
@@ -588,7 +587,7 @@ span.file-title {
 .write-form {
 	max-width: 600px;
 	padding: 15px;
-	margin: 0px auto;
+	margin: 80px auto;
 }
 
 .write-form .write-input {
@@ -1093,7 +1092,11 @@ fieldset.profile {
 	background-color: #3F7EFC; /* 버튼 배경색을 흰색으로 설정 */
 	color: #fff; /* 글자색을 3F7EFC로 설정 */
 }
-
+.apply-list-empty{
+	margin-top: 10%;
+	text-align: center;
+	font-size: 50px;
+}
 
 
 

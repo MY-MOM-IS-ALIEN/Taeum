@@ -1,3 +1,12 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Taeum</title>
+
+
 <link
 	href="https://getbootstrap.com/docs/5.3/dist/css/bootstrap.min.css"
 	rel="stylesheet"
@@ -21,8 +30,12 @@
 
 	 <th:block th:insert="~{fragments :: header}" />
 
+
 	
-	
+
+	</head>
+	<body>
+
 <main class="d-flex flex-nowrap">
 	<div
 		class="d-flex flex-column align-items-stretch flex-shrink-0 bg-body-tertiary border border-r-1"
@@ -649,3 +662,5 @@ function secondsToHoursMinutes(seconds) {
 
 </script>
 
+</body>
+</html>
