@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Taeum</title>
+<!-- External libraries -->
+<script src="js/jquery-3.7.1.min.js"></script>
+<script
+	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<!-- Bootstrap CSS -->
+
+<!-- CSS styles -->
+<link rel="stylesheet" href="css/style.css">
+<!-- Include header fragment -->
+<th:block th:insert="~{fragments :: header}" />
+</head>
+
+<body style= background-color:#f5f6f7;>
+        <h1 class="bw-h1">게시판 작성</h1>
+		
+        <div class='b-write'>
+				<input type="hidden" name="B_ID">
+                <input type="text" class='b-write-1' name="B_TITLE" th:value="${board.B_TITLE}" readonly>
+                <hr class="bw-hr">
+                <textarea class="b-write-2" name="B_CONTENTS" th:value="{board.B_CONTENTS}"readonly></textarea>
+                <hr>
+                 <input type="hidden" name="M_ID" th:value="${#authentication.principal != null ? #authentication.principal.M_ID : ''}">
+      
+                 <input class="b-write-5" type="button" value="돌아가기" id="backbtn">
+  
+        </div><!-- b-write End -->
+        
+    </body>
+</html>
+ 
+
+
+	<th:block th:insert="~{fragments::footer}" />
+
+	<script th:inline="javascript">
+	 $("#backbtn").click(function(){
+	        let url = "/";
+	        location.href = url;
+	    });
+	</script>
+
+</body>
+</html>

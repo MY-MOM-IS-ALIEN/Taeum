@@ -49,6 +49,14 @@ public class BoardController {
 	    return "redirect:/board";
 	}
 	
+	@GetMapping("boardDetail")
+	public String boardDetail(int B_ID, Model model) {
+		log.info("boardDetail");
+		
+		bServ.boardDetail(B_ID, model);
+		return "boardDetail";
+	}
+	
 }
 
 

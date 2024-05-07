@@ -11,5 +11,8 @@
         SELECT * FROM boardtbl ORDER BY B_DATE DESC;
     </select>
     
+    <select id="boardDetail" resultType="BoardDto">
+     	select *from boardtbl where B_ID=#{b_id}
+    </select>
     
 </mapper>

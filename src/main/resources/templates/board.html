@@ -42,21 +42,27 @@
        <td class="b-td">
     <span th:text="${#strings.length(board.B_CONTENTS) &gt; 12} ? ${#strings.substring(board.B_CONTENTS, 0, 12) + '...'} : ${board.B_CONTENTS}"></span>
 	</td>
-         <td class="b-td">
-            <span th:text="${#dates.format(board.B_DATE, 'yyyy-MM-dd HH:mm')}"></span>
-            <a href="" class="b-a"></a>
+         <td class="b-td"><span th:text="${#dates.format(board.B_DATE, 'yyyy-MM-dd HH:mm')}"></span></td>
     </tr>    
     </tbody>
 </table>
-<h2 class="board-title">문의 사항</h2>
+<h2 class="board-title">문의사항</h2>
 <table class="board">  
+<thead class="b-thead">
+    <tr>
+          <th class="b-th">Name</th>
+       	 <th class="b-th">Title</th>
+       	  <th class="b-th">Contents</th>
+       	    <th class="b-th">Date</th>
+    </tr>
+    </thead>
     <tbody class="b-tbody">
   <tr th:each="board : ${boardList}" th:if="${board.role == 'ROLE_USER'}">
 
 
     
         <td class="b-td" th:text="${board.username}"></td>
-        <td class="b-td" th:text="${board.B_TITLE}"></td>
+        <td class="b-td"><a th:href="@{/boardDetail/{id}(id=${board.B_ID})}" th:text="${board.B_TITLE}"></a></td>
        <td class="b-td">
     <span th:text="${#strings.length(board.B_CONTENTS) &gt; 12} ? ${#strings.substring(board.B_CONTENTS, 0, 12) + '...'} : ${board.B_CONTENTS}"></span>
 	</td>

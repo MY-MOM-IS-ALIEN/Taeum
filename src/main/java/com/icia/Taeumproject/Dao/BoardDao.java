@@ -12,5 +12,7 @@ public interface BoardDao {
 	void insertBoard(BoardDto board);
 	
 	List<BoardDto> getBoardList();
+
+	BoardDto boardDetail(int b_ID);
 	
 }

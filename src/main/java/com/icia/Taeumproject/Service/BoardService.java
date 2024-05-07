@@ -61,4 +61,11 @@ public class BoardService {
 		model.addAttribute("boardList",boardList);
 		
 	}
+
+
+	public void boardDetail(int b_ID, Model model) {
+		BoardDto board = bDao.boardDetail(b_ID);
+		model.addAttribute(board);
+		
+	}
 }
