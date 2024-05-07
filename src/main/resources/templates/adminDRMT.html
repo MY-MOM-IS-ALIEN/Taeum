@@ -87,7 +87,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="#4ae39c" viewBox="0 0 256 256" class="me-2">
                     <path d="M232,128A104,104,0,1,1,128,24,104.13,104.13,0,0,1,232,128Z" fill="#3F7EFC"></path>
                 </svg>
-                <span class="fs-5 fw-semibold">기 사 목 록</span>
+                <span class="fs-5 fw-semibold">기사 근태 현황</span>
             </div>
             <div class="d-flex flex-wrap py-3 px-2 gap-3 align-items-center justify-content-center border-bottom">
                 <div class="border-start border-2 h-50"></div>
@@ -114,13 +114,13 @@
                     <span class="fs-5 fw-semibold">날짜 선택 : </span>
                 </div>
                 <div class="d-flex flex-column align-items-center" >
-                   <button type="button" class="btn btn-secondary p-0" id="datePickerButton" >
-        <i class="bi bi-calendar"></i>
-        </button>
 
     
                 </div>
         <span id="DATE-TIME"> </span>
+                   <button type="button" class="btn btn-secondary p-0" id="datePickerButton" >
+        <i class="bi bi-calendar"></i>
+        </button>
             </div>
             <div style="display: flex; justify-content: center; align-items: center; background-color: #3F7EFC;">
                 <span class="fs-5 fw-semibold" style="margin-top: 5%; margin-bottom: 5%; color: #ffffff; ">PickUp Man List</span>
@@ -273,8 +273,106 @@
                         console.log('AJAX 요청이 성공적으로 전송되었습니다.');
                         console.log('응답 데이터:', response);
                         // 드라이버 목록 업데이트
-                       
-                       
+                     
+                        // 출근 시간 데이터 생성
+                        const arrivalData = generateArrivalData(response);
+                        console.log("arrivalData =" + arrivalData );
+                        // 퇴근 시간 데이터 생성
+                        const departureData = generateDepartureData(response);
+                        console.log("departureData =" + departureData );
+                        
+                        
+                        // 날짜 라벨 생성
+                        const currentDate = new Date();
+                        const labels = [];
+                        for (let i = 6; i >= 0; i--) { // 7일 이전부터 역순으로 데이터를 가져옴
+                            const date = new Date(currentDate);
+                            date.setDate(date.getDate() - i); // i일 전의 날짜로 설정
+                            labels.push(`${date.getMonth() + 1}/${date.getDate()}`);
+                        }
+
+
+                        const chartData = {
+                            labels: labels,
+                            datasets: [
+                                {
+                                    label: '출근 시간',
+                                    data: arrivalData,
+                                    borderColor: 'rgb(75, 192, 192)',
+                                    tension: 0.1
+                                },
+                                {
+                                    label: '퇴근 시간',
+                                    data: departureData,
+                                    borderColor: 'rgb(255, 159, 64)',
+                                    tension: 0.1
+                                }
+                            ]
+                        };
+
+                        const options = {
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: '시간',
+                                        fontSize: 16,
+                                        fontWeight: 'bold'
+                                    },
+                                    min: 6,
+                                    max: 20,
+                                    stepSize: 1,
+                                    ticks: {
+                                        fontSize: 14,
+                                        fontWeight: 'bold'
+                                    }
+                                },
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: '날짜',
+                                        fontSize: 16,
+                                        fontWeight: 'bold'
+                                    },
+                                    ticks: {
+                                        fontSize: 14,
+                                        fontWeight: 'bold'
+                                    }
+                                }
+                            }
+                        };
+
+                        // 캔버스 요소 가져오기
+                        const canvas = document.getElementById('myChart');
+
+                        // 캔버스 컨텍스트 가져오기
+                        const ctx = canvas.getContext('2d');
+
+                        // 선 그래프 생성
+                        const myChart = new Chart(ctx, {
+                            type: 'line',
+                            data: chartData,
+                            options: {
+                                ...options,
+                                plugins: {
+                                    tooltip: {
+                                        callbacks: {
+                                            label: function(context) {
+                                                const datasetLabel = context.dataset.label || '';
+                                                const time = context.parsed.y.toFixed(2);
+                                                return `${datasetLabel}: ${time}시`;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                        
+                        
+                        
+                        
+                        
                     },
                     error: function(xhr, status, error) {
                         // Ajax 요청이 실패했을 때 수행할 작업
@@ -282,126 +380,67 @@
                     }
                 });
 
-    // 출근 시간 데이터 생성
-    function generateArrivalData() {
-        const currentDate = new Date();
-        const arrivalData = [];
+   // 출근 시간 데이터 생성
+      function generateArrivalData(response) {
+          const currentDate = new Date();
+          const arrivalData = [];
 
-        // 오늘 날짜 기준으로 -14일까지의 출근 시간 데이터 생성
-        for (let i = 14; i >= 0; i--) {
-            const date = new Date(currentDate);
-            date.setDate(date.getDate() - i); // i일 전의 날짜로 설정
-            
-            
-            const hours = Math.floor(Math.random() * 3) + 7; // 7 ~ 9 사이의 임의의 시간 (정수)
-            const minutes = Math.floor(Math.random() * 60); // 0 ~ 59 사이의 임의의 분
-            const time = hours + minutes / 60; // 시간을 소수점으로 표현 (예: 8시 27분 => 8.45)
+          // 오늘 날짜 기준으로 -6일까지의 출근 시간 데이터 생성
+          for (let i = 6; i >= 0; i--) {
+              const date = new Date(currentDate);
+              date.setDate(date.getDate() - i); // i일 전의 날짜로 설정
+              
+              const dataOfDay = response.find(data => {
+                  const dataDate = new Date(data.dm_STWORK.split(' ')[0]);
+                  return dataDate.toDateString() === date.toDateString(); // 해당 일자의 데이터가 있는지 확인
+              });
 
-            arrivalData.push(time);
-        }
+              if (dataOfDay) {
+                  const dm_STWORK = dataOfDay.dm_STWORK;
+                  const [datepart, timepart] = dm_STWORK.split(' ');
+                  const [hours, minutes] = timepart.split(':').map(Number);
+                  const time = hours + minutes / 60;
+                  arrivalData.push(time);
+              } else {
+                  arrivalData.push(null); // 데이터가 없는 경우 null 추가
+              }
+          }
 
-        return arrivalData;
-    }
+          return arrivalData;
+      }
 
-    // 퇴근 시간 데이터 생성
-    function generateDepartureData() {
-        const currentDate = new Date();
-        const departureData = [];
+   // 퇴근 시간 데이터 생성
+      function generateDepartureData(response) {
+          const currentDate = new Date();
+          const departureData = [];
 
-        // 오늘 날짜 기준으로 -14일까지의 퇴근 시간 데이터 생성
-        for (let i = 14; i >= 0; i--) {
-            const date = new Date(currentDate);
-            date.setDate(date.getDate() - i); // i일 전의 날짜로 설정
-            const hours = Math.floor(Math.random() * 3) + 17; // 17 ~ 19 사이의 임의의 시간 (정수)
-            const minutes = Math.floor(Math.random() * 60); // 0 ~ 59 사이의 임의의 분
-            const time = hours + minutes / 60; // 시간을 소수점으로 표현 (예: 8시 27분 => 8.45)
+          // 오늘 날짜 기준으로 -6일까지의 퇴근 시간 데이터 생성
+          for (let i = 6; i >= 0; i--) {
+              const date = new Date(currentDate);
+              date.setDate(date.getDate() - i); // i일 전의 날짜로 설정
+              
+              const dataOfDay = response.find(data => {
+                  const dataDate = new Date(data.dm_STWORK.split(' ')[0]);
+                  return dataDate.toDateString() === date.toDateString(); // 해당 일자의 데이터가 있는지 확인
+              });
 
-            departureData.push(time);
-        }
+              if (dataOfDay) {
+                  const dm_ENDWORK = dataOfDay.dm_ENDWORK;
+                  const [datepart, timepart] = dm_ENDWORK.split(' ');
+                  const [hours, minutes] = timepart.split(':').map(Number);
+                  const time = hours + minutes / 60;
+                  departureData.push(time);
+              } else {
+                  departureData.push(null); // 데이터가 없는 경우 null 추가
+              }
+          }
 
-        return departureData;
-    }
+          return departureData;
+      }
 
-    // 출근 시간 데이터 생성
-    const arrivalData = generateArrivalData();
 
-    // 퇴근 시간 데이터 생성
-    const departureData = generateDepartureData();
 
-    // 날짜 라벨 생성
-    const currentDate = new Date();
-    const labels = [];
-    for (let i = 14; i >= 0; i--) {
-        const date = new Date(currentDate);
-        date.setDate(date.getDate() - i); // i일 전의 날짜로 설정
-        labels.push(`${date.getMonth() + 1}/${date.getDate()}`);
-    }
-
- 
-
-    const chartData = {
-        labels: labels,
-        datasets: [
-            {
-                label: '출근 시간',
-                data: arrivalData,
-                borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1
-            },
-            {
-                label: '퇴근 시간',
-                data: departureData,
-                borderColor: 'rgb(255, 159, 64)',
-                tension: 0.1
-            }
-        ]
-    };
-
-    const options = {
-        scales: {
-            y: {
-                beginAtZero: true,
-                title: {
-                    display: true,
-                    text: '시간',
-                    fontSize: 16,
-                    fontWeight: 'bold'
-                },
-                min: 6,
-                max: 20,
-                stepSize: 1,
-                ticks: {
-                    fontSize: 14,
-                    fontWeight: 'bold'
-                }
-            },
-            x: {
-                title: {
-                    display: true,
-                    text: '날짜',
-                    fontSize: 16,
-                    fontWeight: 'bold'
-                },
-                ticks: {
-                    fontSize: 14,
-                    fontWeight: 'bold'
-                }
-            }
-        }
-    };
-
-    // 캔버스 요소 가져오기
-    const canvas = document.getElementById('myChart');
-
-    // 캔버스 컨텍스트 가져오기
-    const ctx = canvas.getContext('2d');
-
-    // 선 그래프 생성
-    const myChart = new Chart(ctx, {
-        type: 'line',
-        data: chartData,
-        options: options
-    });
+   
     
      
     });

@@ -1,14 +1,15 @@
 package com.icia.Taeumproject.Dao;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.icia.Taeumproject.Dto.DispatchDto;
 import com.icia.Taeumproject.Dto.DriverDto;
 import com.icia.Taeumproject.Dto.DrivermanagementDto;
 import com.icia.Taeumproject.Dto.Node;
-import com.icia.Taeumproject.Dto.DispatchDto;
 
 @Mapper
 public interface MainDao {
@@ -63,6 +64,8 @@ public interface MainDao {
 
   // 신청 내역 취소 시 Node도 삭제
   public void cancelNode(int m_Id, String a_Date);
+
+  public List<Node> selectNodeListToday(int dR_ID, String formattedDate);
 
 
 

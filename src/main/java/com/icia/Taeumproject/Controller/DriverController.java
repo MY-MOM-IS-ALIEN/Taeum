@@ -1,5 +1,7 @@
 package com.icia.Taeumproject.Controller;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -195,51 +197,76 @@ public class DriverController {
 		return view;
 	}
 
-	
 
-	@GetMapping("/mainCenter")
-	public String test(Model model) {
-
+// 출퇴근 버튼 클릭 시 값 전송
+	@PostMapping("driverCommute")
+	@ResponseBody
+	public String driverCommute(@RequestParam("status") String status) {
+		log.info("driverCommute()");
+		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 		Object principal = authentication.getPrincipal();
 		int m_id = ((SecurityUserDTO) principal).getM_ID();
-
 		log.info("m_id: {}", m_id);
-		int DR_ID = (m_id - 1);
-		System.out.println("DR_ID = " + DR_ID);
 
-		int rideOne = DR_ID;
-		List<List<Node>> rideNodeList = new ArrayList<>();
-		List<Node> innerList1 = new ArrayList<>();
-		List<Node> innerList2 = new ArrayList<>();
-		List<Node> innerList3 = new ArrayList<>();
+		int dr_id = drServ.getDrId(m_id);
+		log.info("dr_id: {}", dr_id);
 
-		List<Node> nodeList = maServ.selectNodeList(DR_ID);
-
-		for (Node node : nodeList) {
-			if (node.getCycle() == 1) {
-				innerList1.add(node);
-			} else if (node.getCycle() == 2) {
-				innerList2.add(node);
-			} else {
-				innerList3.add(node);
-			}
+		if (status.equals("출근")) {
+			
+			drServ.insertCommute(m_id, dr_id);
+			
+		} else if (status.equals("퇴근")) {
+			
+			drServ.updateCommute(dr_id);
+			
 		}
-		rideNodeList.add(innerList1);
-		rideNodeList.add(innerList2);
-		rideNodeList.add(innerList3);
-		System.out.println("rideNodeList ==  == = = = =- = = " + rideNodeList);
-		model.addAttribute("rideNodeList", rideNodeList);
 
-		System.out.println(innerList1);
-		System.out.println(innerList2);
-		System.out.println(innerList3);
-		// model.addAttribute("innerList1", innerList1);
-		model.addAttribute("nodeList", nodeList);
-
-		return "mainCenter"; // 뷰 이름 반환
+		return "redirect:driverModify";
 	}
+
+	@GetMapping("/mainCenter")
+  public String test(Model model) {
+
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    Object principal = authentication.getPrincipal();
+    int m_id = ((SecurityUserDTO) principal).getM_ID();
+    int DR_ID = (m_id - 1);
+
+    List<List<Node>> rideNodeList = new ArrayList<>();
+    List<Node> innerList1 = new ArrayList<>();
+    List<Node> innerList2 = new ArrayList<>();
+    List<Node> innerList3 = new ArrayList<>();
+    
+    List<Node> nodeList = maServ.selectNodeList(DR_ID);
+
+    for (Node node : nodeList) {
+      if (node.getCycle() == 1) {
+        innerList1.add(node);
+      } else if (node.getCycle() == 2) {
+        innerList2.add(node);
+      } else {
+        innerList3.add(node);
+      }
+    }
+    rideNodeList.add(innerList1);
+    rideNodeList.add(innerList2);
+    rideNodeList.add(innerList3);
+
+    
+    
+    System.out.println("rideNodeList ==  == = = = =- = = " + rideNodeList);
+    model.addAttribute("rideNodeList", rideNodeList);
+
+ 
+    // model.addAttribute("innerList1", innerList1);
+    model.addAttribute("nodeList", nodeList);
+
+    return "mainCenter"; // 뷰 이름 반환
+  }
+	
 
 	@GetMapping("driverAutoJoin")
 	public String driverAutoJoin(RedirectAttributes rttr) {
@@ -267,7 +294,7 @@ public class DriverController {
 			drServ.insertDriver(driver, rttr);
 		}
 
-		return "redirect:/adminMain";
+		return "redirect:/adminDriverList";
 	}
 
 	@PostMapping("/acceptNode")
@@ -278,33 +305,26 @@ public class DriverController {
 
 		Object principal = authentication.getPrincipal();
 		int m_id = ((SecurityUserDTO) principal).getM_ID();
-		int DR_ID = (m_id-1);
-	    
-	    System.out.println("여기지롱" + data);
-	    drServ.updateConfirm(data,DR_ID);
-	    return "mainCenter"; // 적절한 응답 처리
+		int DR_ID = (m_id - 1);
+
+		System.out.println("여기지롱" + data);
+		drServ.updateConfirm(data, DR_ID);
+		return "mainCenter"; // 적절한 응답 처리
 	}
-	
+
 	@PostMapping("/deniedNode")
 	public String deniedNode(@RequestBody List<DispatchDto> dataToSend) {
-	    log.info("deniedNode()");
+		log.info("deniedNode()");
 
-	    // 사용자 정보 확인
-	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	    Object principal = authentication.getPrincipal();
-	    int m_id = ((SecurityUserDTO) principal).getM_ID();
-	    int DR_ID = (m_id - 1);
+		// 사용자 정보 확인
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Object principal = authentication.getPrincipal();
+		int m_id = ((SecurityUserDTO) principal).getM_ID();
+		int DR_ID = (m_id - 1);
 
-	    drServ.updateCancle(dataToSend,DR_ID);
+		drServ.updateCancle(dataToSend, DR_ID);
 
-	    return "mainCenter"; // 적절한 응답 처리
-
-
-
-
-
-	 
+		return "mainCenter"; // 적절한 응답 처리
 
 	}
 }
-

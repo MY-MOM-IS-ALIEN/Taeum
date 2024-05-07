@@ -12,7 +12,7 @@ public class DispatchDto {
   private String D_CANCLE;
   private String D_REASON;
   private int DR_ID;
-
+  private String D_DATE;
   
 
   

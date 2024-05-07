@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Taeum</title>
+<!-- External libraries -->
+<script src="js/jquery-3.7.1.min.js"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<!-- CSS styles -->
+<link rel="stylesheet" href="css/style.css">
+<!-- Include header fragment -->
+<th:block th:insert="~{fragments :: header}" />
+</head>
+
+<body>
+<section>
+  <div class="content">
+    <div class="container mt-5">
+      <h2 class="text-center mb-4">공지사항</h2>
+      <div class="row">
+        <div class="col-md-8 offset-md-2">
+         <!-- 작성 버튼 -->
+          <button id="writeBtn" class="btn btn-primary mb-3">글 작성</button>
+          <!-- 게시글 목록 -->
+          <div id="postList">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">새로운 트렌드에 대한 공지</h5>
+                <p class="card-text">작성 시간: 2024-05-02 10:00</p>
+                <p class="card-text">작성자: 관리자</p>
+                <p class="card-text">댓글 수: 5</p>
+                <button class="btn btn-link">자세히 보기</button>
+              </div>
+              <div class="card-footer" style="display: none;">
+                <p class="card-text">여기에 공지 내용을 작성하세요.</p>
+              </div>
+            </div>
+            <!-- 다른 게시글들 추가 -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<th:block th:insert="~{fragments::footer}" />
+
+<script th:inline="javascript">
+  $(function() {
+    // 게시글 자세히 보기 버튼 클릭 시 토글
+    $('.btn-link').click(function() {
+      $(this).closest('.card').find('.card-footer').toggle();
+    });
+  });
+</script>
+
+</body>
+</html>
