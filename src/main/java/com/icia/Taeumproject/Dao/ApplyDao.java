@@ -25,6 +25,8 @@ public interface ApplyDao {
 
 	// 사용자 신청 삭제
 	void cancelApply(int applyId);
+
+  List<ApplyDto> selectAllMember();
 	
 
 }

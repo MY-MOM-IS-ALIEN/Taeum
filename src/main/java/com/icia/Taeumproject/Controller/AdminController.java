@@ -23,9 +23,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.icia.Taeumproject.Dto.DriverDto;
 import com.icia.Taeumproject.Dto.DrivermanagementDto;
+import com.icia.Taeumproject.Dto.MemberDto;
 import com.icia.Taeumproject.Dto.Node;
 import com.icia.Taeumproject.Dto.NodeCost;
 import com.icia.Taeumproject.Dto.TourActivity;
+import com.icia.Taeumproject.Dto.ApplyDto;
 import com.icia.Taeumproject.Dto.DispatchDto;
 import com.icia.Taeumproject.Service.ApplyService;
 import com.icia.Taeumproject.Service.DriverService;
@@ -173,6 +175,8 @@ public String GetDriverImage(int M_ID, Model model) {
     // 날짜 모델에 추가되어야함
     model.addAttribute("nodeList", nodeList);
 
+      List<ApplyDto> memberList = aServ.selectAllMember();
+    model.addAttribute("memberList", memberList);
     return "adminNodeSelection";
   }
 
@@ -622,18 +626,81 @@ public String GetDriverImage(int M_ID, Model model) {
   
   @GetMapping("adminDRMT")
   public String adminDRMT(Model model) {
- // 현재 날짜를 가져오기
-//    LocalDate currentDate = LocalDate.now();
-//    // 날짜를 yyyy-MM-dd 형식의 문자열로 변환
-//    String currentDateStr = currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"));
-//    
-//    
-  //  List<DrivermanagementDto> startworkList = maServ.driverStartTim(DR_ID);
-   // List<DrivermanagementDto> endworkList = maServ.driverEndtTime();
+   // 현재 날짜를 가져오기
+       LocalDate currentDate = LocalDate.now();
+       // 날짜를 yyyy-MM-dd 형식의 문자열로 변환
+       String currentDateStr = currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM"));
+       
+    
+       
+       // 이전 달의 날짜를 가져오기
+       LocalDate previousMonthDate = currentDate.minusMonths(1);
+       String previousMonth = previousMonthDate.format(DateTimeFormatter.ofPattern("yyyy-MM"));
+       
+       LocalDate twoMonthsAgoDate = currentDate.minusMonths(2);
+       String twoMonthsAgo = twoMonthsAgoDate.format(DateTimeFormatter.ofPattern("yyyy-MM"));
+       
+       // 현재 날짜를 사용하여 데이터 조회
+       List<Node> nodeList = maServ.selectLocaldate(currentDateStr);
+       // 이전 달의 데이터 조회
+       List<Node> previousMonthNodeList = maServ.selectLocaldate(previousMonth);
+       // 그 이전 달의 데이터 조회
+       List<Node> twoMonthsAgoNodeList = maServ.selectLocaldate(twoMonthsAgo);
+       
+       int nodeListsize = nodeList.size();
+       int previousMonthNodeListsize = previousMonthNodeList.size();
+       int twoMonthsAgoNodeListsize = twoMonthsAgoNodeList.size();
+       int TotalNodeCount = nodeListsize + previousMonthNodeListsize + twoMonthsAgoNodeListsize;
+       
+       model.addAttribute("currentDateStr", currentDateStr); // 현재 날짜
+       model.addAttribute("nodeListsize", nodeListsize); //현재 날짜 노드
+       model.addAttribute("previousMonth", previousMonth); // 현재 날짜
+       model.addAttribute("previousMonthNodeListsize", previousMonthNodeListsize); //현재 날짜 노드
+       model.addAttribute("twoMonthsAgo", twoMonthsAgo); // 현재 날짜
+       model.addAttribute("twoMonthsAgoNodeListsize", twoMonthsAgoNodeListsize); //현재 날짜 노드
+       model.addAttribute("TotalNodeCount", TotalNodeCount);
+       // -------------------------------------------------------------------------------------------------
+       int dispathNowListSize = getRideNodeListSize(nodeList);
+       int dispathPrevListSize = getRideNodeListSize(previousMonthNodeList);
+       int dispathTwoListSize = getRideNodeListSize(twoMonthsAgoNodeList);
+       int TotalBechaCount = dispathNowListSize + dispathPrevListSize + dispathTwoListSize;
+       
+
+       model.addAttribute("dispathNowListsize", dispathNowListSize);
+       model.addAttribute("dispathPrevListsize", dispathPrevListSize);
+       model.addAttribute("dispathTwoListsize", dispathTwoListSize);
+       model.addAttribute("TotalBechaCount", TotalBechaCount);
+       // ---------------------------------------------------------------------------------------------------
+       List<DispatchDto> dispatchNowList = maServ.getDispatch(currentDateStr);
+       List<DispatchDto> dispatchPrevList = maServ.getDispatch(previousMonth);
+       List<DispatchDto> dispatchTwoList = maServ.getDispatch(twoMonthsAgo);
+       
+       
+       int dispatchNowListSize1 = getDispatchListSize(dispatchNowList);
+       int dispatchPrevListSize1 = getDispatchListSize(dispatchPrevList);
+       int dispatchTwoListSize1 = getDispatchListSize(dispatchTwoList);
+       int totalDispatchListSize1 =  dispatchNowListSize1 + dispatchPrevListSize1 + dispatchTwoListSize1;
+       
+       System.out.println(dispatchNowListSize1);
+       model.addAttribute("totalDispatchListSize1", totalDispatchListSize1);
+       
+       int dispatchNowListSize2 = getDispatchListSize1(dispatchNowList);
+       int dispatchPrevListSize2 = getDispatchListSize1(dispatchPrevList);
+       int dispatchTwoListSize2 = getDispatchListSize1(dispatchTwoList);
+       int totalDispatchListSize2 =  dispatchNowListSize2 + dispatchPrevListSize2 + dispatchTwoListSize2;
+       model.addAttribute("totalDispatchListSize2", totalDispatchListSize2);
+       
+       model.addAttribute("dispatchNowListSize1", dispatchNowListSize1);
+       model.addAttribute("dispatchPrevListSize1", dispatchPrevListSize1);
+       model.addAttribute("dispatchTwoListSize1", dispatchTwoListSize1);
+       model.addAttribute("dispatchNowListSize2", dispatchNowListSize2);
+       model.addAttribute("dispatchPrevListSize2", dispatchPrevListSize2);
+       model.addAttribute("dispatchTwoListSize2", dispatchTwoListSize2);
     
     
     return "adminDRMT";
   }
+
   
   @PostMapping("adminDRMTproc")
   @ResponseBody

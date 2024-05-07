@@ -29,7 +29,8 @@
         DELETE FROM applytbl WHERE A_ID = #{applyId}
     </delete>
   
-
-
+    <select id = "selectAllMember" resultType="ApplyDto">
+      SELECT * FROM applytbl
+    </select>
 
 </mapper>

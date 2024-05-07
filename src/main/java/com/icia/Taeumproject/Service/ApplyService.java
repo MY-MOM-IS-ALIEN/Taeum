@@ -226,6 +226,11 @@ public class ApplyService {
     // 팝업 메시지 삭제
     nDao.deleteNotification(NOTIFICATION_ID);
 }
+
+  public List<ApplyDto> selectAllMember() {
+List<ApplyDto> memberList = aDao.selectAllMember();
+    return memberList;
+  }
   
   
 

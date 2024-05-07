@@ -3,6 +3,7 @@ package com.icia.Taeumproject.Service;
 import java.security.Principal;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -167,5 +168,7 @@ public class MemberService {
     
     mDao.updateRole(m_id);
   }
+
+  
 	
 }

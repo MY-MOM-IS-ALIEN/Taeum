@@ -53,4 +53,6 @@
     UPDATE membertbl SET m_name =#{m_NAME}, m_phone =#{m_PHONE} WHERE username=#{username};
   </update>
 
+
+
 </mapper>
