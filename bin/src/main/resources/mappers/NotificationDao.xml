@@ -8,4 +8,12 @@
     <select id="selectNotificationList" parameterType="SearchDto" resultType="NotificationDto">
     SELECT * FROM notificationtbl
     </select>
+    
+    <delete id="deleteNotification" parameterType="Integer">
+        DELETE FROM notificationtbl WHERE  NOTIFICATION_ID = #{NOTIFICATION_ID}
+    </delete>
+    <delete id="deleteAllNotifications">
+        DELETE FROM notificationtbl
+    </delete>
+    
 </mapper>

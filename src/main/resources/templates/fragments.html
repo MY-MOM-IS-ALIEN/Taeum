@@ -4,14 +4,8 @@
 <head>
 <meta charset="UTF-8">
 <title>태움</title>
-<script src="script.js"></script>
-<script>
-	function openPopup() {
-		var url = "/Popup";
-		var name = "Popup";
-		var options = "width = 500px, height = 500px, top = 100px, left = 200px, location = yes";
-		window.open(url, name, options);
-	}
+<script src="script.js">
+
 </script>
 </head>
 <link rel="stylesheet"
@@ -54,13 +48,10 @@
 
 		<th:block sec:authorize="hasRole('ADMIN')">
     <div class="top-left">
-        <img src="images/bell.png" alt="로고" class="top-left logo">
-        <a href="Popup" target="_blank">알림 확인</a>
+        <img src="images/notification.png" alt="로고" class="top-left logo">
+        <a href="/Popup" onclick="window.open(this.href, '_blank', 'width=500, height=600'); return false;">알림 확인</a>
     </div>
 </th:block>
-
-
-
 			<nav class="top-right">
 				<ul>
 					<!-- 로그인되지 않은 사용자에게만 표시 -->
@@ -95,7 +86,7 @@
 		<div class="body-top-bar-divider"></div>
 	</div>
 
-	<main></main>
+	
 
 	<div th:fragment="footer" class="footer-bar">
 		<div class="content">

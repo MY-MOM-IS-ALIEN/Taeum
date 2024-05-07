@@ -74,8 +74,12 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="#4ae39c" viewBox="0 0 256 256" class="me-2">
                     <path d="M232,128A104,104,0,1,1,128,24,104.13,104.13,0,0,1,232,128Z" fill="#3F7EFC"></path>
                 </svg>
-                <span class="fs-5 fw-semibold">기 사 목 록</span>
-            </div>
+                <span class="fs-5 fw-semibold">기 사 목 록</span> 
+                <a href="driverAutoJoin">
+					<button type="button" class="btn btn-success"
+      style="margin-left: 20px; top: 15px; right: 20px; z-index: 1030; background-color: #3F7EFC;">기사 등록</button>
+				</a>
+			</div>
             <div class="d-flex flex-wrap py-3 px-2 gap-3 align-items-center justify-content-center border-bottom">
                 <div class="border-start border-2 h-50"></div>
                 <div class="d-flex flex-column align-items-center">
@@ -101,13 +105,14 @@
                     <span class="fs-5 fw-semibold">날짜 선택 : </span>
                 </div>
                 <div class="d-flex flex-column align-items-center" >
-                   <button type="button" class="btn btn-secondary p-0" id="datePickerButton" >
-        <i class="bi bi-calendar"></i>
-        </button>
+                  
 
     
                 </div>
         <span id="DATE-TIME"> </span>
+         <button type="button" class="btn btn-secondary p-0" id="datePickerButton" >
+        <i class="bi bi-calendar"></i>
+        </button>
             </div>
             <div style="display: flex; justify-content: center; align-items: center; background-color: #3F7EFC;">
                 <span class="fs-5 fw-semibold" style="margin-top: 5%; margin-bottom: 5%; color: #ffffff; ">PickUp Man List</span>
@@ -124,7 +129,7 @@
         </div>
         <div style="width: 100%; height: 100%;"> 
        <div style="display: flex; align-items: flex-start; margin-top: 3%; margin-left: 3%; width: 100%; " >
-    <img src="images/nullprofile.png" style="width: 300px; height: auto;">
+    <img src="images/nullprofile.png" style="width: 300px; height: auto;" id="driverImage">
     <div style="margin-left: 3%;"> <!-- 여백 조정 -->
       
             <ul style="font-weight: bold; font-size: 25px;">
@@ -245,6 +250,7 @@
                 driverItem.append('<div class="ma-2"></div>');
                 driverItem.find('.d-flex').append('<span type="text"> 이름 : '+ driver.m_NAME +'</span>');
                 driverItem.find('.d-flex').append('<input type="hidden" id="dr_ID" value="'+driver.dr_ID+'">');
+                driverItem.find('.d-flex').append('<input type="hidden" id="m_ID" value="'+driver.m_ID+'">');
                 console.log("driver.dr_ID = ", driver.dr_ID);
                 driverItem.find('.ma-1').append('<span type="text"> 운행구역 : '+ driver.dr_AREA +'</span>');
                 driverItem.find('.ma-2').append('<span type="text"> 차량번호 : '+ driver.dr_CARNUM +'</span>');
@@ -253,11 +259,13 @@
                 // 클릭 이벤트 핸들러를 설정하는 코드
                 $('#driverList').append(driverItem);
             });
+            
+            
     $(document).on('click', '#driverList a', function(event) {
         event.preventDefault(); // 기본 동작 방지
         var driverID = parseInt($(this).find('#dr_ID').val()); // 드라이버 ID 가져오기
-        console.log("Clicked driver ID:", driverID);
-        
+        var memberID = parseInt($(this).find('#m_ID').val());
+       
         // 선택된 드라이버의 정보를 가져와서 화면에 출력
         var selectedDriver = driverData.find(function(driver) {
             return parseInt(driver.dr_ID) === parseInt(driverID);
@@ -272,16 +280,14 @@
      // 드라이버 정보를 화면에 출력하는 함수
         function displayDriverInfo(driverInfo) {
             $('#driverName').text('이름 : ' + driverInfo.m_NAME);
-            $('#driverPhone').text('전화번호 : ' + driverInfo.m_PHONE);
-         
+            $('#driverPhone').text('전화번호 : ' + driverInfo.m_PHONE);    
             $('#driverLocal').text('주 운행지 : ' + driverInfo.dr_AREA);
             $('#driverCarnum').text('차량 번호 : ' + driverInfo.dr_CARNUM);
             $('#driverId').text(driverInfo.dr_ID);
         }
      //2024-04-29 진행중-------------------------------------------------------------------------
      
-    var driverID = parseInt($(this).find('#dr_ID').val());
-//     var GetDriverList = [[${GetDriverList}]];
+  
     
     $.ajax({
                 url: 'GetDriverList', // 컨트롤러의 URL
@@ -294,6 +300,7 @@
                    $('#driverInfoList123').empty()
                   
                    displayDispatchList(response);
+      
                 },
                 error: function(xhr, status, error) {
                     // Ajax 요청이 실패했을 때 수행할 작업
@@ -301,7 +308,37 @@
                    
                 }
             });
-    
+     
+     
+     // image 불러오기
+    $.ajax({
+        url: 'GetDriverImage', // 컨트롤러의 URL
+        method: 'POST',
+        data: {
+            M_ID : memberID
+        }, // 선택된 값 전송
+        success: function(response) {
+            // 성공적으로 서버로부터 응답을 받았을 때 수행할 작업
+          
+          
+        console.log("GetDriverImage  = "+response);
+            
+           if (response) {
+               // 서버에서 이미지가 반환되었을 때
+               $('#driverImage').attr('src', '/upload/' + response);
+           } else {
+               // 서버에서 이미지가 null이거나 비어있을 때
+               $('#driverImage').attr('src', 'images/nullprofile.png');
+           }
+            
+        },
+        error: function(xhr, status, error) {
+            // Ajax 요청이 실패했을 때 수행할 작업
+            console.error('AJAX 요청이 실패하였습니다:', error);
+           
+        }
+    });
+     
      
     });
     

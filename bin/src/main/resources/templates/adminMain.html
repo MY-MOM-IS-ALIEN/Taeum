@@ -64,12 +64,12 @@
         <div style="display: flex; justify-content: center; align-items: center; background-color: #3F7EFC;">
         <span class="fs-5 fw-semibold" style="margin-top: 5%; margin-bottom: 5%; color: #ffffff;" >M  E  N  U</span>
         </div>
-         <a href="driverAutoJoin" class="list-group-item list-group-item-action py-3 lh-sm mt-3 border rounded-2" style="background-color: #f0f8ff;">
+        <!--  <a href="driverAutoJoin" class="list-group-item list-group-item-action py-3 lh-sm mt-3 border rounded-2" style="background-color: #f0f8ff;">
         <div class="d-flex w-100 align-items-center justify-content-start mb-1" style="margin-top: 8%; ">
           <span class="badge text-bg-secondary" style=" margin-bottom: 6%; margin-right:25%;">등록</span><strong class="ms-1" style="margin-bottom: 6%;">기 사 등 록</strong>
       
         </div>
-      </a>
+      </a> -->
         <a href="adminDriverList" class="list-group-item list-group-item-action py-3 lh-sm mt-3 border rounded-2" style="background-color: #f0f8ff;">
         <div class="d-flex w-100 align-items-center justify-content-start mb-1" style="margin-top: 8%">
           <span class="badge text-bg-secondary" style=" margin-bottom: 6%;  margin-right:25%;">배정</span><strong class="ms-1" style=" margin-bottom: 6%;">기 사 배 정</strong>
@@ -161,31 +161,15 @@ function updateCount() {
 }
 
 
-// 페이지가 로드될 때 기본값으로 현재 날짜를 표시하는 함수
-function displayCurrentDate() {
-    const currentDate = new Date();
-    const dateString = currentDate.toLocaleDateString(); // 날짜 포맷을 조정할 수 있음
-    document.getElementById('DATE-TIME').innerText = dateString;
-}
 
-// 페이지가 로드될 때 부트스트랩 달력 초기화
-window.onload = function () {
-    $('#datePickerButton').datepicker({
-        format: 'yyyy-mm-dd',
-        autoclose: true,
-        todayHighlight: true
-    }).on('changeDate', function (e) {
-        const selectedDate = e.format();
-        document.getElementById('DATE-TIME').innerText = selectedDate;
-    });
-    displayCurrentDate();
-   
-};
 
 $(document).ready(function() {
-    // DATE-TIME 요소에서 현재 날짜 표시
+	   // DATE-TIME 요소에서 현재 날짜 표시
     var currentDate = new Date();
-    var dateString = currentDate.toLocaleDateString(); // 날짜 포맷을 조정할 수 있음
+    var year = currentDate.getFullYear();
+    var month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
+    var day = ('0' + currentDate.getDate()).slice(-2);
+    var dateString = year + '-' + month + '-' + day;
     $('#DATE-TIME').text(dateString);
 
     // 부트스트랩 달력 초기화

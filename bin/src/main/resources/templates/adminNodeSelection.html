@@ -182,6 +182,29 @@ function spinOn() {
     var cycle = document.getElementById('cycle').value;
     var selectedDriver = [[${drID}]];
     var currentTime = new Date(); // 현재 시간을 가져옵니다.
+ // 현재 페이지 URL 가져오기
+    const currentUrl = window.location.href;
+
+    // URL에서 파라미터 부분만 추출
+    const queryString = currentUrl.split('?')[1];
+
+    // 추출한 파라미터를 &로 나누어 배열로 변환
+    const queryParamsArray = queryString.split('&');
+
+    // 파라미터를 담을 객체 생성
+    const queryParams = {};
+
+    // 각 파라미터를 key-value 쌍으로 분리하여 객체에 추가
+    queryParamsArray.forEach(param => {
+        const [key, value] = param.split('=');
+        queryParams[key] = decodeURIComponent(value); // URL 디코딩
+    });
+ // selectDate 파라미터 값에서 # 제거
+    const selectDateWithoutHash = queryParams.selectDate.replace('#', '');
+    console.log(selectDateWithoutHash);
+    // selectDate 파라미터 값 출력
+
+    
  // 년도, 월, 일
     var year = currentTime.getFullYear();
     var month = ('0' + (currentTime.getMonth() + 1)).slice(-2); // 월은 0부터 시작하므로 +1 필요
@@ -203,12 +226,13 @@ function spinOn() {
             ride: selectedDriver, // ride 파라미터에 적절한 값을 입력하세요.
             node_id: mIdValue,
             cycle : cycle,
-            dateTime : formattedTime
+            dateTime : formattedTime,
+            selectedTime : selectDateWithoutHash
         },
         success: function(response) {
             // 요청이 성공적으로 처리된 경우 실행할 코드를 작성하세요.
             alert( "배차 선정 완료\n 현재시각: " + formattedTime);
-            
+            alert(selectedTime);
             window.location.href = "adminDriverList";
         },
         error: function(xhr, status, error) {
