@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.icia.Taeumproject.Dto.ApplyDto;
+import com.icia.Taeumproject.Dto.SearchDto;
 
 @Mapper
 public interface ApplyDao {
@@ -22,6 +23,8 @@ public interface ApplyDao {
 
 	// 사용자 신청 삭제
 	void cancelApply(int applyId);
+
+	int selectApplyCnt(SearchDto sdto);
 	
 
 }

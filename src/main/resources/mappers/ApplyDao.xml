@@ -29,7 +29,9 @@
         DELETE FROM applytbl WHERE A_ID = #{applyId}
     </delete>
   
-
+<select id="selectApplyCnt" parameterType="SearchDto" resultType="Integer">
+	SELECT COUNT(*) FROM applytbl
+</select>
 
 
 </mapper>
