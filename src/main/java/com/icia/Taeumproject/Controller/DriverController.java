@@ -1,7 +1,5 @@
 package com.icia.Taeumproject.Controller;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,22 +41,6 @@ public class DriverController {
 	@Autowired
 	private MainService maServ;
 
-	@GetMapping("driverMain")
-	public String driverMain(Model model) {
-		log.info("driverMain()");
-
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-		// 로그인 시 정보 가져오기
-		Object principal = authentication.getPrincipal();
-		int m_id = ((SecurityUserDTO) principal).getM_ID();
-		log.info("m_id: {}", m_id);
-
-		drServ.getDriverInfo(m_id, model);
-
-		return "driverMain";
-	}
-
 	// 로그인 후 출력될 기사 메인 화면 이동 및 기사 개인정보 가져오기
 	@GetMapping("driverModify")
 	public String driverModify(Model model) {
@@ -70,49 +52,11 @@ public class DriverController {
 		Object principal = authentication.getPrincipal();
 		int m_id = ((SecurityUserDTO) principal).getM_ID();
 		log.info("m_id: {}", m_id);
-
+		
 		drServ.getDriverInfo(m_id, model);
 		System.out.println("엉엉엉" + model);
 
 		return "driverModify";
-	}
-
-	// 운행 전 화면 이동
-	@GetMapping("standBy")
-	public String moveToStandBy(Model model) {
-		log.info("moveToStandBy()");
-
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-		Object principal = authentication.getPrincipal();
-		int m_id = ((SecurityUserDTO) principal).getM_ID();
-		log.info("m_id: {}", m_id);
-
-		String username = authentication.getName();
-		log.info("username: {}", username);
-
-		drServ.getPassengerInfo(m_id, username, model);
-
-		return "standBy";
-	}
-
-	// 경로 확인 및 운행 리스트 띄우기 및 페이지 이동
-	@GetMapping("routeCheck")
-	public String moveToRoute(Model model) {
-		log.info("moveToRoute()");
-
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-		Object principal = authentication.getPrincipal();
-		int m_id = ((SecurityUserDTO) principal).getM_ID();
-		log.info("m_id: {}", m_id);
-
-		String username = authentication.getName();
-		log.info("username: {}", username);
-
-		drServ.getRouteList(m_id, username, model);
-
-		return "routeCheck";
 	}
 
 	// 기사 프로필 이미지 가져오기
@@ -130,25 +74,6 @@ public class DriverController {
 		return drServ.getDriverImage(M_ID, model);
 
 	}
-
-	@GetMapping("driverJoin")
-	public String driverJoin() {
-		log.info("driverJoin()");
-
-		return "driverJoin";
-	}
-
-	/*
-	 * @PostMapping("driverJoinProc") public String
-	 * driverJoinProc(@RequestPart("files") List<MultipartFile> files, HttpSession
-	 * session, DriverDto driver, RedirectAttributes rttr) {
-	 * log.info("driverJoinProc()");
-	 * 
-	 * log.info("driver: {}", driver); String view = drServ.insertDriver(files,
-	 * session, driver, rttr);
-	 * 
-	 * return view; }
-	 */
 
 	@GetMapping("driverUpdate")
 	public String driverUpdate(Model model) {
@@ -274,7 +199,7 @@ public class DriverController {
 
 		for (int i = 2; i <= 4; i++) {
 			MemberDto member = new MemberDto();
-			member.setUsername("alsdn547" + i + "@naver.com");
+			member.setUsername("driver" + (i-1) + "@taeum.com");
 			member.setPassword("1111");
 			member.setM_NAME("드라이버" + (i - 1));
 			member.setM_PHONE("null");

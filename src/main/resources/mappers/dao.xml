@@ -58,9 +58,6 @@ FROM NodeTbl ORDER BY distance ASC;
     </selectKey>
 </insert>
   
-
-
-
   <select id="getDispatchList" resultType="dispatchDto">
     SELECT D_ID FROM dispatchtbl WHERE LAST_INSERT_ID();
   </select>

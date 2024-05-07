@@ -4,14 +4,13 @@
 <mapper namespace="com.icia.Taeumproject.Dao.DriverDao">
 
 	<!-- driverMain 관련 쿼리 -->
-	<select id="getDriverInfo" parameterType="Integer"
-		resultType="DriverDto">
-		SELECT dt.*, mt.*
-		FROM drivertbl dt, membertbl mt
-		WHERE
-		mt.m_id = #{m_id}
+	<select id="getDriverInfo" parameterType="Integer" resultType="DriverDto">
+    SELECT *
+		FROM drivertbl dt
+		JOIN membertbl mt ON dt.m_id = mt.m_id
+		WHERE mt.m_id = #{m_id}
 		LIMIT 1
-	</select>
+</select>
 
 	<select id="getTodayTraffic" parameterType="Integer"
 		resultType="Integer">

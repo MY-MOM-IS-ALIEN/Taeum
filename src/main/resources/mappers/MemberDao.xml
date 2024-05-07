@@ -43,6 +43,11 @@
     update membertbl set
     role='DRIVER' where M_ID=#{mid}
   </update>
+  
+  <update id="updateAdmin" parameterType="Integer">
+    update membertbl set
+    role='ADMIN' where M_ID=#{m_id}
+  </update>
 
   <update id="updateDriveMemberUpdate" parameterType="MemberDto">
     update

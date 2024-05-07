@@ -38,11 +38,11 @@ public class MemberService {
 
 //로그인 처리 메소드
 	public String loginProc(Model model, RedirectAttributes rttr, MemberDto member) {
-		log.info("loginProc");
-
+		System.out.println(member);
+		log.info("loginProc()");
 		String view = null;
 		String msg = null;
-
+		
 		// 사용자 입력 이메일로 UserDetails 가져오기
 		UserDetails userDetails;
 		try {
@@ -59,14 +59,18 @@ public class MemberService {
 			Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
 					userDetails.getAuthorities());
 			SecurityContextHolder.getContext().setAuthentication(authentication); // Spring Security에 인증 정보 저장
-
 			msg = "로그인에 성공했습니다.";
-			view = "redirect:/"; // 로그인 성공 시 홈페이지로 리다이렉트
+			if(member.getRole() == "ADMIN") {
+			view = "redirect:/adminMain";
+			} else {
+			view = "redirect:/driverModify"; // 로그인 성공 시 홈페이지로 리다이렉트
+			}
 		} else {
 			// 비밀번호가 일치하지 않음
 			msg = "비밀번호가 일치하지 않습니다.";
 			model.addAttribute("msg", msg);
 			view = "loginForm"; // 비밀번호가 일치하지 않으면 다시 로그인 폼으로 이동
+			System.out.println("비번틀림");
 		}
 
 		return view;
@@ -93,7 +97,14 @@ public class MemberService {
 
 		try {
 			mDao.insertMember(member);
-
+			MemberDto adminMember = mDao.selectMember(member.getUsername());
+			System.out.println(adminMember);
+			if(adminMember.getM_ID() == 1) {
+				int m_id = adminMember.getM_ID();
+				mDao.updateAdmin(m_id);
+				view = "redirect:/";
+				msg = "관리자 가입 성공";
+			}
 			view = "redirect:/";
 			msg = "가입 성공";
 		} catch (Exception e) {

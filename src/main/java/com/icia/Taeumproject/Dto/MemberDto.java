@@ -4,9 +4,11 @@ package com.icia.Taeumproject.Dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 public class MemberDto {
     private int M_ID;
     private String username;

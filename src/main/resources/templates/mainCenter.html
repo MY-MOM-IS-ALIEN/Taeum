@@ -295,6 +295,8 @@ function toggleOnOff(innerList, isActive, idx) {
             var nodeId = nodeElement.querySelector('.badge.text-bg-secondary').value;
             var node = findNodeById(nodeId); 
             var datePart = node.a_DATE.split(" ")[0];
+            var status = node.status;
+            console.log(status);
             
             if(datePart === dateTime) {
                 var markerPosition = new kakao.maps.LatLng(node.y, node.x);
