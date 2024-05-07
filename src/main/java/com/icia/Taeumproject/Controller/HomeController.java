@@ -11,7 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-
+import com.icia.Taeumproject.Dao.NotificationDao;
 import com.icia.Taeumproject.Dto.ApplyDto;
 
 import com.icia.Taeumproject.Dto.SearchDto;
@@ -33,6 +33,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class HomeController {
       @Autowired
       private ApplyService aServ;
+      @Autowired
+      private  NotificationDao nDao;
     
       
       @GetMapping("applyList")
@@ -97,6 +99,26 @@ public class HomeController {
        
        return view;
      }
+     @PostMapping("/deletePop")
+     public String deletePopup(@RequestParam("NOTIFICATION_ID") int NOTIFICATION_ID, RedirectAttributes rttr) {
+         log.info("deletePopup");
+         System.out.println("NOTIFICATION_ID = "  + NOTIFICATION_ID);
+        
+
+         // 팝업 메시지 삭제 서비스 메소드 호출
+         aServ.deletePopup(NOTIFICATION_ID);
+
+         // 삭제 후 리다이렉트
+         return "redirect:/Popup";
+     }
      
-}
+     @PostMapping("alldeletePop")
+     public String alldeletePop() {
+       nDao.deleteAllNotifications();
+       
+       return "redirect:/Popup";
+     }
+ }
+     
+
     

@@ -16,7 +16,9 @@ public interface NotificationDao {
 
   List<NotificationDto> selectNotificationList(SearchDto sdto);
 
+  void deleteNotification(int NOTIFICATION_ID);
 
+  void deleteAllNotifications();
 
  
 }
