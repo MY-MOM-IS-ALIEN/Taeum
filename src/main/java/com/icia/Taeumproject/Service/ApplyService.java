@@ -13,6 +13,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.icia.Taeumproject.Dao.ApplyDao;
@@ -219,5 +220,14 @@ public class ApplyService {
 
     return view;
   }
+  public void deletePopup(@RequestParam("NOTIFICATION_ID") int NOTIFICATION_ID) {
+      log.info("deletePopup()");
+    
+    // 팝업 메시지 삭제
+    nDao.deleteNotification(NOTIFICATION_ID);
+}
+  
+  
 
 }
+
