@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +28,7 @@ import com.icia.Taeumproject.Dto.NodeCost;
 import com.icia.Taeumproject.Dto.TourActivity;
 import com.icia.Taeumproject.Dto.DispatchDto;
 import com.icia.Taeumproject.Service.ApplyService;
+import com.icia.Taeumproject.Service.DriverService;
 import com.icia.Taeumproject.Service.MainService;
 import com.icia.Taeumproject.Service.MemberService;
 import com.icia.Taeumproject.Service.NodeCostService;
@@ -57,7 +59,8 @@ public class AdminController {
 
   @Autowired
   private MainService maServ;
-
+  @Autowired
+  private DriverService drServ;
   @Autowired
   private NodeService nodeService;
   @Autowired
@@ -88,19 +91,33 @@ public class AdminController {
 	  
 @PostMapping("GetDriverList")
 @ResponseBody
-public List<DispatchDto> GetDriverList(int DR_ID, Model model) {
+public List<DispatchDto> GetDriverList(int DR_ID ,Model model) {
   log.info("GetDriverList");
    
-    System.out.println("DR_IDDR_IDDR_IDDR_IDDR_IDDR_IDDR_IDDR_IDDR_IDDR_IDDR_ID = " + DR_ID) ;
+
   List<DispatchDto> dispatchDtoList = maServ.GetDriverList(DR_ID);
+  
+ 
   model.addAttribute("GetDriverList",dispatchDtoList);
+  
+  
   return dispatchDtoList;
 }
 	 
+@PostMapping("GetDriverImage")
+@ResponseBody
+public String GetDriverImage(int M_ID, Model model) {
+  
+  String image = drServ.getDriverImage(M_ID, model);
+  System.out.println("M_IDM_IDM_IDM_IDM_IDM_IDM_IDM_IDM_IDM_IDM_IDM_IDM_IDM_ID = " + M_ID);
+  System.out.println("imageimageimageimageimageimageimageimageimageimageimageimageimage = " + image);
+  return image;
+}
+
 
 
 	  @PostMapping("updateDelivery")
-	  public String updateDelivery(String ride , String node_id, Integer cycle, String dateTime) {
+	  public String updateDelivery(String ride , String node_id, Integer cycle, String dateTime, String selectedTime) {
 	    log.info("updateDeliveryPROC");
 	    int status = 0;
 	    String statusStr = "0";
@@ -121,6 +138,7 @@ public List<DispatchDto> GetDriverList(int DR_ID, Model model) {
 	      dto.setD_SELECT(dateTime);
 	      dto.setD_STATUS(statusStr);
 	      dto.setDR_ID(ridding);
+	      dto.setD_DATE(selectedTime);
 	      maServ.isnertConfirm(dto);
           
 	      long D_ID = dto.getD_ID();

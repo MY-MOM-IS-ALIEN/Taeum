@@ -197,49 +197,46 @@ public class DriverController {
 
 	
 
-	@GetMapping("/mainCenter")
-	public String test(Model model) {
+  @GetMapping("/mainCenter")
+  public String test(Model model) {
+    
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    Object principal = authentication.getPrincipal();
+    int m_id = ((SecurityUserDTO) principal).getM_ID();
+    int DR_ID = (m_id - 1);
 
-		Object principal = authentication.getPrincipal();
-		int m_id = ((SecurityUserDTO) principal).getM_ID();
+    List<List<Node>> rideNodeList = new ArrayList<>();
+    List<Node> innerList1 = new ArrayList<>();
+    List<Node> innerList2 = new ArrayList<>();
+    List<Node> innerList3 = new ArrayList<>();
+    
+    List<Node> nodeList = maServ.selectNodeList(DR_ID);
 
-		log.info("m_id: {}", m_id);
-		int DR_ID = (m_id - 1);
-		System.out.println("DR_ID = " + DR_ID);
+    for (Node node : nodeList) {
+      if (node.getCycle() == 1) {
+        innerList1.add(node);
+      } else if (node.getCycle() == 2) {
+        innerList2.add(node);
+      } else {
+        innerList3.add(node);
+      }
+    }
+    rideNodeList.add(innerList1);
+    rideNodeList.add(innerList2);
+    rideNodeList.add(innerList3);
 
-		int rideOne = DR_ID;
-		List<List<Node>> rideNodeList = new ArrayList<>();
-		List<Node> innerList1 = new ArrayList<>();
-		List<Node> innerList2 = new ArrayList<>();
-		List<Node> innerList3 = new ArrayList<>();
+    
+    
+    System.out.println("rideNodeList ==  == = = = =- = = " + rideNodeList);
+    model.addAttribute("rideNodeList", rideNodeList);
 
-		List<Node> nodeList = maServ.selectNodeList(DR_ID);
+ 
+    // model.addAttribute("innerList1", innerList1);
+    model.addAttribute("nodeList", nodeList);
 
-		for (Node node : nodeList) {
-			if (node.getCycle() == 1) {
-				innerList1.add(node);
-			} else if (node.getCycle() == 2) {
-				innerList2.add(node);
-			} else {
-				innerList3.add(node);
-			}
-		}
-		rideNodeList.add(innerList1);
-		rideNodeList.add(innerList2);
-		rideNodeList.add(innerList3);
-		System.out.println("rideNodeList ==  == = = = =- = = " + rideNodeList);
-		model.addAttribute("rideNodeList", rideNodeList);
-
-		System.out.println(innerList1);
-		System.out.println(innerList2);
-		System.out.println(innerList3);
-		// model.addAttribute("innerList1", innerList1);
-		model.addAttribute("nodeList", nodeList);
-
-		return "mainCenter"; // 뷰 이름 반환
-	}
+    return "mainCenter"; // 뷰 이름 반환
+  }
 
 	@GetMapping("driverAutoJoin")
 	public String driverAutoJoin(RedirectAttributes rttr) {
@@ -267,7 +264,7 @@ public class DriverController {
 			drServ.insertDriver(driver, rttr);
 		}
 
-		return "redirect:/adminMain";
+		return "redirect:/adminDriverList";
 	}
 
 	@PostMapping("/acceptNode")
