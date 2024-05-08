@@ -1,8 +1,5 @@
 package com.icia.Taeumproject.Service;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.icia.Taeumproject.Dao.MainDao;
-import com.icia.Taeumproject.Dto.ApplyDto;
+import com.icia.Taeumproject.Dto.DispatchDto;
 import com.icia.Taeumproject.Dto.DriverDto;
 import com.icia.Taeumproject.Dto.DrivermanagementDto;
 import com.icia.Taeumproject.Dto.Node;
-import com.icia.Taeumproject.Dto.DispatchDto;
 import com.icia.Taeumproject.util.KakaoApiUtil.Point;
 
 import lombok.extern.slf4j.Slf4j;
