@@ -158,7 +158,8 @@ public class ApplyService {
 
         // 게시글 저장
         apply.setSTATUS(0); // 0 배차중, 1 수락, 2 거절
-        aDao.insertApply(apply);
+     aDao.insertApply(apply);
+     
         // 발신자 정보 조회
         MemberDto user = mDao.findUserByEmail(username);
 
@@ -176,7 +177,8 @@ public class ApplyService {
 
           if (startPoint != null) {
             int kind = 1;
-            maServ.insertServ(apply.getM_ID(), apply.getA_STARTADRESS(), startPoint, kind, rttr, apply.getA_DATE());
+            maServ.insertServ(apply.getM_ID(), apply.getA_STARTADRESS(), startPoint, kind, rttr, 
+                apply.getA_DATE(), apply.getM_NAME(), apply.getM_PHONE(), apply.getA_NAME(), apply.getA_CONTENTS(), apply.getA_ID());
 
           }
         }
@@ -185,7 +187,8 @@ public class ApplyService {
 
           if (endPoint != null) {
             int kind = 2;
-            maServ.insertServ(apply.getM_ID(), apply.getA_ENDADRESS(), endPoint, kind, rttr, apply.getA_DATE());
+            maServ.insertServ(apply.getM_ID(), apply.getA_ENDADRESS(), endPoint, kind, rttr, 
+                apply.getA_DATE(),apply.getM_NAME(), apply.getM_PHONE(), apply.getA_NAME(), apply.getA_CONTENTS(), apply.getA_ID());
           }
         }
 

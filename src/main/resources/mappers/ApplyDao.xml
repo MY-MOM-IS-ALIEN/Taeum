@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.icia.Taeumproject.Dao.ApplyDao">
 
-  <insert id="insertApply" parameterType="ApplyDto">
+  <insert id="insertApply" parameterType="ApplyDto" useGeneratedKeys="true" keyProperty="A_ID">
     INSERT INTO applytbl
     VALUES(#{M_NAME},#{M_PHONE},#{A_ID},#{A_NAME},#{A_PHONE},#{A_STARTADRESSNUM},
     #{A_STARTADRESS},#{A_STARTDADRESS},#{A_STARTRADRESS},#{A_ENDADRESSNUM},

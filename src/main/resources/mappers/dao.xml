@@ -6,7 +6,7 @@
   <insert id="insert" parameterType="Node">
     INSERT INTO NodeTbl
     VALUES (
-     null,#{Address},#{x},#{y},#{M_ID},null,#{kind},null,null,#{A_DATE},null  
+     null,#{Address},#{x},#{y},#{M_ID},null,#{kind},null,null,#{A_DATE},null,#{M_PHONE},#{M_NAME},#{A_NAME},#{A_CONTENTS} ,#{A_ID} 
     )
   </insert>
   

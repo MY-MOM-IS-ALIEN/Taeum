@@ -184,7 +184,7 @@ public String GetDriverImage(int M_ID, Model model) {
   @ResponseBody
   public JsonResult postVrp(@RequestBody List<Node> nodeList, Model model) throws IOException, InterruptedException {
     System.out.println("Vrp()");
-    System.out.println(nodeList.size());
+    System.out.println("nodeList.size()(()())()())()()( = "  + nodeList.size());
 
     VrpService vrpService = new VrpService();
 
@@ -203,15 +203,15 @@ public String GetDriverImage(int M_ID, Model model) {
       Node node = nodeList.get(i);
       // System.out.println("여기지롱 =" + node);
       String nodeId = String.valueOf(node.getNode_id());
-      if (!tourMap.containsKey(node.getM_ID())) {
+      if (!tourMap.containsKey(node.getA_ID())) {
 
         TourActivity tourActivity = new TourActivity();
-        tourActivity.setM_id(node.getM_ID());
-        tourMap.put(node.getM_ID(), tourActivity);
+        tourActivity.setA_ID(node.getA_ID());
+        tourMap.put(node.getA_ID(), tourActivity);
 
       }
 
-      TourActivity tourActivity = tourMap.get(node.getM_ID());
+      TourActivity tourActivity = tourMap.get(node.getA_ID());
 
       if (nodeList.get(i).getKind() == 1) {
         tourActivity.setStartNode_id(node.getNode_id());
@@ -224,14 +224,14 @@ public String GetDriverImage(int M_ID, Model model) {
       // System.out.println("여기 질엘 = " + nodeMap);
 
     }
-    for (Integer m_id : tourMap.keySet()) {
-      System.out.println("반복 해라 =" + m_id);
-      TourActivity tourActivity = tourMap.get(m_id);
+    for (Integer A_ID : tourMap.keySet()) {
+      System.out.println("반복 해라 =" + A_ID);
+      TourActivity tourActivity = tourMap.get(A_ID);
 
       // 조건을 모두 통과한 경우, 정상적으로 노드를 처리합니다.
-      vrpService.addShipement(String.valueOf(tourActivity.getM_id()), String.valueOf(tourActivity.getStartNode_id()),
+      vrpService.addShipement(String.valueOf(tourActivity.getA_ID()), String.valueOf(tourActivity.getStartNode_id()),
           String.valueOf(tourActivity.getEndNode_id()));
-      System.out.println("tourActivity.getM_id() = " + tourActivity.getM_id());
+      System.out.println("tourActivity.getM_id() = " + tourActivity.getA_ID());
       System.out.println("tourActivity.getstartNode_id() = " + tourActivity.getStartNode_id());
       System.out.println("tourActivity.getendNode_id() = " + tourActivity.getEndNode_id());
     }
