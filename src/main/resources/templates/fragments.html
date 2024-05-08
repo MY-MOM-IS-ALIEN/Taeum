@@ -89,7 +89,7 @@
 							<span class="dropbtn"
 								th:text="${#authentication.principal.M_NAME + '님 환영합니다'}"></span>
 							<div class="dropdown-content" sec:authorize="hasRole('USER')">
-								<a href="/UserUpdate">내 정보 수정</a> <a href="/applyList">신청 내역</a>
+								<a href="/UserUpdate">내 정보 수정</a> <a href="applyList">신청 내역</a>
 								<a href="/board">공지 및 문의사항</a>
 							</div>
 					
