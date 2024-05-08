@@ -73,4 +73,12 @@ public class BoardService {
 	
 		return bDao.getComments(id);
 	}
+
+
+	public void CommentProc(CommentDto comment, Model model) {
+		// 게시글 저장
+	 
+	        bDao.insertComment(comment);
+	        model.addAttribute(model);
+	}
 }

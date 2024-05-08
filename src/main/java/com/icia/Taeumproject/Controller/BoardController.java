@@ -63,6 +63,15 @@ public class BoardController {
 	        return "boardDetail"; // 게시글 상세 페이지의 HTML 파일명
 	    }
 	   
+	    @PostMapping("commentProc")
+	    public String commentProc(CommentDto comment,Model model) {
+	    	
+	    	bServ.CommentProc(comment,model);
+	    	// 리다이렉트할 때 게시글의 ID를 함께 전달
+	        int boardId = comment.getB_ID();
+	        return "redirect:/boardDetail/" + boardId;
+	    }
+	   
 	
 	    }
 

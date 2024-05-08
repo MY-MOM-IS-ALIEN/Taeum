@@ -99,6 +99,7 @@ public class SecurityConfig{
       .requestMatchers("/applyList").hasRole("USER")
       .requestMatchers("/getApplyList").hasRole("USER")
       .requestMatchers("/board/**").permitAll()
+      .requestMatchers("/comment/**").permitAll()
       .requestMatchers("/updateApplyStatusWithNodeList").permitAll()
             
       

@@ -19,4 +19,9 @@
     	select *from commentTbl where B_ID=#{id}
     </select>
     
+    <insert id="insertComment" parameterType="CommentDto">
+		 INSERT INTO commentTbl
+		  VALUES(#{C_ID},#{B_ID},#{C_CONTENTS},DEFAULT,#{M_ID})
+	</insert>
+	
 </mapper>

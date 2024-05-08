@@ -18,5 +18,7 @@ public interface BoardDao {
 
 	// 댓글 가져오기
 	List<CommentDto> getComments(int id);
+	// 댓글 작성하기
+	void insertComment(CommentDto comment);
 	
 }
