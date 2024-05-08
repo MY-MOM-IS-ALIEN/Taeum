@@ -16,9 +16,39 @@ body {
 }
 
 section {
-	margin-bottom: 50px;
+	margin-bottom: 35px;
+	margin-top: 45px;
 	flex: 1;
 }
+
+/* pop up*/
+
+.p_content {
+	margin-top: 50px;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+	
+}
+
+.check-btn {
+	width: 70px;
+  height: 20px;
+	display: flex;
+	font-weight: bold; /* 글꼴을 볼드체로 설정 */
+  font-family: 'Open Sans', sans-serif; /* Open Sans 글꼴 사용 */
+  border: none; /* 윤곽선 제거 */
+  border-radius: 6px; /* 모서리를 둥글게 만듦 */
+  background-color: #3F7EFC; /* 버튼 배경색을 흰색으로 설정 */
+  color: #fff; /* 글자색을 3F7EFC로 설정 */
+  text-align: center;
+  padding-top: 2.5px;
+}
+
+/* pop up End*/
+
+
 
 .w-100 {
 	width: 100%;
@@ -75,9 +105,7 @@ section {
 	color: inherit; /* 링크 색을 부모 요소의 색으로 상속 */
 }
 
-.top-left a:hover {
-	color: inherit; /* 호버 시 링크 색을 부모 요소의 색으로 상속 */
-}
+
 
 .logo {
 	margin-top: 4px;
@@ -130,7 +158,7 @@ section {
 	padding-left: 15px;
 	margin-right: auto;
 	margin-left: auto;
-	max-width: 800px;
+	max-width: 90%;
 }
 
 .content-home {
@@ -209,6 +237,7 @@ section {
 	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 	margin-bottom: 10px;
 }
+
 
 .login-btn {
 	display: block;
@@ -587,7 +616,7 @@ span.file-title {
 .write-form {
 	max-width: 600px;
 	padding: 15px;
-	margin: 0px auto;
+	margin: 80px auto;
 }
 
 .write-form .write-input {
@@ -822,7 +851,7 @@ fieldset.profile {
 
 /* board css*/
 .board-title{
-	margin-left:80%;
+	margin-left:10%;
 }
 .board {
   border: 1px #a39485 solid;
@@ -837,6 +866,28 @@ fieldset.profile {
   margin-right: auto;
 }
 
+.board-btn-primary {
+	background-color: #dc3545;
+	color: #fff;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+	margin-top: 20px;
+	margin-left:80%;
+	display: inline-block;
+	text-decoration: none;
+	width: 80px; /* 자동으로 내용에 맞게 너비 조절 */
+	box-sizing: border-box; /* 패딩과 테두리를 포함한 전체 너비를 설정 */
+}
+
+.board-btn-primary:hover {
+	background-color: #c82333;
+}
+.board-btn-primary:focus {
+    outline: none; /* 포커스 효과 제거 */
+}
 .b-th {
   text-align: left;
   color: #000; /* 검은색으로 변경 */
@@ -1092,7 +1143,11 @@ fieldset.profile {
 	background-color: #3F7EFC; /* 버튼 배경색을 흰색으로 설정 */
 	color: #fff; /* 글자색을 3F7EFC로 설정 */
 }
-
+.apply-list-empty{
+	margin-top: 10%;
+	text-align: center;
+	font-size: 50px;
+}
 
 
 

@@ -135,7 +135,7 @@ public class DriverController {
 		int m_id = ((SecurityUserDTO) principal).getM_ID();
 		log.info("m_id: {}", m_id);
 
-		int dr_id = drServ.getDrId(m_id);
+		int dr_id = (m_id - 1);
 		log.info("dr_id: {}", dr_id);
 
 		if (status.equals("출근")) {

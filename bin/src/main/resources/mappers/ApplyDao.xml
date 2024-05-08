@@ -9,7 +9,7 @@
     #{A_ENDADRESS},#{A_ENDDADRESS},#{A_ENDRADRESS},#{A_DATE},DEFAULT,#{A_CONTENTS},
     #{M_ID},#{STATUS})
   </insert>
-
+	
   <select id="sDuplicateApply" resultType="boolean"
     parameterType="java.util.Map">
     SELECT COUNT(*) > 0
@@ -29,6 +29,14 @@
         DELETE FROM applytbl WHERE A_ID = #{applyId}
     </delete>
   
+
+    <select id = "selectAllMember" resultType="ApplyDto">
+      SELECT * FROM applytbl
+    </select>
+
+<select id="selectApplyCnt" parameterType="SearchDto" resultType="Integer">
+	SELECT COUNT(*) FROM applytbl
+</select>
 
 
 

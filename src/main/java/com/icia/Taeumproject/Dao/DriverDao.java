@@ -49,8 +49,6 @@ public interface DriverDao {
 
 	void updateEndwork(int m_id);
 
-	int getDrId(int m_id);
-
 	void insertCommute(int m_id, int dr_id);
 
 	void updateCommute(int dr_id);

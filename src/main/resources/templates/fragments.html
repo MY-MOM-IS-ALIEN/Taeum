@@ -14,46 +14,10 @@
 			}
 		});
 		
-		document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('driver1Button').addEventListener('click', function() {
-                sendNumberToServer(1);
-            });
-            document.getElementById('driver2Button').addEventListener('click', function() {
-                sendNumberToServer(2);
-            });
-            document.getElementById('driver3Button').addEventListener('click', function() {
-                sendNumberToServer(3);
-            });
-        });
-
-        // 숫자를 서버로 전송하는 함수 (POST 요청)
-        function sendNumberToServer(number) {
-            var formData = new FormData();
-            formData.append('num', number);
-
-            fetch('/loginChangeProc', {
-                method: 'POST',
-                body: formData
-            })
-            .then(function(response) {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.text();
-            })
-            .then(function(data) {
-                console.log('서버 응답:', data);
-                // 이곳에서 추가적인 작업을 할 수 있습니다.
-            })
-            .catch(function(error) {
-                console.error('Error:', error);
-            });
-        }
 	</script>
 
 </head>
-<link rel="stylesheet"
-	href="com.icia.Teaumproject.resuources.static.css/style.css">
+<link rel="stylesheet" href="css/style.css">
 <body>
 	<div th:fragment="header" class="top-bar">
 		<div class="content">
@@ -72,12 +36,12 @@
 				</a>
 			</th:block>
 			<th:block sec:authorize="hasRole('DRIVER')">
-				<a href="driverMain"> <img
+				<a href="driverModify"> <img
 					src="images/taeum-high-resolution-logo-transparent.png" alt="로고"
 					class="top-left logo">
 				</a>
 			</th:block>
-			<h2 class="top-left top-home">
+			<span class="top-left top-home">
 				<th:block sec:authorize="hasRole('USER') or isAnonymous()">
 					<a href="/">태움</a>
 				</th:block>
@@ -86,37 +50,41 @@
 					<a href="/adminMain">태움</a>
 				</th:block>
 				<th:block sec:authorize="hasRole('DRIVER')">
-					<a href="/driverMain">태움</a>
+					<a href="/driverModify">태움</a>
 				</th:block>
-			</h2>
+			</span>
 
-		<th:block sec:authorize="hasRole('ADMIN')">
-    <div class="top-left">
-
-          <img src="images/notification.png" alt="로고" class="top-left logo">
-        <a href="/Popup" onclick="window.open(this.href, '_blank', 'width=500, height=600'); return false;">알림 확인</a>
-
-    </div>
-
-</th:block>
-
+					
 
 			<nav class="top-right">
 				<ul>
+				
 					<!-- 로그인되지 않은 사용자에게만 표시 -->
 					<li sec:authorize="isAnonymous()"><a href="/loginForm">Login</a>
 					</li>
 					<li sec:authorize="isAnonymous()"><a href="/joinForm">Join</a>
 					</li>
 					<!-- 로그인된 사용자에게만 표시 -->
-					<li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a>
-					</li>
+					
 					<li id="applyLink" sec:authorize="hasRole('USER')"><a
 						th:href="@{/ApplyForm}">Apply</a></li>
 					<!-- 로그인 및 관리자일때만 -->
 
 					<!-- 세션에 저장된 사용자 이름 표시 -->
 					<li sec:authorize="isAuthenticated()">
+					<th:block sec:authorize="hasRole('ADMIN')">
+						<div class="top-right">
+
+
+							<a href="/Popup"
+								onclick="window.open(this.href, '_blank', 'width=500, height=600'); return false;">
+								<img src="images/notification.png" alt="로고"
+								class="top-left logo">
+							</a>
+
+						</div>
+
+					</th:block>
 						<div class="dropdown">
 							<span class="dropbtn"
 								th:text="${#authentication.principal.M_NAME + '님 환영합니다'}"></span>
@@ -124,21 +92,20 @@
 								<a href="/UserUpdate">내 정보 수정</a> <a href="/applyList">신청 내역</a>
 								<a href="/board">공지 및 문의사항</a>
 							</div>
+					
 
-							<div class="dropdown-content" sec:authorize="hasRole('DRIVER')">
-							<a href="/Driver">Driver</a> <a href="/Driver">Driver</a>
-								<a href="/Driver">Driver</a>
-						</div>
-						<div class="dropdown-content" sec:authorize="hasRole('ADMIN')">
-							<a href="/ADMIN">ADMIN</a> <a href="/ADMIN">ADMIN</a>
-								<a href="/ADMIN">ADMIN</a>
-							</div>
+							
+			
 							<div class="dropdown-content" sec:authorize="hasAnyRole('DRIVER', 'ADMIN')">
 							<a th:href="@{loginChange}">계정전환</a>
+							
 
 						</div><!-- drop down end -->
+						
 						</div>
-    </li>
+						<li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a>
+					</li>
+ 				   </li>
 					<!--사용자 이름  End -->
 
 				</ul>
