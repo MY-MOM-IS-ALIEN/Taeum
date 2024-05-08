@@ -20,5 +20,7 @@ public interface BoardDao {
 	List<CommentDto> getComments(int id);
 	// 댓글 작성하기
 	void insertComment(CommentDto comment);
+
+	void cancelComment(int c_ID);
 	
 }

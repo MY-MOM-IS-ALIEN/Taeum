@@ -39,51 +39,55 @@
 	<!-- b-write End -->
 
 	<div>
-		<!-- 댓글 -->
-		<div class="card-body">
-			<form th:action="@{/commentProc}" class="form-horizontal"
-				method="post">
-				<div class="row">
-					<input type="hidden" name="B_ID" th:value="${boardDto.B_ID}">
-					<div class="form-group col-sm-8">
-						<input class="form-control input-sm" name="C_CONTENTS"
-							id="newReplyText" type="text" placeholder="댓글 입력...">
-					</div>
-					<div class="form-group col-sm-2">
-						<input type="hidden" name="M_ID" class="form-control input-sm"
-							id="newReplyWriter"
-							th:value="${#authentication.principal != null ? #authentication.principal.M_ID : ''}">
-					</div>
-					<div class="form-group col-sm-2">
-						<button type="submit"
-							class="btn btn-primary btn-sm btn-block replyAddBtn">
-							<i class="fa fa-save"></i> 저장
-						</button>
-					</div>
-				</div>
-			</form>
-		</div>
-		<!-- card-body End -->
+	<!-- 댓글 -->
+<div class="card-body">
+    <form th:action="@{/commentProc}" class="form-horizontal" method="post">
+        <div class="row text-center" style="margin-left:30%">
+            <input type="hidden" name="B_ID" th:value="${boardDto.B_ID}">
+            <input type="hidden" name="M_ID" class="form-control input-sm" id="newReplyWriter"
+                th:value="${#authentication.principal != null ? #authentication.principal.M_ID : ''}">
+            <div class="form-group col-sm-6">
+                <input class="form-control input-sm" name="C_CONTENTS" id="newReplyText" type="text"
+                    placeholder="댓글 입력...">
+            </div>
+            <div class="form-group col-sm-1">
+                <button type="submit" class="btn btn-primary btn-sm btn-block replyAddBtn">
+                    <i class="fa fa-save"></i> 저장
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- card-body End -->
+
+
 
 		<!-- 댓글 목록 -->
 		<div class="comment-list">
 			<!-- 댓글 하나를 나타내는 부분 -->
 			<div class="post replyDiv" th:each="comment : ${comments}">
 				<div class="user-block">
-					
+
 					<div class="oldReplyText">
-				<span th:text="${comment.C_CONTENTS}"></span>
-				</div>
-					
-					<span class="username"> 
-						<span th:text="${comment.M_ID}"></span>
+						<span th:text="${comment.C_CONTENTS}"></span>
+					</div>
+
+					<span class="username"> <span th:text="${comment.M_ID}"></span>
 						<span th:text="${comment.C_DATE}"></span>
 					</span>
 				</div>
-				
+					<!-- 삭제 버튼 -->
+			<div class="cancel-button">
+				<form action="/cancelComment" method="post">
+					<input type="hidden" name="C_ID" th:value="${comment.C_ID}" />
+					<input type="hidden" name="B_ID" th:value="${comment.B_ID}" />
+					<button type="submit" onclick="return confirm('삭제 하시겠습니까?')">삭제</button>
+				</form>
 			</div>
-		</div>
-		<!-- comment-list End -->
+			<!-- 취소 버튼 end -->
+			</div><!-- post replyDiv -->
+		</div>	<!-- comment-list End -->
+	
 
 
 

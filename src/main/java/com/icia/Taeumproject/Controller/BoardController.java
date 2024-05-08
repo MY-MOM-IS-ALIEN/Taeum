@@ -72,6 +72,15 @@ public class BoardController {
 	        return "redirect:/boardDetail/" + boardId;
 	    }
 	   
+	    @PostMapping("/cancelComment")
+	    public String cancelComment(int C_ID,int B_ID,RedirectAttributes rttr) {
+	    	
+	    	log.info("cancelCommentcancelCommentcancelC");
+	    	bServ.cancelComment(C_ID,rttr);
+	    	 return "redirect:/boardDetail/" + B_ID;
+	    }
+	    
+	    
 	
 	    }
 

@@ -23,5 +23,8 @@
 		 INSERT INTO commentTbl
 		  VALUES(#{C_ID},#{B_ID},#{C_CONTENTS},DEFAULT,#{M_ID})
 	</insert>
+	<delete id="cancelComment" parameterType="int" >
+        DELETE FROM commentTbl WHERE C_ID = #{c_ID}
+    </delete>
 	
 </mapper>

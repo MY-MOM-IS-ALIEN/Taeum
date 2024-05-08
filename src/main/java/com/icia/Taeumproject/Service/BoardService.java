@@ -81,4 +81,11 @@ public class BoardService {
 	        bDao.insertComment(comment);
 	        model.addAttribute(model);
 	}
+
+
+	public void cancelComment(int c_ID,RedirectAttributes rttr) {
+		log.info("cancelComment");
+		bDao.cancelComment(c_ID);
+		
+	}
 }
