@@ -910,6 +910,10 @@ fieldset.profile {
   border-bottom: 1px solid rgba(0,0,0,.1);
   background: #fff;
 }
+.b-td a {
+     border-bottom: 1px solid rgba(0,0,0,.1);
+  background: #fff;
+}
 
 .b-a {
   color: #73685d;
@@ -992,6 +996,15 @@ fieldset.profile {
     background-color: #f5f6f7;
     outline: none;
 }
+.b-write-6 {
+    margin-top: 30px;
+    font-size: 15px;
+    border: none;
+    background-color: #f5f6f7;
+    outline: none;
+    min-height: 400px;
+}
+
 
 .b-write-3 {
     margin-top: 10px;
