@@ -107,15 +107,6 @@ public class MainService {
   }
 
 
-
-  public List<Node> endSelectList() {
-    log.info("endSelectList()");
-    List<Node> endList = mDao.endSelectList();
-    System.out.println(endList);
-    
-    return endList;
-    }
-
   public List<Node> selectNodeList(int rideOne) {
     
    List<Node> rideNodeList = mDao.selectRideList(rideOne);

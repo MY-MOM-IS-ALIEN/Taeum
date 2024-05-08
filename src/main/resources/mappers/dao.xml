@@ -16,10 +16,6 @@
 FROM NodeTbl ORDER BY distance ASC;
   </select>
   
-  <select id="endSelectList" resultType="Node">
-    SELECT * FROM endNodetbl
-  </select>
-  
 
  <update id ="updateDelivery" parameterType="Node">
     UPDATE NodeTbl SET DR_ID=#{DR_ID}, cycle=#{cycle}, status =#{status}, D_ID=#{D_ID} WHERE node_id=#{node_id}

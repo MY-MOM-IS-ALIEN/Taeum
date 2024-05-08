@@ -386,115 +386,6 @@ public String GetDriverImage(int M_ID, Model model) {
     return nodeCost;
   }
 
-//	  @GetMapping("main")
-//	  public String main(Model model) {
-//	 // 카카오api로 요청해서 약국정보 가져오기
-//	    List<Node> nodeList = maServ.selectList();
-//	    System.out.println(nodeList);
-//	    model.addAttribute("nodeList", nodeList);
-//	    return "main";
-//	  }
-
-  @GetMapping("/ride")
-  @ResponseBody
-  public String ride(@RequestParam Long ride, @RequestParam Long id) {
-    log.info("ride()");
-    List<Node> nodeList = maServ.selectList();
-
-    for (int i = 0; i < nodeList.size(); i++) {
-      Long nId = Long.valueOf(nodeList.get(i).getNode_id());
-      System.out.println("node_id = " + id);
-      System.out.println("nId = " + nId);
-
-      if (nId.equals(id)) {
-        maServ.updateRide(ride, id);
-        break;
-      }
-    }
-    return "redirect:/main";
-  }
-
-  @GetMapping("/poi")
-  @ResponseBody
-  public JsonResult getPoi(@RequestParam double x, @RequestParam double y, Model model)
-      throws IOException, InterruptedException {
-    Point center = new Point(x, y);
-
-    // 카카오api로 요청해서 약국정보 가져오기
-    List<Node> nodeList = maServ.selectList();
-    System.out.println(nodeList);
-
-    // copiedNodeList를 사용하여 반복문 실행
-    List<Node> copiedNodeList = new ArrayList<>(nodeList);
-    int totalDistance = 0;
-    int totalDuration = 0;
-    List<Point> totalPathPointList = new ArrayList<>();
-    for (int i = 1; i < copiedNodeList.size(); i++) {
-      Node prev = copiedNodeList.get(i - 1);
-      Node next = copiedNodeList.get(i);
-
-      NodeCostParam nodeCostParam = new NodeCostParam();
-      nodeCostParam.setStartNodeId(Long.valueOf(prev.getNode_id()));
-      nodeCostParam.setEndNodeId(Long.valueOf(next.getNode_id()));
-      System.out.println("여기까진 됌");
-      NodeCost nodeCost = nodeCostService.getOneByParam(nodeCostParam);
-
-      if (nodeCost == null) {
-        KakaoDirections kakaoDirections = KakaoApiUtil.getKakaoDirections(new Point(prev.getX(), prev.getY()),
-            new Point(next.getX(), next.getY()));
-        List<Route> routes = kakaoDirections.getRoutes();
-        Route route = routes.get(0);
-        List<Point> pathPointList = new ArrayList<Point>();
-        List<Section> sections = route.getSections();
-
-        if (sections == null) {
-          // {"trans_id":"018e3d7f7526771d9332cb717909be8f","routes":[{"result_code":104,"result_msg":"출발지와
-          // 도착지가 5 m 이내로 설정된 경우 경로를 탐색할 수 없음"}]}
-          continue;
-        }
-        List<Road> roads = sections.get(0).getRoads();
-        for (Road road : roads) {
-          List<Double> vertexes = road.getVertexes();
-          for (int q = 0; q < vertexes.size(); q++) {
-            pathPointList.add(new Point(vertexes.get(q), vertexes.get(++q)));
-          }
-        }
-        Summary summary = route.getSummary();
-        Integer distance = summary.getDistance();
-        Integer duration = summary.getDuration();
-        Fare fare = summary.getFare();
-        Integer taxi = fare.getTaxi();
-        Integer toll = fare.getToll();
-
-        nodeCost = new NodeCost();
-        nodeCost.setStartNodeId(Long.valueOf(prev.getNode_id()));// 시작노드id
-        nodeCost.setEndNodeId(Long.valueOf(next.getNode_id()));// 종료노드id
-        nodeCost.setDistanceMeter(distance.longValue());// 이동거리(미터)
-        nodeCost.setDurationSecond(duration.longValue());// 이동시간(초)
-        nodeCost.setTollFare(toll);// 통행 요금(톨게이트)
-        nodeCost.setTaxiFare(taxi);// 택시 요금(지자체별, 심야, 시경계, 복합, 콜비 감안)
-        nodeCost.setPathJson(new ObjectMapper().writeValueAsString(pathPointList));// 이동경로json [[x,y],[x,y]]
-        nodeCost.setRegDt(new Date());// 등록일시
-        nodeCost.setModDt(new Date());// 수정일시
-        nodeCostService.add(nodeCost);
-      }
-
-      totalDistance += nodeCost.getDistanceMeter();
-      totalDuration += nodeCost.getDurationSecond();
-      totalPathPointList.addAll(new ObjectMapper().readValue(nodeCost.getPathJson(), new TypeReference<List<Point>>() {
-      }));
-    }
-
-    JsonResult jsonResult = new JsonResult();
-//	    jsonResult.addData("totalDistance", totalDistance);// 전체이동거리
-//	    jsonResult.addData("totalDuration", totalDuration);// 전체이동시간
-//	    jsonResult.addData("totalPathPointList", totalPathPointList);// 전체이동경로
-    jsonResult.addData("nodeList", nodeList);// 방문지목록
-
-//	    System.out.println("totalPathPointList = " + totalPathPointList);
-    System.out.println("nodeList 마지막 " + nodeList);
-    return jsonResult;
-  }
 
   @PostMapping("selectLocaldate")
   @ResponseBody
@@ -513,84 +404,85 @@ public String GetDriverImage(int M_ID, Model model) {
     return driverDtoList;
   }
 
-  @GetMapping("adminBoard")
-  public String adminBoard(Model model) {
-    log.info("adminBoard()");
-    
-    // 현재 날짜를 가져오기
-    LocalDate currentDate = LocalDate.now();
-    // 날짜를 yyyy-MM-dd 형식의 문자열로 변환
-    String currentDateStr = currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM"));
-    
- 
-    
-    // 이전 달의 날짜를 가져오기
-    LocalDate previousMonthDate = currentDate.minusMonths(1);
-    String previousMonth = previousMonthDate.format(DateTimeFormatter.ofPattern("yyyy-MM"));
-    
-    LocalDate twoMonthsAgoDate = currentDate.minusMonths(2);
-    String twoMonthsAgo = twoMonthsAgoDate.format(DateTimeFormatter.ofPattern("yyyy-MM"));
-    
-    // 현재 날짜를 사용하여 데이터 조회
-    List<Node> nodeList = maServ.selectLocaldate(currentDateStr);
-    // 이전 달의 데이터 조회
-    List<Node> previousMonthNodeList = maServ.selectLocaldate(previousMonth);
-    // 그 이전 달의 데이터 조회
-    List<Node> twoMonthsAgoNodeList = maServ.selectLocaldate(twoMonthsAgo);
-    
-    int nodeListsize = nodeList.size();
-    int previousMonthNodeListsize = previousMonthNodeList.size();
-    int twoMonthsAgoNodeListsize = twoMonthsAgoNodeList.size();
-    int TotalNodeCount = nodeListsize + previousMonthNodeListsize + twoMonthsAgoNodeListsize;
-    
-    model.addAttribute("currentDateStr", currentDateStr); // 현재 날짜
-    model.addAttribute("nodeListsize", nodeListsize); //현재 날짜 노드
-    model.addAttribute("previousMonth", previousMonth); // 현재 날짜
-    model.addAttribute("previousMonthNodeListsize", previousMonthNodeListsize); //현재 날짜 노드
-    model.addAttribute("twoMonthsAgo", twoMonthsAgo); // 현재 날짜
-    model.addAttribute("twoMonthsAgoNodeListsize", twoMonthsAgoNodeListsize); //현재 날짜 노드
-    model.addAttribute("TotalNodeCount", TotalNodeCount);
-    // -------------------------------------------------------------------------------------------------
-    int dispathNowListSize = getRideNodeListSize(nodeList);
-    int dispathPrevListSize = getRideNodeListSize(previousMonthNodeList);
-    int dispathTwoListSize = getRideNodeListSize(twoMonthsAgoNodeList);
-    int TotalBechaCount = dispathNowListSize + dispathPrevListSize + dispathTwoListSize;
-    
-
-    model.addAttribute("dispathNowListsize", dispathNowListSize);
-    model.addAttribute("dispathPrevListsize", dispathPrevListSize);
-    model.addAttribute("dispathTwoListsize", dispathTwoListSize);
-    model.addAttribute("TotalBechaCount", TotalBechaCount);
-    // ---------------------------------------------------------------------------------------------------
-    List<DispatchDto> dispatchNowList = maServ.getDispatch(currentDateStr);
-    List<DispatchDto> dispatchPrevList = maServ.getDispatch(previousMonth);
-    List<DispatchDto> dispatchTwoList = maServ.getDispatch(twoMonthsAgo);
-    
-    
-    int dispatchNowListSize1 = getDispatchListSize(dispatchNowList);
-    int dispatchPrevListSize1 = getDispatchListSize(dispatchPrevList);
-    int dispatchTwoListSize1 = getDispatchListSize(dispatchTwoList);
-    int totalDispatchListSize1 =  dispatchNowListSize1 + dispatchPrevListSize1 + dispatchTwoListSize1;
-    
-    System.out.println(dispatchNowListSize1);
-    model.addAttribute("totalDispatchListSize1", totalDispatchListSize1);
-    
-    int dispatchNowListSize2 = getDispatchListSize1(dispatchNowList);
-    int dispatchPrevListSize2 = getDispatchListSize1(dispatchPrevList);
-    int dispatchTwoListSize2 = getDispatchListSize1(dispatchTwoList);
-    int totalDispatchListSize2 =  dispatchNowListSize2 + dispatchPrevListSize2 + dispatchTwoListSize2;
-    model.addAttribute("totalDispatchListSize2", totalDispatchListSize2);
-    
-    model.addAttribute("dispatchNowListSize1", dispatchNowListSize1);
-    model.addAttribute("dispatchPrevListSize1", dispatchPrevListSize1);
-    model.addAttribute("dispatchTwoListSize1", dispatchTwoListSize1);
-    model.addAttribute("dispatchNowListSize2", dispatchNowListSize2);
-    model.addAttribute("dispatchPrevListSize2", dispatchPrevListSize2);
-    model.addAttribute("dispatchTwoListSize2", dispatchTwoListSize2);
-    
-    
-    return "adminBoard";
-    }
+  /*
+   * @GetMapping("adminBoard") public String adminBoard(Model model) {
+   * log.info("adminBoard()");
+   * 
+   * // 현재 날짜를 가져오기 LocalDate currentDate = LocalDate.now(); // 날짜를 yyyy-MM-dd 형식의
+   * 문자열로 변환 String currentDateStr =
+   * currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM"));
+   * 
+   * 
+   * 
+   * // 이전 달의 날짜를 가져오기 LocalDate previousMonthDate = currentDate.minusMonths(1);
+   * String previousMonth =
+   * previousMonthDate.format(DateTimeFormatter.ofPattern("yyyy-MM"));
+   * 
+   * LocalDate twoMonthsAgoDate = currentDate.minusMonths(2); String twoMonthsAgo
+   * = twoMonthsAgoDate.format(DateTimeFormatter.ofPattern("yyyy-MM"));
+   * 
+   * // 현재 날짜를 사용하여 데이터 조회 List<Node> nodeList =
+   * maServ.selectLocaldate(currentDateStr); // 이전 달의 데이터 조회 List<Node>
+   * previousMonthNodeList = maServ.selectLocaldate(previousMonth); // 그 이전 달의 데이터
+   * 조회 List<Node> twoMonthsAgoNodeList = maServ.selectLocaldate(twoMonthsAgo);
+   * 
+   * int nodeListsize = nodeList.size(); int previousMonthNodeListsize =
+   * previousMonthNodeList.size(); int twoMonthsAgoNodeListsize =
+   * twoMonthsAgoNodeList.size(); int TotalNodeCount = nodeListsize +
+   * previousMonthNodeListsize + twoMonthsAgoNodeListsize;
+   * 
+   * model.addAttribute("currentDateStr", currentDateStr); // 현재 날짜
+   * model.addAttribute("nodeListsize", nodeListsize); //현재 날짜 노드
+   * model.addAttribute("previousMonth", previousMonth); // 현재 날짜
+   * model.addAttribute("previousMonthNodeListsize", previousMonthNodeListsize);
+   * //현재 날짜 노드 model.addAttribute("twoMonthsAgo", twoMonthsAgo); // 현재 날짜
+   * model.addAttribute("twoMonthsAgoNodeListsize", twoMonthsAgoNodeListsize);
+   * //현재 날짜 노드 model.addAttribute("TotalNodeCount", TotalNodeCount); //
+   * -----------------------------------------------------------------------------
+   * -------------------- int dispathNowListSize = getRideNodeListSize(nodeList);
+   * int dispathPrevListSize = getRideNodeListSize(previousMonthNodeList); int
+   * dispathTwoListSize = getRideNodeListSize(twoMonthsAgoNodeList); int
+   * TotalBechaCount = dispathNowListSize + dispathPrevListSize +
+   * dispathTwoListSize;
+   * 
+   * 
+   * model.addAttribute("dispathNowListsize", dispathNowListSize);
+   * model.addAttribute("dispathPrevListsize", dispathPrevListSize);
+   * model.addAttribute("dispathTwoListsize", dispathTwoListSize);
+   * model.addAttribute("TotalBechaCount", TotalBechaCount); //
+   * -----------------------------------------------------------------------------
+   * ---------------------- List<DispatchDto> dispatchNowList =
+   * maServ.getDispatch(currentDateStr); List<DispatchDto> dispatchPrevList =
+   * maServ.getDispatch(previousMonth); List<DispatchDto> dispatchTwoList =
+   * maServ.getDispatch(twoMonthsAgo);
+   * 
+   * 
+   * int dispatchNowListSize1 = getDispatchListSize(dispatchNowList); int
+   * dispatchPrevListSize1 = getDispatchListSize(dispatchPrevList); int
+   * dispatchTwoListSize1 = getDispatchListSize(dispatchTwoList); int
+   * totalDispatchListSize1 = dispatchNowListSize1 + dispatchPrevListSize1 +
+   * dispatchTwoListSize1;
+   * 
+   * System.out.println(dispatchNowListSize1);
+   * model.addAttribute("totalDispatchListSize1", totalDispatchListSize1);
+   * 
+   * int dispatchNowListSize2 = getDispatchListSize1(dispatchNowList); int
+   * dispatchPrevListSize2 = getDispatchListSize1(dispatchPrevList); int
+   * dispatchTwoListSize2 = getDispatchListSize1(dispatchTwoList); int
+   * totalDispatchListSize2 = dispatchNowListSize2 + dispatchPrevListSize2 +
+   * dispatchTwoListSize2; model.addAttribute("totalDispatchListSize2",
+   * totalDispatchListSize2);
+   * 
+   * model.addAttribute("dispatchNowListSize1", dispatchNowListSize1);
+   * model.addAttribute("dispatchPrevListSize1", dispatchPrevListSize1);
+   * model.addAttribute("dispatchTwoListSize1", dispatchTwoListSize1);
+   * model.addAttribute("dispatchNowListSize2", dispatchNowListSize2);
+   * model.addAttribute("dispatchPrevListSize2", dispatchPrevListSize2);
+   * model.addAttribute("dispatchTwoListSize2", dispatchTwoListSize2);
+   * 
+   * 
+   * return "adminBoard"; }
+   */
   // 배차 현황 리스트 사이즈 가져오기
   private int getRideNodeListSize(List<Node> nodeList) {
     int count = 0;
