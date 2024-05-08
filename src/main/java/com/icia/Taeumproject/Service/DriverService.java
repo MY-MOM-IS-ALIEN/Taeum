@@ -13,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.icia.Taeumproject.Dao.DriverDao;
-import com.icia.Taeumproject.Dao.MemberDao;
 import com.icia.Taeumproject.Dto.DispatchDto;
 import com.icia.Taeumproject.Dto.DriverDto;
 import com.icia.Taeumproject.Dto.DriverFileDto;
@@ -31,8 +30,6 @@ public class DriverService {
 	private TransactionDefinition definition;
 	@Autowired
 	private DriverDao drDao;
-	@Autowired
-	private MemberDao mDao;
 
 	public void getDriverInfo(int m_id, Model model) {
 		log.info("getDriverInfo()");
