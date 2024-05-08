@@ -49,8 +49,8 @@ FROM NodeTbl ORDER BY distance ASC;
 
 <insert id="insertDispatch" parameterType="dispatchDto">
     <!-- 데이터 삽입 -->
-    INSERT INTO dispatchtbl (D_SELECT, D_STATUS, DR_ID)
-    VALUES (#{D_SELECT}, #{D_STATUS}, #{DR_ID})
+    INSERT INTO dispatchtbl (D_SELECT, D_STATUS, DR_ID, D_DATE)
+    VALUES (#{D_SELECT}, #{D_STATUS}, #{DR_ID}, #{D_DATE})
     
     <!-- 자동 생성된 키 값을 DTO의 D_ID 필드에 매핑하는 selectKey -->
     <selectKey keyProperty="D_ID" order="AFTER" resultType="java.lang.Long">
@@ -90,5 +90,9 @@ FROM NodeTbl ORDER BY distance ASC;
     	DELETE FROM NodeTbl
     	WHERE M_Id = #{m_Id} AND A_Date = #{a_Date}
 	</delete>
+	
+	<select id="selectNodeListToday" resultType="Node">
+		select * from nodetbl where DR_ID=#{dR_ID} AND A_DATE LIKE CONCAT('%', #{formattedDate}, '%');
+	</select>
   
 </mapper>

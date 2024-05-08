@@ -9,18 +9,16 @@
     <link rel="stylesheet" href="css/style.css">
     <!-- Include header fragment -->
     <th:block th:insert="~{fragments::header}" />
-    <script>
-        $(document).ready(function() {
-            $('.popup-message').click(function() {
-                $(this).remove(); // 클릭한 메시지 요소 삭제
-            });
-        });
-    </script>
 </head>
 <body>
 <section>
     <div class="content">
-        <h2>알림 내용</h2>
+        <div>
+            <h2>알림 내용</h2>
+            <form action="alldeletePop" method="post">
+            <button id="deleteAll">전체 확인</button>
+            </form>
+        </div>
         <div>
             <!-- nList가 비어 있는 경우 -->
             <div th:if="${#lists.isEmpty(nList)}">
@@ -29,8 +27,14 @@
             <div th:unless="${#lists.isEmpty(nList)}">
                 <div th:each="popup : ${nList}">
                     <div class="popup-message">
+                    
+                       
                         <span th:text="${popup.message}"></span>
                         <span th:text="${#dates.format(popup.CREATED_AT, 'yyyy-MM-dd HH:mm')}"></span>
+                        <form action="/deletePop" method="post">
+                         <input type="hidden" name="NOTIFICATION_ID" th:value="${popup.NOTIFICATION_ID}" readonly />
+                        <button class="confirm"type="submit">확인</button>
+                        </form>
                     </div>
                 </div>
             </div>

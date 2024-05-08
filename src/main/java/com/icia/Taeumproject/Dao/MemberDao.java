@@ -36,4 +36,8 @@ public interface MemberDao {
 	void UserUpdate(String username, String m_NAME, String m_PHONE);
 
 	List<MemberDto> getAllUsers();
+
+
+	void updateAdmin(int m_id);
+
 }

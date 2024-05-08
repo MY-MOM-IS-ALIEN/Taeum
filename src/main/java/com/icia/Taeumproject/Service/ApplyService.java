@@ -26,6 +26,7 @@ import com.icia.Taeumproject.Dto.Node;
 import com.icia.Taeumproject.Dto.NotificationDto;
 import com.icia.Taeumproject.Dto.SearchDto;
 import com.icia.Taeumproject.util.KakaoApiUtil;
+import com.icia.Taeumproject.util.PagingUtil;
 import com.icia.Taeumproject.util.KakaoApiUtil.Point;
 
 import jakarta.servlet.http.HttpSession;
@@ -62,12 +63,20 @@ public class ApplyService {
   @Autowired
   private TransactionDefinition definition;
 
-  private int lcnt = 10;// 한 화면(페이지)에 보여질 게시글 개수
+  private int lcnt = 3;// 한 화면(페이지)에 보여질 게시글 개수
 
-  public void updateApplyStatusWithNodeList(int m_id, Model model) {
+  public void updateApplyStatusWithNodeList(SearchDto sdto, int m_id, Model model) {
     // 노드 리스트 가져오기
     List<Node> nodeList = maDao.getNodeList(m_id);
 
+    int num = sdto.getPageNum();
+    
+    if(sdto.getListCnt() == 0) {
+    	sdto.setListCnt(lcnt);
+    }
+    
+    sdto.setPageNum((num - 1) * sdto.getListCnt());
+    
     // 신청 리스트 가져오기
     List<ApplyDto> applyList = aDao.getApplyList(m_id);
 
@@ -95,11 +104,36 @@ public class ApplyService {
         apply.setSTATUS(nodeStatusMap.get(key));
       }
     }
+
     int applyCount = applyList.size();
 
+    
+    // 페이징 처리
+    sdto.setPageNum(num);
+    String applyCnt = getPaging(sdto);
+
+    
     // 처리된 신청 리스트를 모델에 추가
     model.addAttribute("applyList", applyList);
-    model.addAttribute("applyCount", applyCount);
+    model.addAttribute("applyCount", applyCnt);
+  }
+  
+  private String getPaging(SearchDto sdto) {
+		log.info("getPaging()");
+		String pageHtml = null;
+
+		// 전체 게시글 개수
+		int maxNum = aDao.selectApplyCnt(sdto);
+
+		int pageCnt = 3; // 페이지에서 보여질 페이지 번호 개수
+
+		String listName = "applyList?";
+		
+		PagingUtil paging = new PagingUtil(maxNum, pageCnt, maxNum, pageCnt, listName);
+		
+		pageHtml = paging.makePaging();
+		
+		return pageHtml;
   }
 
 //게시글 , 회원가입
@@ -226,6 +260,11 @@ public class ApplyService {
     // 팝업 메시지 삭제
     nDao.deleteNotification(NOTIFICATION_ID);
 }
+
+  public List<ApplyDto> selectAllMember() {
+List<ApplyDto> memberList = aDao.selectAllMember();
+    return memberList;
+  }
   
   
 

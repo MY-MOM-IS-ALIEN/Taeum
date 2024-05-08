@@ -55,6 +55,7 @@ public class SecurityConfig{
       .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
       .requestMatchers("/", "/home").permitAll()
       .requestMatchers("/loginProc","/joinProc").permitAll()// "/","/login" 모든 사용자 접근
+      .requestMatchers("/loginProc").permitAll()// "/","/login" 모든 사용자 접근
       .requestMatchers("/joinForm").permitAll()
       .requestMatchers("/ApplyForm").hasRole("USER")
       .requestMatchers("/fragments").permitAll()
@@ -88,6 +89,8 @@ public class SecurityConfig{
       .requestMatchers("/applyWrite").permitAll()
       .requestMatchers("/insertServ").permitAll()
       .requestMatchers("/mainCenter").permitAll()
+      .requestMatchers("/loginChange").permitAll()
+      .requestMatchers("/loginChangeProc").permitAll()
       .requestMatchers("/selectNodeList").permitAll()
       .requestMatchers("/selectRideList").permitAll()
       .requestMatchers("/selectLocaldate").permitAll()
