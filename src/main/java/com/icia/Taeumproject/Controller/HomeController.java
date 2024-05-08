@@ -1,8 +1,6 @@
 package com.icia.Taeumproject.Controller;
 
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,7 +32,10 @@ public class HomeController {
     
       
       @GetMapping("applyList")
-  		public String applyList(SearchDto sdto, Model model) {
+  		public String applyList(SearchDto sdto,
+  								@RequestParam(name = "page", defaultValue = "1") int page,
+  								@RequestParam(name = "size", defaultValue = "3") int size,
+  								Model model) {
   		log.info("applyList()");
   		
   		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -44,8 +45,9 @@ public class HomeController {
   		int m_id = ((SecurityUserDTO) principal).getM_ID();
   		log.info("m_id: {}", m_id);
 
+  		
   		// aServ.getApplyList(m_id, model);
-  		aServ.updateApplyStatusWithNodeList(sdto, m_id, model);
+  		aServ.updateApplyStatusWithNodeList(sdto, m_id, page, size, model);
   		
   		return "applyList";
   		}

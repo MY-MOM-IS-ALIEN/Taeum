@@ -1057,11 +1057,15 @@ fieldset.profile {
 }
 
 .apply-item {
-	border: 1px solid #ddd;
-	border-radius: 5px;
-	padding: 15px;
-	margin-bottom: 20px;
+   border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+    width: 70%;
+    margin: 10px auto; /* 좌우 여백을 자동으로 설정하여 가운데 정렬 */
+    max-width: 600px; /* 최대 너비 설정 (필요에 따라 조절) */
 }
+
 
 .apply-detail {
 	display: flex;
@@ -1149,10 +1153,47 @@ fieldset.profile {
 	font-size: 50px;
 }
 
+.a-content.pagination {
+    display: flex; /* 요소를 수평으로 배치하기 위해 Flexbox 사용 */
+    justify-content: center; /* 내부 요소들을 수평 가운데 정렬 */
+    align-items: center; /* 내부 요소들을 수직 가운데 정렬 */
+    text-align: center; /* 내부 텍스트를 수평으로 가운데 정렬 */
+}
 
+.pagination {
+    display: flex; /* 요소를 수평으로 배치하기 위해 Flexbox 사용 */
+    justify-content: center; /* 내부 요소들을 수평 가운데 정렬 */
+    align-items: center; /* 내부 요소들을 수직 가운데 정렬 */
+    text-align: center; /* 내부 텍스트를 수평으로 가운데 정렬 */
+}
 
+.pagination a{
+	text-decoration: none;
+	color: ingerit;
+	font-size: 20px;
+}
+/* 방문한 링크 색상 제거 */
+a:visited {
+    color: inherit; /* 부모 요소의 색상을 상속 */
+}
 
+.apply-detail {
+  display: flex; /* 요소들을 수평으로 배치 */
+  justify-content: space-between; /* 요소들을 가로 방향으로 동일한 간격으로 배치 */
+ 
+}
 
+.apply-left {
+  flex: 1; /* 왼쪽 영역이 확장될 수 있도록 설정 */
+}
+
+.cancel-button {
+  margin-left: auto; /* 취소 버튼을 오른쪽으로 이동 */
+}
+
+.apply-info {
+  margin-bottom: 5px; /* 각 정보 아래 여백 추가 */
+}
 
 
 
