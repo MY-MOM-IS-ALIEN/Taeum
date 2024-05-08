@@ -30,6 +30,14 @@
     </delete>
   
 
+    <select id = "selectAllMember" resultType="ApplyDto">
+      SELECT * FROM applytbl
+    </select>
+
+<select id="selectApplyCnt" parameterType="SearchDto" resultType="Integer">
+	SELECT COUNT(*) FROM applytbl
+</select>
+
 
 
 </mapper>

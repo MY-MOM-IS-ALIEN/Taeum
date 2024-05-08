@@ -39,7 +39,9 @@ public class DriverService {
 		log.info("getDriverInfo()");
 
 		DriverDto drDto = drDao.getDriverInfo(m_id);
+		System.out.println(m_id);
 		model.addAttribute("driver", drDto);
+		System.out.println(drDto);
 
 		// 오늘 운행 건수 가져오기
 		int todayTraffic = drDao.getTodayTraffic(m_id);

@@ -9,17 +9,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import com.icia.Taeumproject.Service.MemberService;
-
-
-
-import com.icia.Taeumproject.Dto.MemberDto;
-
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.icia.Taeumproject.Dto.MemberDto;
+import com.icia.Taeumproject.Service.MemberService;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Slf4j
@@ -60,6 +57,43 @@ public class MemberController {
   public String loginProc(MemberDto member , Model model, RedirectAttributes rttr) {
    log.info("loginProc()");
      return mServ.loginProc(model,rttr, member);
+  }
+  @GetMapping("loginChange")
+  public String loginChange() {
+	  log.info("loginChange()");
+	  return "loginChange";
+  }
+  
+  @PostMapping("loginChangeProc")
+  public String loginChangeProc(@RequestParam("num") int num, MemberDto member, Model model, RedirectAttributes rttr) {
+      log.info("loginChangeProc()");
+      String username = null;
+      String password = null;
+      String role = null;
+      
+      if(num == 1) {
+          username = "admin@taeum.com";
+          password = "1111";
+          role = "ADMIN";
+      } else if(num == 2) {
+    	  username = "driver1@taeum.com";
+          password = "1111";
+          role = "DRIVER";
+      } else if(num == 3) {
+    	  username = "driver2@taeum.com";
+          password = "1111";
+          role = "DRIVER";
+      } else {
+    	  username = "driver3@taeum.com";
+          password = "1111";
+          role = "DRIVER";
+      }
+      member.setUsername(username);
+      member.setPassword(password);
+      member.setRole(role);
+      System.out.println(member);
+    
+      return mServ.loginProc(model, rttr, member);
   }
   
 //메일 인증 메핑 메소드
