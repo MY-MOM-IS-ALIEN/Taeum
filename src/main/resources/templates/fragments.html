@@ -65,16 +65,11 @@
 					<li sec:authorize="isAnonymous()"><a href="/joinForm">Join</a>
 					</li>
 					<!-- 로그인된 사용자에게만 표시 -->
-					
-					<li id="applyLink" sec:authorize="hasRole('USER')"><a
-						th:href="@{/ApplyForm}">Apply</a></li>
-					<!-- 로그인 및 관리자일때만 -->
 
 					<!-- 세션에 저장된 사용자 이름 표시 -->
 					<li sec:authorize="isAuthenticated()">
 					<th:block sec:authorize="hasRole('ADMIN')">
 						<div class="top-right">
-
 
 							<a href="/Popup"
 								onclick="window.open(this.href, '_blank', 'width=500, height=600'); return false;">

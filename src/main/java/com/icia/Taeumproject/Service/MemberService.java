@@ -1,25 +1,21 @@
 package com.icia.Taeumproject.Service;
 
 import java.security.Principal;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.icia.Taeumproject.Dao.MemberDao;
-import com.icia.Taeumproject.Dto.DriverDto;
 import com.icia.Taeumproject.Dto.MemberDto;
 
 import jakarta.servlet.http.HttpSession;
@@ -58,7 +54,7 @@ public class MemberService {
 		if (passwordEncoder.matches(member.getPassword(), userDetails.getPassword())) {
 			// 인증 성공
 			Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
-					userDetails.getAuthorities());
+			userDetails.getAuthorities());
 			SecurityContextHolder.getContext().setAuthentication(authentication); // Spring Security에 인증 정보 저장
 			msg = "로그인에 성공했습니다.";
 			if(member.getRole() == "ADMIN") {
@@ -162,17 +158,39 @@ public class MemberService {
 		mDao.updateDriveMemberUpdate(member);
 	}
 
-	// 사용자 수정 메서드
-	public void UserUpdate(String m_NAME, String m_PHONE, Principal principal) {
+	public String userUpdate(String m_NAME, String m_PHONE, Principal principal, RedirectAttributes rttr, HttpSession session) {
+	    String view;
+	    String msg;
 
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String username = authentication.getName();
-		String msg = null;
+	    // Principal 객체를 Authentication으로 형변환
+	    Authentication authentication = (Authentication) principal;
+	    String username = authentication.getName();
 
-		mDao.UserUpdate(username, m_NAME, m_PHONE);
-		msg = "수정하셨습니다";
+	    try {
+	        // 사용자 정보 업데이트
+	        mDao.UserUpdate(username, m_NAME, m_PHONE);
+
+	        // 업데이트된 사용자 정보를 가져와서 UserDetails 객체 생성
+	        UserDetails updatedUserDetails = customUserDetailsService.loadUserByUsername(username);
+
+	        // 인증 객체 업데이트
+	        Authentication updatedAuth = new UsernamePasswordAuthenticationToken(updatedUserDetails, authentication.getCredentials(), updatedUserDetails.getAuthorities());
+	        SecurityContextHolder.getContext().setAuthentication(updatedAuth);
+
+	        // 세션 갱신하지 않음
+
+	        msg = "수정 완료";
+	        view = "redirect:/"; // 로그인 상태를 유지하고 리다이렉트
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        msg = "수정 실패";
+	        view = "redirect:UserUpdate";
+	    }
+
+	    rttr.addFlashAttribute("msg", msg);
+	    return view;
 	}
-
   
   public void updateRole(int m_id) {
     log.info("updateRole()");

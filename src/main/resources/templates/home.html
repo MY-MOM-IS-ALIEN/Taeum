@@ -17,13 +17,14 @@
 			slideWidth : 600
 		// Slide width
 		});
-
-		// Message handling
-		const msg = null;
-		if (msg != null) {
-			alert(message);
-		}
 	});
+	
+		$(function() {
+		    const msg = /*[[${msg}]]*/null;
+		    if (msg != null) {
+		      alert(msg);
+		    }
+		  });
 
 	function redirectToLoginForm() {
 		window.location.href = '/loginForm';
@@ -41,12 +42,7 @@
 	function redirectToApplyForm() {
 		window.location.href = 'ApplyForm';
 	}
-	$(function() {
-	    const msg = /*[[${msg}]]*/null;
-	    if (msg != null) {
-	      alert(msg);
-	    }
-	  });
+
 </script>
 
 <th:block th:insert="~{fragments::header}" />

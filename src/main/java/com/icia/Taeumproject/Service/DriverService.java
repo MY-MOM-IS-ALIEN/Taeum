@@ -1,9 +1,14 @@
 package com.icia.Taeumproject.Service;
 
 import java.io.File;
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -30,6 +35,8 @@ public class DriverService {
 	private TransactionDefinition definition;
 	@Autowired
 	private DriverDao drDao;
+	@Autowired
+    private CustomUserDetailsService customUserDetailsService;
 
 	public void getDriverInfo(int m_id, Model model) {
 		log.info("getDriverInfo()");
@@ -122,36 +129,37 @@ public class DriverService {
 		}
 	}
 
-	public String driverUpdateProc(List<MultipartFile> files, DriverDto driver, RedirectAttributes rttr,
-			HttpSession session) {
-		log.info("driverUpdateProc()");
-		TransactionStatus status = manager.getTransaction(definition);
-		String msg = null;
+	public String driverUpdateProc(List<MultipartFile> files, DriverDto driver, RedirectAttributes rttr, HttpSession session, Principal principal) {
+	    log.info("driverUpdateProc()");
+	    TransactionStatus status = manager.getTransaction(definition);
+	    String msg = null;
 
-		try {
-			// 드라이버 정보 업데이트
-			drDao.updateDriver(driver);
-			log.info("업데이트 완료");
-			msg = "업데이트 완료 다시 로그인 후 이용해주세요";
+	    try {
+	        // 드라이버 정보 업데이트
+	        drDao.updateDriver(driver);
+	        msg = "업데이트 완료";
 
-			if (!files.get(0).isEmpty()) {// 업로드 파일이 있다면
-				fileUpload(files, session, driver.getM_ID()); // 여기는 컬럼을 어떻게할지 정해야함
-			}
+	        if (!files.get(0).isEmpty()) {// 업로드 파일이 있다면
+	            fileUpload(files, session, driver.getM_ID()); // 여기는 컬럼을 어떻게할지 정해야함
+	        }
 
-			// commit 수행
-			manager.commit(status);
+	        // commit 수행
+	        manager.commit(status);
 
-			// 드라이버 정보 가져오기
-		} catch (Exception e) {
-			e.printStackTrace();
-			manager.rollback(status);
-			log.error("업데이트 실패");
-			msg = "업데이트 실패";
-		}
+	        // 인증 정보 다시 저장
+	        Authentication authentication = (Authentication) principal;
+	        UserDetails updatedUserDetails = customUserDetailsService.loadUserByUsername(authentication.getName());
+	        Authentication updatedAuth = new UsernamePasswordAuthenticationToken(updatedUserDetails, authentication.getCredentials(), updatedUserDetails.getAuthorities());
+	        SecurityContextHolder.getContext().setAuthentication(updatedAuth);
 
-		rttr.addFlashAttribute("msg", msg);
-		session.invalidate();
-		return "redirect:/";
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        manager.rollback(status);
+	        msg = "업데이트 실패";
+	    }
+
+	    rttr.addFlashAttribute("msg", msg);
+	    return "redirect:driverModify";
 	}
 
 	public void updateDriverProfile(int mid) {
