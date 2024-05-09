@@ -956,6 +956,7 @@ fieldset.profile {
     padding: 10px 10px;
     padding-bottom: 30px;
     border-bottom:1px solid #848484;
+    margin-top:5%;
 }
 
 .b-write {
@@ -983,21 +984,21 @@ fieldset.profile {
 .b-write-1 {
     height: 50px;
     border : none;
-    font-size: 40px;
+    font-size: 30px;
     background-color: #f5f6f7;
     outline: none;
 }
 
 .b-write-2 {
     margin-top: 30px;
-    font-size: 15px;
+    font-size: 20px;
     border: none;
     background-color: #f5f6f7;
     outline: none;
 }
 .b-write-6 {
     margin-top: 30px;
-    font-size: 15px;
+    font-size: 20px;
     border: none;
     background-color: #f5f6f7;
     outline: none;
@@ -1043,9 +1044,15 @@ fieldset.profile {
 .cancel-button button:hover {
     background-color: #5a6268; /* 마우스를 올렸을 때 배경색 진하게 변화 */
 }
+/* 댓글 END*/
+ 
 
- 
- 
+    /* 돌아가기 버튼을 입력 필드와 동일한 높이에 위치시킴 */
+    .b-write-form .b-write-5 {
+        vertical-align: middle;
+        margin-left:22%;
+    }
+	/*돌아가기 버튼*/
 
  #map{
  	position: relative;
@@ -1063,6 +1070,7 @@ fieldset.profile {
   position: relative; /* 부모 요소 설정 */
   z-index: 2; /* 지도 요소보다 앞에 배치 */
 }
+
  
 /* dropdown css*/
 .dropdown {

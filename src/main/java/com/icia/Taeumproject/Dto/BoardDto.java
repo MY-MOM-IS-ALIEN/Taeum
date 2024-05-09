@@ -12,7 +12,7 @@ import lombok.ToString;
 public class BoardDto {
 		
 	 private int B_ID;
-	 private String username;
+	 private String username; // 작성자 이름
 	 private String B_TITLE;
 	 private String B_CONTENTS;
 	 private Timestamp B_DATE;
