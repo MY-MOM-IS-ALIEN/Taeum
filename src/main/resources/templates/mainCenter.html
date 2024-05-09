@@ -75,7 +75,7 @@
     </div>
 <div class="list-group scrollarea px-3 flex-grow-1">
 
-    <div th:each="nodeList, index : ${rideNodeList}" class="abc" style="z-index:9998" id="seonghun">
+    <div th:each="nodeList, index : ${rideNodeList}" class="abc" style="z-index:9998">
     <!-- 각 rideNodeList 요소에 대한 div -->
     <a href="#" class="list-group-item list-group-item-action py-3 lh-sm mt-3 border rounded-2">
         <div class="d-flex w-100 align-items-center justify-content-start mb-1">
@@ -87,7 +87,8 @@
                 </th:block>
             </div>
         </div>
-        <span type="text" id="onOff">off</span>
+        <span type="text">[[${index.index+1}]]차 배정</span><span type="text" id="onOff" >off</span>
+         <!-- style="display: none; visibility: hidden; -->
     </a>
     <!-- 인덱스 번호를 버튼 텍스트에 추가 -->
     <div class="btn-area">
@@ -290,10 +291,19 @@ function drawPath(pathPointList) {
 function toggleOnOff(innerList, isActive, idx) {
     var nodeList = innerList.querySelectorAll('.def'); 
     var onOffElement = innerList.querySelector('#onOff');
+    var onOffDiv = innerList.querySelectorAll('.abc');
     var dateTime = document.getElementById('DATE-TIME').innerText;
     
     if (isActive) {
         onOffElement.textContent = 'on';
+        onOffDiv.forEach(function(div, index) {
+            if (index === idx) {
+                div.style.backgroundColor = '#3F7EFC'; // 변경하려는 배경색으로 설정
+            } else {
+                div.style.backgroundColor = ''; // 다른 요소의 배경색 초기화
+            }
+        });
+        
         nodeList.forEach(function(nodeElement) {
             var nodeId = nodeElement.querySelector('.badge.text-bg-secondary').value;
             var node = findNodeById(nodeId); 
@@ -315,6 +325,10 @@ function toggleOnOff(innerList, isActive, idx) {
         innerList.classList.add('active');
     } else {
         onOffElement.textContent = 'off';
+        onOffDiv.forEach(function(div) {
+            div.style.backgroundColor = ''; // 모든 요소의 배경색 초기화
+        });
+        
         nodeList.forEach(function(nodeElement) {
             var nodeId = nodeElement.querySelector('.badge.text-bg-secondary').value;
             var marker = markers[nodeId];
@@ -323,7 +337,7 @@ function toggleOnOff(innerList, isActive, idx) {
                 delete markers[nodeId];
                 delete NODE_MAP[nodeId];
                 if(POLYLINE){
-                POLYLINE.setMap(null);
+                    POLYLINE.setMap(null);
                 }
             }
         });
