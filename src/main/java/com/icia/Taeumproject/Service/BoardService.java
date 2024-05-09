@@ -82,10 +82,22 @@ public class BoardService {
 	        model.addAttribute(model);
 	}
 
-
+		// 댓글 삭제
 	public void cancelComment(int c_ID,RedirectAttributes rttr) {
 		log.info("cancelComment");
 		bDao.cancelComment(c_ID);
+		
+	}
+
+		//게시글 삭제
+	public void cancelBoard(int b_ID, RedirectAttributes rttr) {
+		bDao.cacelBoard(b_ID);
+		
+	}
+
+		//게시글에 대한 모든 댓글 삭제
+	public void cancelCommentAll(int b_ID, RedirectAttributes rttr) {
+		bDao.cancelCommentAll(b_ID);
 		
 	}
 }
