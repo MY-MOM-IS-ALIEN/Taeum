@@ -43,6 +43,11 @@
     update membertbl set
     role='DRIVER' where M_ID=#{mid}
   </update>
+  
+  <update id="updateAdmin" parameterType="Integer">
+    update membertbl set
+    role='ADMIN' where M_ID=#{m_id}
+  </update>
 
   <update id="updateDriveMemberUpdate" parameterType="MemberDto">
     update
@@ -52,5 +57,7 @@
     parameterType="com.icia.Taeumproject.Dto.MemberDto">
     UPDATE membertbl SET m_name =#{m_NAME}, m_phone =#{m_PHONE} WHERE username=#{username};
   </update>
+
+
 
 </mapper>

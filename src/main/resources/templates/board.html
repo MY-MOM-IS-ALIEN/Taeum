@@ -18,7 +18,7 @@
 </head>
 
 <body>
-<<<<<<< HEAD
+
 	<a href="/boardWrite" class="board-btn-primary"> Write</a>
 
 <h2 class="board-title">공지사항</h2>
@@ -39,7 +39,7 @@
     <tr th:each="board, iterStat : ${boardList}" th:if="${board.role == 'ROLE_ADMIN' and iterStat.index < 4}">
 
         <td class="b-td" th:text="${board.username}"></td>
-        <td class="b-td" th:text="${board.B_TITLE}"></td>
+        <td class="b-td"><a th:href="@{/boardDetail/{id}(id=${board.B_ID})}" th:text="${board.B_TITLE}" style="color: black; text-decoration: none; font-weight: bold;"></a></td>
        <td class="b-td">
     <span th:text="${#strings.length(board.B_CONTENTS) &gt; 12} ? ${#strings.substring(board.B_CONTENTS, 0, 12) + '...'} : ${board.B_CONTENTS}"></span>
 	</td>
@@ -63,7 +63,8 @@
 
     
         <td class="b-td" th:text="${board.username}"></td>
-        <td class="b-td"><a th:href="@{/boardDetail/{id}(id=${board.B_ID})}" th:text="${board.B_TITLE}"></a></td>
+       <td class="b-td"><a th:href="@{/boardDetail/{id}(id=${board.B_ID})}" th:text="${board.B_TITLE}" style="color: black; text-decoration: none; font-weight: bold;"></a></td>
+
        <td class="b-td">
     <span th:text="${#strings.length(board.B_CONTENTS) &gt; 12} ? ${#strings.substring(board.B_CONTENTS, 0, 12) + '...'} : ${board.B_CONTENTS}"></span>
 	</td>

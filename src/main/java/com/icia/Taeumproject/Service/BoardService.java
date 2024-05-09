@@ -14,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.icia.Taeumproject.Dao.BoardDao;
 import com.icia.Taeumproject.Dto.BoardDto;
+import com.icia.Taeumproject.Dto.CommentDto;
 import com.icia.Taeumproject.Dto.MemberDto;
 
 import lombok.extern.slf4j.Slf4j;
@@ -62,10 +63,29 @@ public class BoardService {
 		
 	}
 
+	public BoardDto getBoardById(int id) {
+		
+		return bDao.getBoardById(id);
+	}
 
-	public void boardDetail(int b_ID, Model model) {
-		BoardDto board = bDao.boardDetail(b_ID);
-		model.addAttribute(board);
+
+	public List<CommentDto> getCommentsByBoardId(int id) {
+	
+		return bDao.getComments(id);
+	}
+
+
+	public void CommentProc(CommentDto comment, Model model) {
+		// 게시글 저장
+	 
+	        bDao.insertComment(comment);
+	        model.addAttribute(model);
+	}
+
+
+	public void cancelComment(int c_ID,RedirectAttributes rttr) {
+		log.info("cancelComment");
+		bDao.cancelComment(c_ID);
 		
 	}
 }

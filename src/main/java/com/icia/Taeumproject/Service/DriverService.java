@@ -13,8 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.icia.Taeumproject.Dao.DriverDao;
-import com.icia.Taeumproject.Dao.MemberDao;
-import com.icia.Taeumproject.Dto.ApplyDto;
 import com.icia.Taeumproject.Dto.DispatchDto;
 import com.icia.Taeumproject.Dto.DriverDto;
 import com.icia.Taeumproject.Dto.DriverFileDto;
@@ -32,8 +30,6 @@ public class DriverService {
 	private TransactionDefinition definition;
 	@Autowired
 	private DriverDao drDao;
-	@Autowired
-	private MemberDao mDao;
 
 	public void getDriverInfo(int m_id, Model model) {
 		log.info("getDriverInfo()");
@@ -59,29 +55,6 @@ public class DriverService {
 		model.addAttribute("driverImage", driverImage);
 	}
 
-	public void getPassengerInfo(int m_id, String username, Model model) {
-		log.info("getPassengerInfo()");
-
-		DriverDto mdto = drDao.getInfo(m_id);
-		model.addAttribute("driverName", mdto);
-
-		List<DriverDto> applyList = drDao.getPassengerList(m_id);
-		model.addAttribute("applyList", applyList);
-		log.info("applyList: {}", applyList);
-
-	}
-
-	public String getRouteList(int m_id, String username, Model model) {
-		log.info("getRouteList()");
-
-		DriverDto mdto = drDao.getInfo(m_id);
-		model.addAttribute("driverName", mdto);
-
-		List<ApplyDto> routeList = drDao.getRouteList(m_id);
-		model.addAttribute("routeList", routeList);
-
-		return "routeCheck";
-	}
 
 	public String getDriverImage(int M_ID, Model model) {
 		String driverImage = drDao.getDriverImage(M_ID);
@@ -214,12 +187,6 @@ public class DriverService {
 			drDao.updateCancle(dispatch);
 			drDao.updateNodeCancle(dispatch);
 		}
-	}
-	
-
-	public int getDrId(int m_id) {
-
-		return drDao.getDrId(m_id);
 	}
 
 	public void insertCommute(int m_id, int dr_id) {

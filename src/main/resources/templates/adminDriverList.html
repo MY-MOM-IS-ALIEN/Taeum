@@ -77,10 +77,10 @@
                 <span class="fs-5 fw-semibold">기 사 목 록</span> 
                 <a href="driverAutoJoin">
 					<button type="button" class="btn btn-success"
-      style="margin-left: 20px; top: 15px; right: 20px; z-index: 1030; background-color: #3F7EFC;">기사 등록</button>
+      style="margin-left: 55px; top: 15px; right: 20px; z-index: 1030; background-color: #3F7EFC;">기사 등록</button>
 				</a>
        <button type="button" class="btn btn-success"
-      style=" margin-left: 20px; top: 15px; right: 20px; z-index: 1030; background-color: #3F7EFC;"
+      style=" margin-left: 10px; top: 15px; right: 20px; z-index: 1030; background-color: #3F7EFC;"
       id="send" >전송</button> 
 			</div>
             <div class="d-flex flex-wrap py-3 px-2 gap-3 align-items-center justify-content-center border-bottom">
@@ -258,6 +258,8 @@
                 driverItem.find('.ma-2').append('<span type="text"> 차량번호 : '+ driver.dr_CARNUM +'</span>');
                 
                 // 링크를 클릭했을 때 이벤트 처리
+                
+ 
                 // 클릭 이벤트 핸들러를 설정하는 코드
                 $('#driverList').append(driverItem);
             });
@@ -268,6 +270,9 @@
         var driverID = parseInt($(this).find('#dr_ID').val()); // 드라이버 ID 가져오기
         var memberID = parseInt($(this).find('#m_ID').val());
        
+    
+       
+        
         // 선택된 드라이버의 정보를 가져와서 화면에 출력
         var selectedDriver = driverData.find(function(driver) {
             return parseInt(driver.dr_ID) === parseInt(driverID);
@@ -301,6 +306,8 @@
                     // 성공적으로 서버로부터 응답을 받았을 때 수행할 작업
                    $('#driverInfoList123').empty()
                   
+
+                   
                    displayDispatchList(response);
       
                 },
@@ -341,6 +348,7 @@
         }
     });
      
+
      
     });
     
@@ -397,10 +405,13 @@
 
                     // 테이블에 행 추가
                     table.append(row);
+                    
                 });
 
                 // 이전 내용을 지우고 테이블을 추가
                 $('#driverInfoList123').empty().append(table);
+                
+                
             });
         }
         

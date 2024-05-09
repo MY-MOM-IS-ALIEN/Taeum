@@ -3,6 +3,7 @@ package com.icia.Taeumproject.Dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.icia.Taeumproject.Dto.ApplyDto;
 import com.icia.Taeumproject.Dto.SearchDto;
@@ -17,18 +18,15 @@ public interface ApplyDao {
 
 	// 중복 신청 체크
 	boolean sDuplicateApply(int m_ID, String formattedDate);
-	
+
 	// 사용자 신청 내역 가져오기
-	List<ApplyDto> getApplyList(int m_id);
+	List<ApplyDto> getApplyList(@Param("m_id") int m_id, @Param("offset") int offset, @Param("size") int size);
 
 	// 사용자 신청 삭제
 	void cancelApply(int applyId);
 
+	List<ApplyDto> selectAllMember();
 
-  List<ApplyDto> selectAllMember();
-
-	int selectApplyCnt(SearchDto sdto);
-
-	
+	int selectAplCnt(SearchDto sdto);
 
 }

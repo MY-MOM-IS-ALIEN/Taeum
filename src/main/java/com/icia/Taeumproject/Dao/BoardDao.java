@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.icia.Taeumproject.Dto.BoardDto;
+import com.icia.Taeumproject.Dto.CommentDto;
 
 @Mapper
 public interface BoardDao {
@@ -13,6 +14,13 @@ public interface BoardDao {
 	
 	List<BoardDto> getBoardList();
 
-	BoardDto boardDetail(int b_ID);
+	BoardDto getBoardById(int id);
+
+	// 댓글 가져오기
+	List<CommentDto> getComments(int id);
+	// 댓글 작성하기
+	void insertComment(CommentDto comment);
+
+	void cancelComment(int c_ID);
 	
 }
