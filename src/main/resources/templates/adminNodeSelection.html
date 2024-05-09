@@ -49,7 +49,7 @@
      </svg>
 			<span class="fs-5 fw-semibold">경로 최적화 결과</span>
 			<button id="undoButton" class="btn btn-success"
-                style="margin-left: 40px; top: 15px; right: 20px; z-index: 1030; background-color: #3F7EFC;">뒤 로 가 기</button>
+                style="margin-left: 75px; top: 15px; right: 20px; z-index: 1030; background-color: #3F7EFC;">초 기 화</button>
 		</div>
 		<div
 			class="d-flex flex-wrap py-3 px-2 gap-3 align-items-center justify-content-center border-bottom">
@@ -147,7 +147,7 @@
     <img  src="images/marker.png" style="width: 20px; heigth: 20px; margin-left: 65px; "><span style="margin-right: 50px;"> : 승차지 </span>
     <img  src="images/pngwing.png" style="width: 20px; heigth: 20px;"><span> : 하차지</span>
        <select class="btn btn-success"
-      style="width: 180px; height: 38px; background-color: #3F7EFC; margin-left:170px; margin-bottom: -80px;"
+      style="width: 180px; height: 38px; background-color: #3F7EFC; margin-left:px; margin-bottom: -80px;"
       id="cycle" >
       <option value="1">1차 배정</option>
       <option value="2">2차 배정</option>
@@ -155,7 +155,7 @@
     </select> 
     
     <button type="button" class="btn btn-success"
-      style="width: 150px; background-color: #3F7EFC;  margin-bottom: -32.5px;"
+      style="width: 150px; background-color: #3F7EFC;  margin-bottom: -32.5px; margin-left:195px; " 
       onclick="send()" >전 송</button>
 
     <input type="hidden" name="filed_m_id" value="" class="btn btn-success"
@@ -171,12 +171,7 @@
 
 
 
-	<div id="map" class="w-100" style="z-index: 0;"></div>
-
-
-	
-
-
+	<div id="map" class="w-100" style="z-index: 0;">
 	<div
 		class="w-100 h-100 fixed-top justify-content-center align-items-center bg-opacity-10 bg-success"
 		id="spin" style="display: none;">
@@ -184,6 +179,14 @@
 			<span class="visually-hidden">Loading...</span>
 		</div>
 	</div>
+	
+	
+	</div>
+
+
+	
+
+
 
   
 
@@ -663,7 +666,7 @@ function secondsToHoursMinutes(seconds) {
     function drawWhiteLine() {
       // 출발좌표와 마지막출발좌표를 가져옵니다.
       var startIndex = pathIndex;
-      var endIndex = Math.min(pathIndex + 7, linePath.length);
+      var endIndex = Math.min(pathIndex + 5, linePath.length);
       var segment = linePath.slice(startIndex, endIndex);
       // 이전에 그렸던 하얀색 선이 있다면 삭제합니다.
       if (POLYLINE_WHITE) POLYLINE_WHITE.setMap(null);
@@ -671,7 +674,7 @@ function secondsToHoursMinutes(seconds) {
       POLYLINE_WHITE = new kakao.maps.Polyline({
         path: segment,
         strokeWeight: 3, // 선의 두께입니다.
-        strokeColor: 'white', // 선의 색깔입니다.
+        strokeColor: '#FFFFFF', // 선의 색깔입니다.
         strokeOpacity: 1, // 선의 불투명도입니다.
         strokeStyle: 'solid' // 선의 스타일입니다.
       });
