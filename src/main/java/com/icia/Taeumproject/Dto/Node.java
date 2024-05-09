@@ -22,6 +22,11 @@ public class Node {
   private String status;
   private String A_DATE;
   private long D_ID;
+  private String M_PHONE;
+  private String M_NAME;
+  private String A_NAME;
+  private String A_CONTENTS;
+  private Integer A_ID;
 }
 
 

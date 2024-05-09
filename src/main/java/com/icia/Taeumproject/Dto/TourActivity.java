@@ -8,7 +8,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class TourActivity {
-  private int m_id;
+  private Integer A_ID;
   private Integer startNode_id;
   private Integer endNode_id;
   

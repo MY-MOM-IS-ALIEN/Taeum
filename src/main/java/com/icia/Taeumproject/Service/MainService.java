@@ -1,8 +1,5 @@
 package com.icia.Taeumproject.Service;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.icia.Taeumproject.Dao.MainDao;
-import com.icia.Taeumproject.Dto.ApplyDto;
+import com.icia.Taeumproject.Dto.DispatchDto;
 import com.icia.Taeumproject.Dto.DriverDto;
 import com.icia.Taeumproject.Dto.DrivermanagementDto;
 import com.icia.Taeumproject.Dto.Node;
-import com.icia.Taeumproject.Dto.DispatchDto;
 import com.icia.Taeumproject.util.KakaoApiUtil.Point;
 
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +38,7 @@ public class MainService {
   }
 
   
-  public void insertServ(int m_id,String fromAddress,Point startPoint,int sOrE,RedirectAttributes rttr, String string) {
+  public void insertServ(int m_id,String fromAddress,Point startPoint,int sOrE,RedirectAttributes rttr, String string, String string2, String string3, String string4, String string5, int i) {
       log.info("insertServ()");
       Node node = new Node();
       
@@ -57,6 +53,12 @@ public class MainService {
         node.setAddress(fromAddress);
         node.setKind(sOrE);
         node.setA_DATE(aDateAsString);
+        node.setM_PHONE(string3);
+        node.setM_NAME(string2);
+        node.setA_NAME(string4);
+        node.setA_CONTENTS(string5);
+        node.setA_ID(i);
+        
         
         
         mDao.insert(node);
@@ -68,7 +70,11 @@ public class MainService {
         node.setAddress(fromAddress);
         node.setKind(sOrE);
         node.setA_DATE(aDateAsString);
-        
+        node.setM_PHONE(string3);
+        node.setM_NAME(string2);
+        node.setA_NAME(string4);
+        node.setA_CONTENTS(string5);
+        node.setA_ID(i);
         
         mDao.insert(node);
       }
@@ -96,15 +102,6 @@ public class MainService {
     
   }
 
-
-
-  public List<Node> endSelectList() {
-    log.info("endSelectList()");
-    List<Node> endList = mDao.endSelectList();
-    System.out.println(endList);
-    
-    return endList;
-    }
 
   public List<Node> selectNodeList(int rideOne) {
     

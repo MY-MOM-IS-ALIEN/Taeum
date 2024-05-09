@@ -6,7 +6,7 @@
   <insert id="insert" parameterType="Node">
     INSERT INTO NodeTbl
     VALUES (
-     null,#{Address},#{x},#{y},#{M_ID},null,#{kind},null,null,#{A_DATE},null  
+     null,#{Address},#{x},#{y},#{M_ID},null,#{kind},null,null,#{A_DATE},null,#{M_PHONE},#{M_NAME},#{A_NAME},#{A_CONTENTS} ,#{A_ID} 
     )
   </insert>
   
@@ -14,10 +14,6 @@
   <select id="selectList" resultType="Node">
     select *, SQRT(POW(x - 126.675113, 2) + POW(y - 37.438893,2)) AS distance
 FROM NodeTbl ORDER BY distance ASC;
-  </select>
-  
-  <select id="endSelectList" resultType="Node">
-    SELECT * FROM endNodetbl
   </select>
   
 
@@ -58,9 +54,6 @@ FROM NodeTbl ORDER BY distance ASC;
     </selectKey>
 </insert>
   
-
-
-
   <select id="getDispatchList" resultType="dispatchDto">
     SELECT D_ID FROM dispatchtbl WHERE LAST_INSERT_ID();
   </select>
