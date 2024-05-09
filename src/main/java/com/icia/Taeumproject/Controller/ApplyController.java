@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Slf4j
-public class HomeController {
+public class ApplyController {
       @Autowired
       private ApplyService aServ;
       @Autowired
@@ -53,10 +53,10 @@ public class HomeController {
   		}
 
       
-     @GetMapping("ApplyForm")
+     @GetMapping("applyForm")
      public String ApplyForm() {
        
-         return "ApplyForm";
+         return "applyForm";
      }
      
      @PostMapping("ApplyProc")
@@ -87,7 +87,7 @@ public class HomeController {
          return "redirect:/"; // 홈으로 리다이렉트
      }
      
-     @GetMapping("Popup")
+     @GetMapping("popup")
      public String pop(SearchDto sdto , HttpSession session , Model model) {
        
        log.info("pop()");
@@ -107,14 +107,14 @@ public class HomeController {
          aServ.deletePopup(NOTIFICATION_ID);
 
          // 삭제 후 리다이렉트
-         return "redirect:/Popup";
+         return "redirect:/popup";
      }
      
      @PostMapping("alldeletePop")
      public String alldeletePop() {
        nDao.deleteAllNotifications();
        
-       return "redirect:/Popup";
+       return "redirect:/popup";
      }
  }
      

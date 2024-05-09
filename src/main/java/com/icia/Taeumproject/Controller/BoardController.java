@@ -14,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.icia.Taeumproject.Dto.BoardDto;
 import com.icia.Taeumproject.Dto.CommentDto;
+import com.icia.Taeumproject.Dto.SecurityUserDTO;
 import com.icia.Taeumproject.Service.BoardService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -45,9 +46,10 @@ public class BoardController {
 	@PostMapping("bWriteProc")
 	public String bWriteProc(BoardDto board, RedirectAttributes rttr) {
 	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	    String username = authentication.getName(); // 현재 로그인한 사용자의 아이디
+	    Object principal = authentication.getPrincipal();
+	    String username = ((SecurityUserDTO)principal).getM_NAME();
 	    
-	    bServ.bWriteProc(board, rttr, username);
+	    bServ.bWriteProc(board, rttr, username); // username = M_NAME
 	    
 	    // 게시글 작성 후 게시글 목록 페이지로 리다이렉트
 	    return "redirect:/board";

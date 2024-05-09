@@ -125,11 +125,11 @@ public class MemberController {
   }
   
   
-  @GetMapping("UserUpdate")
+  @GetMapping("userUpdate")
   public String UserUpdate() {
 	  log.info("UserUpdate()");
 	  
-	  return "/UserUpdate";
+	  return "/userUpdate";
   }
   
   @PostMapping("UserUpdateProc")
