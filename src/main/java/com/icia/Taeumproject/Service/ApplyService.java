@@ -63,49 +63,54 @@ public class ApplyService {
   private TransactionDefinition definition;
 
   public void updateApplyStatusWithNodeList(SearchDto sdto, int m_id, int page, int size, Model model) {
-   
-	// 노드 리스트 가져오기
-    List<Node> nodeList = maDao.getNodeList(m_id);
+	   
+		// 노드 리스트 가져오기
+	    List<Node> nodeList = maDao.getNodeList(m_id);
 
-    int offset = (page - 1) * size;
-    
-    // 신청 리스트 가져오기
-    List<ApplyDto> applyList = aDao.getApplyList(m_id, offset, size);
+	    int offset = (page - 1) * size;
+	    
+	    // 신청 리스트 가져오기
+	    List<ApplyDto> applyList = aDao.getApplyList(m_id, offset, size);
 
-    // 노드 내역을 맵으로 변환하여 효율적으로 검색하기
-    Map<String, Integer> nodeStatusMap = new HashMap<>(); // 상태를 정수로 저장할 맵으로 수정
-    for (Node node : nodeList) {
-      String key = node.getM_ID() + "-" + node.getA_DATE(); // M_ID와 A_DATE를 조합하여 고유한 키 생성
-      // 노드 내역의 M_ID와 A_DATE를 키로, 상태를 정수로 변환하여 맵에 추가
-      int status = 0; // 기본값 설정
-      if (node.getStatus() != null && !node.getStatus().isEmpty()) {
-        try {
-          status = Integer.parseInt(node.getStatus());
-        } catch (NumberFormatException e) {
-          // 예외 처리
-          e.printStackTrace(); // 혹은 다른 처리 방법을 선택
-        }
-      }
-      nodeStatusMap.put(key, status);
-    }
-    // 신청 리스트의 각 항목에 대해 처리
-    for (ApplyDto apply : applyList) {
-      String key = apply.getM_ID() + "-" + apply.getA_DATE(); // 신청 내역의 M_ID와 A_DATE를 조합하여 키 생성
-      if (nodeStatusMap.containsKey(key)) { // 해당하는 노드 내역이 있는 경우
-        // 해당 신청 내역의 status 값을 노드 내역의 status 값으로 설정
-        apply.setSTATUS(nodeStatusMap.get(key));
-      }
-    }
-    int applyCnt = aDao.selectAplCnt(sdto);
-    
-    int totalPages = (int) Math.ceil((double) applyCnt / size);
-    
-    // 처리된 신청 리스트를 모델에 추가
-    model.addAttribute("applyList", applyList);
-    model.addAttribute("applyCount", applyCnt); // 전체 신청 수
-    model.addAttribute("totalPages", totalPages); // 전체 페이지 수
-    
-  }
+	    // 노드 내역을 맵으로 변환하여 효율적으로 검색하기
+	    Map<String, Integer> nodeStatusMap = new HashMap<>(); // 상태를 정수로 저장할 맵으로 수정
+	    for (Node node : nodeList) {
+	      String key = node.getM_ID() + "-" + node.getA_DATE(); // M_ID와 A_DATE를 조합하여 고유한 키 생성
+	      // 노드 내역의 M_ID와 A_DATE를 키로, 상태를 정수로 변환하여 맵에 추가
+	      int status = 0; // 기본값 설정
+	      if (node.getStatus() != null && !node.getStatus().isEmpty()) {
+	        try {
+	          status = Integer.parseInt(node.getStatus());
+	        } catch (NumberFormatException e) {
+	          // 예외 처리
+	          e.printStackTrace(); // 혹은 다른 처리 방법을 선택
+	        }
+	      }
+	      nodeStatusMap.put(key, status);
+	    }
+	    // 신청 리스트의 각 항목에 대해 처리
+	    for (ApplyDto apply : applyList) {
+	      String key = apply.getM_ID() + "-" + apply.getA_DATE(); // 신청 내역의 M_ID와 A_DATE를 조합하여 키 생성
+	      if (nodeStatusMap.containsKey(key)) { // 해당하는 노드 내역이 있는 경우
+	        // 해당 신청 내역의 status 값을 노드 내역의 status 값으로 설정
+	        apply.setSTATUS(nodeStatusMap.get(key));
+	      }
+	    }
+	    int applyCnt = aDao.selectAplCnt(sdto);
+	    
+	    int totalPages = (int) Math.ceil((double) applyCnt / size);
+	    int prevPage = Math.max(page - 1, 1);
+	    int nextPage = Math.min(page + 1, totalPages);
+	    
+	    // 처리된 신청 리스트를 모델에 추가
+	    model.addAttribute("applyList", applyList);
+	    model.addAttribute("applyCount", applyCnt); // 전체 신청 수
+	    model.addAttribute("totalPages", totalPages); // 전체 페이지 수
+	    model.addAttribute("prevPage", prevPage);
+	    model.addAttribute("nextPage", nextPage);
+	    
+	  }
+
 
 //게시글 , 회원가입
   @Transactional

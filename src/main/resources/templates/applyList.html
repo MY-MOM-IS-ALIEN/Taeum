@@ -67,24 +67,28 @@
 			<br>
 			<!-- applyList end -->
 			<div class="pagination">
-				<div>
+				<div class="page-button1">
 					<!-- 이전 페이지로 이동하는 링크 -->
-					<span th:if="${page > 1}">
-						<a th:href="@{/applyList(page=${page - 1}, size=${size})}">이전</a>
+					<span th:if="${prevPage > 0}"> <a
+						th:href="@{/applyList(page=${prevPage})}"> << </a>
 					</span>
+				</div>
 
+				<div class="page-numbering">
 					<!-- 페이지 번호를 표시하는 링크 -->
-					<span th:each="pageNum : ${#numbers.sequence(1, totalPages)}">
-						<a th:href="@{/applyList(page=${pageNum}, size=${size})}"
-						th:text="${pageNum}"></a>
-					</span> 
-					
+					<span class="span-page-numbering" th:each="pageNum : ${#numbers.sequence(1, totalPages)}"
+						th:text="${pageNum}"></span>
+				</div>
+
+				<div class="page-button2">
 					<!-- 다음 페이지로 이동하는 링크 -->
-					<span th:if="${page != null}">
-						<a th:href="@{/applyList(page=${page + 1}, size=${size})}">다음</a>
+					<span th:if="${nextPage <= totalPages}"> <a
+						th:href="@{/applyList(page=${nextPage})}"> >> </a>
 					</span>
 				</div>
 			</div>
+
+
 		</div>
 	</section>
 	<th:block th:insert="~{fragments :: footer}" />
