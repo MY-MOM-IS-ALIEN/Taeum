@@ -11,8 +11,20 @@
         SELECT * FROM boardtbl ORDER BY B_DATE DESC;
     </select>
     
-    <select id="boardDetail" resultType="BoardDto">
-     	select *from boardtbl where B_ID=#{b_id}
+    <select id="getBoardById" resultType="BoardDto">
+     	select *from boardtbl where B_ID=#{id}
     </select>
     
+    <select id="getComments" resultType="CommentDto">
+    	select *from commentTbl where B_ID=#{id}
+    </select>
+    
+    <insert id="insertComment" parameterType="CommentDto">
+		 INSERT INTO commentTbl
+		  VALUES(#{C_ID},#{B_ID},#{C_CONTENTS},DEFAULT,#{M_ID})
+	</insert>
+	<delete id="cancelComment" parameterType="int" >
+        DELETE FROM commentTbl WHERE C_ID = #{c_ID}
+    </delete>
+	
 </mapper>

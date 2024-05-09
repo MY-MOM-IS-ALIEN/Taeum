@@ -49,11 +49,7 @@
      </svg>
 			<span class="fs-5 fw-semibold">경로 최적화 결과</span>
 			<button id="undoButton" class="btn btn-success"
-<<<<<<< HEAD
                 style="margin-left: 40px; top: 15px; right: 20px; z-index: 1030; background-color: #3F7EFC;">뒤 로 가 기</button>
-=======
-                style="margin-left: 20px; top: 15px; right: 20px; z-index: 1030; background-color: #3F7EFC;">뒤 로 가 기</button>
->>>>>>> refs/remotes/origin/amw_0508
 		</div>
 		<div
 			class="d-flex flex-wrap py-3 px-2 gap-3 align-items-center justify-content-center border-bottom">
@@ -103,24 +99,15 @@
 							<div class="d-flex align-items-center justify-content-between">
 								<div class="d-flex align-items-center">
 									<span
-<<<<<<< HEAD
 										class="badge text-bg-light border border-secondary-subtle me-2">신청자</span>
 									<span id="M_NAME" th:text="${node.m_NAME}"></span>
-=======
-										class="badge text-bg-light border border-secondary-subtle me-2">성함</span>
-									<span id="M_NAME" ></span>
->>>>>>> refs/remotes/origin/amw_0508
 									<span class="node_mid"  th:text="${node.m_ID}" hidden></span>
 								</div>
 								<div class="d-flex align-items-center">
 									<span
 										class="badge text-bg-light border border-secondary-subtle me-2">전화번호</span>
 									<span th:text="${node.node_id}" id="bechaList" hidden></span>
-<<<<<<< HEAD
 									<span  id="M_PHONE" th:text="${node.m_PHONE}"></span>  <span
-=======
-									<span  id="M_PHONE" ></span>  <span
->>>>>>> refs/remotes/origin/amw_0508
 										 class="ride" th:text="${node.kind}" hidden></span>
 								</div>
 								<div class="d-flex align-items-center"></div>
@@ -148,14 +135,6 @@
                 </div>
 
 
-                <div class="d-flex align-items-center" style="margin-top: 20px;">
-                  <span
-                    class="badge text-bg-light border border-secondary-subtle me-2">특이사항</span>
-                  <span id="A_CONTETNS"></span> <span
-                    class="ride" th:text="${node.kind}" hidden></span>
-                </div>
-
-
 						</div>
 					</a>
 				</th:block>
@@ -179,35 +158,12 @@
       style="width: 150px; background-color: #3F7EFC;  margin-bottom: -32.5px;"
       onclick="send()" >전 송</button>
 
-<<<<<<< HEAD
     <input type="hidden" name="filed_m_id" value="" class="btn btn-success"
       style="position: fixed; top: px; right: 300px; z-index: 1030;">
     
   
   </form>
 </div>
-=======
-  <form id="deliveryForm" action="updateDelivery" method="post">
-       <select class="btn btn-success"
-      style="width: 180px; background-color: #3F7EFC; margin-left:15px; margin-bottom: -32.5px;"
-      id="cycle" >
-      <option value="1">1차 배정</option>
-      <option value="2">2차 배정</option>
-      <option value="3">3챠 배정</option>
-    </select> 
-    
-    
-    <button type="button" class="btn btn-success"
-      style="width: 150px; background-color: #3F7EFC; margin-left: 10px; margin-bottom: -32.5px;"
-      onclick="send()" >전 송</button>
-
-    <input type="hidden" name="filed_m_id" value="" class="btn btn-success"
-      style="position: fixed; top: px; right: 300px; z-index: 1030;">
-    
-  
-  </form>
-
->>>>>>> refs/remotes/origin/amw_0508
 		<div class="d-flex align-items-center justify-content-center p-3">
 			<button type="button" class="btn btn-dark w-100" onclick="goVrp()" style="background-color: #3F7EFC;">경로 최적화</button>
 		</div>
@@ -215,7 +171,7 @@
 
 
 
-	<div id="map" class="w-100"></div>
+	<div id="map" class="w-100" style="z-index: 0;"></div>
 
 
 	
@@ -451,13 +407,8 @@ function spinOn() {
  
 	   selectedMIds.push(nodeId); // 배열에 선택한 m_id를 추가합니다.
        updateMIdInput(selectedMIds.join(', ')); 
-<<<<<<< HEAD
          
        
-=======
-          console.log("addConnectedMarker 불통과 = ");
-          console.log(nodeId);
->>>>>>> refs/remotes/origin/amw_0508
         
        // nodeList에서 'm_id'가 nodeMId인 노드들을 찾습니다.
        const connectedNodes = nodeList.filter(node => parseInt(node.m_ID) === parseInt(nodeMId) && parseInt(node.kind) === 2
@@ -547,23 +498,11 @@ function displayData(data) {
         </div>
         <div class="mt-3 small">
         <div class="d-flex align-items-center justify-content-between">
-<<<<<<< HEAD
-=======
-         <div class="d-flex align-items-center"><span class="badge text-bg-light border border-secondary-subtle me-2">m_id</span> <span id="node.m_ID">${node.m_ID}</span></div>
->>>>>>> refs/remotes/origin/amw_0508
           <div class="d-flex align-items-center"><span class="badge text-bg-light border border-secondary-subtle me-2">출발 / 도착</span> 
-<<<<<<< HEAD
           ${node.kind == 1 ? '<span style="margin-right: 20px;" >승차지  </span>' : '<span style="margin-right: 20px;" >하차지 </span>'}
          <div class="d-flex align-items-center"><span class="badge text-bg-light border border-secondary-subtle me-2">탑승자</span> <span id="node.m_ID">${node.a_NAME}</span></div>
-=======
-          ${node.kind == 1 ? '<span>출발지</span>' : '<span>도착지</span>'}
->>>>>>> refs/remotes/origin/amw_0508
           </div>
-<<<<<<< HEAD
         
-=======
-          <div class="d-flex align-items-center"><span class="badge text-bg-light border border-secondary-subtle me-2">배정 기사</span> <span>${node.dr_ID}</span></div>
->>>>>>> refs/remotes/origin/amw_0508
             </div>
             <div class="d-flex align-items-center"><span class="badge text-bg-light border border-secondary-subtle me-2">신청자 전화번호</span> <span>${node.m_PHONE}</span></div>
           </div>
@@ -808,26 +747,9 @@ function secondsToHoursMinutes(seconds) {
   
       }
      
-<<<<<<< HEAD
   
       
       
-=======
-      /* 모델로부터 memberList 가져오기 */
-      var memberList = [[${memberList}]]; 
-     
-     /* 각 span의 id에 해당하는 요소를 찾아 텍스트 설정 */
-      memberList.forEach(function(member) {
-         // 이름 설정
-         document.getElementById('M_NAME').textContent = member.m_NAME;
-         
-         // 전화번호 설정
-         document.getElementById('M_PHONE').textContent = member.m_PHONE;
-         
-         // 특이사항 설정
-         document.getElementById('A_CONTETNS').textContent = member.a_CONTENTS;
-     });  
->>>>>>> refs/remotes/origin/amw_0508
 
 </script>
 

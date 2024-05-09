@@ -1,5 +1,6 @@
 package com.icia.Taeumproject.Controller;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +55,6 @@ public class DriverController {
 		log.info("m_id: {}", m_id);
 		
 		drServ.getDriverInfo(m_id, model);
-		System.out.println("엉엉엉" + model);
 
 		return "driverModify";
 	}
@@ -93,28 +93,28 @@ public class DriverController {
 
 	@PostMapping("driverUpdateProc")
 	public String driverUpdateProc(List<MultipartFile> files, DriverDto driver, RedirectAttributes rttr,
-			HttpSession session) {
-		log.info("driverUpdateProc()");
-		String view = null;
+	        HttpSession session, Principal principal) {
+	    log.info("driverUpdateProc()");
+	    String view = null;
 
-		MemberDto member = new MemberDto();
-		int mid = driver.getM_ID();
-		String m_name = driver.getM_NAME();
-		String m_phone = driver.getM_PHONE();
-		member.setM_ID(mid);
-		member.setM_NAME(m_name);
-		member.setM_PHONE(m_phone);
+	    MemberDto member = new MemberDto();
+	    int mid = driver.getM_ID();
+	    String m_name = driver.getM_NAME();
+	    String m_phone = driver.getM_PHONE();
+	    member.setM_ID(mid);
+	    member.setM_NAME(m_name);
+	    member.setM_PHONE(m_phone);
 
-		// 기사 정보 업데이트
-		mServ.DriveMemberUpdate(member);
+	    // 기사 정보 업데이트
+	    mServ.DriveMemberUpdate(member);
 
-		// 프로필 이미지 업데이트
-		drServ.updateDriverProfile(mid);
+	    // 프로필 이미지 업데이트
+	    drServ.updateDriverProfile(mid);
 
-		// 그 외 업데이트 처리
-		view = drServ.driverUpdateProc(files, driver, rttr, session);
+	    // 그 외 업데이트 처리
+	    view = drServ.driverUpdateProc(files, driver, rttr, session, principal);
 
-		return view;
+	    return view;
 	}
 
 

@@ -17,13 +17,14 @@
 			slideWidth : 600
 		// Slide width
 		});
-
-		// Message handling
-		const msg = null;
-		if (msg != null) {
-			alert(message);
-		}
 	});
+	
+		$(function() {
+		    const msg = /*[[${msg}]]*/null;
+		    if (msg != null) {
+		      alert(msg);
+		    }
+		  });
 
 	function redirectToLoginForm() {
 		window.location.href = '/loginForm';
@@ -39,14 +40,9 @@
 		window.location.href = '/joinForm';
 	}
 	function redirectToApplyForm() {
-		window.location.href = 'ApplyForm';
+		window.location.href = 'applyForm';
 	}
-	$(function() {
-	    const msg = /*[[${msg}]]*/null;
-	    if (msg != null) {
-	      alert(msg);
-	    }
-	  });
+
 </script>
 
 <th:block th:insert="~{fragments::header}" />
@@ -57,9 +53,6 @@
 			<div class="slider">
 				<div>
 					<img src="images/markus-winkler-3vlGNkDep4E-unsplash.jpg">
-				</div>
-				<div>
-					<img src="images/martin-kallur-ig-mkallur-l4m_o4aFOn8-unsplash.jpg">
 				</div>
 				<div>
 					<img src="images/mealpro-uFIfEb-fPA4-unsplash.jpg">

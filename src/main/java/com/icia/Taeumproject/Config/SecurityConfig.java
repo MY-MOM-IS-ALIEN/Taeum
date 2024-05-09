@@ -57,7 +57,7 @@ public class SecurityConfig{
       .requestMatchers("/loginProc","/joinProc").permitAll()// "/","/login" 모든 사용자 접근
       .requestMatchers("/loginProc").permitAll()// "/","/login" 모든 사용자 접근
       .requestMatchers("/joinForm").permitAll()
-      .requestMatchers("/ApplyForm").hasRole("USER")
+      .requestMatchers("/applyForm").hasRole("USER")
       .requestMatchers("/fragments").permitAll()
       .requestMatchers("/emailCheck").permitAll()
       .requestMatchers("/ApplyProc").hasRole("USER")

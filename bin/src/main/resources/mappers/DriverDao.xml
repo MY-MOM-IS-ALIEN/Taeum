@@ -113,16 +113,6 @@
 		STATUS='2' where DR_ID=#{DR_ID} and D_ID=#{D_ID}
 	</update>
 
-	<select id="getDrId" parameterType="Integer"
-		resultType="Integer">
-		SELECT dt.dr_id
-		FROM drivertbl dt JOIN membertbl mt
-		ON
-		dt.m_id = mt.m_id
-		WHERE
-		mt.m_id = #{m_id}
-	</select>
-
 	<insert id="insertCommute" parameterType="Integer">
 		INSERT INTO
 		drivermanagement

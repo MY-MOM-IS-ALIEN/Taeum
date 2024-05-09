@@ -6,44 +6,100 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Taeum</title>
 <!-- External libraries -->
-<script src="js/jquery-3.7.1.min.js"></script>
+<script src="/js/jquery-3.7.1.min.js"></script>
 <script
 	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <!-- Bootstrap CSS -->
-
+<!-- Bootstrap CSS -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <!-- CSS styles -->
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="/css/style.css">
 <!-- Include header fragment -->
 <th:block th:insert="~{fragments :: header}" />
 </head>
 
-<body style= background-color:#f5f6f7;>
-        <h1 class="bw-h1">게시판 작성</h1>
-		
-        <div class='b-write'>
-				<input type="hidden" name="B_ID">
-                <input type="text" class='b-write-1' name="B_TITLE" th:value="${board.B_TITLE}" readonly>
-                <hr class="bw-hr">
-                <textarea class="b-write-2" name="B_CONTENTS" th:value="{board.B_CONTENTS}"readonly></textarea>
-                <hr>
-                 <input type="hidden" name="M_ID" th:value="${#authentication.principal != null ? #authentication.principal.M_ID : ''}">
-      
-                 <input class="b-write-5" type="button" value="돌아가기" id="backbtn">
-  
-        </div><!-- b-write End -->
-        
-    </body>
-</html>
- 
+<body style="background-color: #f5f6f7;">
+	<h1 class="bw-h1">게시글</h1>
+
+	<div class="b-write">
+		<div class="b-write-form">
+			<input type="hidden" name="B_ID" th:value="${boardDto.B_ID}">
+			<input type="text" class="b-write-1" name="B_TITLE"
+				th:value="${boardDto.B_TITLE}" readonly>
+			<hr class="bw-hr">
+			<textarea class="b-write-6" name="B_CONTENTS" readonly
+				th:text="${boardDto.B_CONTENTS}"></textarea>
+			<hr>
+			<input type="hidden" name="M_ID"
+				th:value="${#authentication.principal?.M_ID}"> <input
+				class="b-write-5" type="button" value="돌아가기" id="backbtn">
+		</div>
+	</div>
+	<!-- b-write End -->
+
+	<div>
+	<!-- 댓글 -->
+<div class="card-body">
+    <form th:action="@{/commentProc}" class="form-horizontal" method="post">
+        <div class="row text-center" style="margin-left:30%">
+            <input type="hidden" name="B_ID" th:value="${boardDto.B_ID}">
+            <input type="hidden" name="M_ID" class="form-control input-sm" id="newReplyWriter"
+                th:value="${#authentication.principal != null ? #authentication.principal.M_ID : ''}">
+            <div class="form-group col-sm-6">
+                <input class="form-control input-sm" name="C_CONTENTS" id="newReplyText" type="text"
+                    placeholder="댓글 입력...">
+            </div>
+            <div class="form-group col-sm-1">
+                <button type="submit" class="btn btn-primary btn-sm btn-block replyAddBtn">
+                    <i class="fa fa-save"></i> 저장
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- card-body End -->
 
 
+
+		<!-- 댓글 목록 -->
+		<div class="comment-list">
+			<!-- 댓글 하나를 나타내는 부분 -->
+			<div class="post replyDiv" th:each="comment : ${comments}">
+				<div class="user-block">
+
+					<div class="oldReplyText">
+						<span th:text="${comment.C_CONTENTS}"></span>
+					</div>
+
+					<span class="username"> <span th:text="${comment.M_ID}"></span>
+						<span th:text="${comment.C_DATE}"></span>
+					</span>
+				</div>
+					<!-- 삭제 버튼 -->
+			<div class="cancel-button">
+				<form action="/cancelComment" method="post">
+					<input type="hidden" name="C_ID" th:value="${comment.C_ID}" />
+					<input type="hidden" name="B_ID" th:value="${comment.B_ID}" />
+					<button type="submit" onclick="return confirm('삭제 하시겠습니까?')">삭제</button>
+				</form>
+			</div>
+			<!-- 취소 버튼 end -->
+			</div><!-- post replyDiv -->
+		</div>	<!-- comment-list End -->
+	
+
+
+
+	</div>
+	<!-- 댓글 End-->
 	<th:block th:insert="~{fragments::footer}" />
 
 	<script th:inline="javascript">
-	 $("#backbtn").click(function(){
-	        let url = "/";
-	        location.href = url;
-	    });
+		$("#backbtn").click(function() {
+			let url = "/board";
+			location.href = url;
+		});
 	</script>
 
 </body>
