@@ -20,7 +20,11 @@ public interface BoardDao {
 	List<CommentDto> getComments(int id);
 	// 댓글 작성하기
 	void insertComment(CommentDto comment);
-
+	// 댓글 삭제
 	void cancelComment(int c_ID);
+	// 게시글 삭제
+	void cacelBoard(int b_ID);
+	// 게시글에 대한 모든 댓글 삭제
+	void cancelCommentAll(int b_ID);
 	
 }

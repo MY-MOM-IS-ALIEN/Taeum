@@ -39,7 +39,16 @@
 			<hr>
 			<input type="hidden" name="M_ID"
 				th:value="${#authentication.principal?.M_ID}"> 
-				<input class="b-write-5" type="button" value="돌아가기" id="backbtn">
+				<div class="btn2">
+				<input class="b-write-back" type="button" value="돌아가기" id="backbtn">
+				<!-- 게시글 삭제 버튼 -->
+			<div th:if="${#authorization.expression('hasRole(''ADMIN'')') or boardDto.M_ID == #authentication.principal?.M_ID}">
+				<form action="/cancelBoard" method="post">
+					<input type="hidden" name="B_ID" th:value="${boardDto.B_ID}" />
+					<button class="board-delete-btn" type="submit" onclick="return confirm('게시글을 삭제하시겠습니까?')">게시글 삭제</button>
+				</form>
+			</div>
+			</div><!-- button -->
 		</div>
 	</div>
 	<!-- b-write End -->
