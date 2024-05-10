@@ -1377,3 +1377,10 @@ a:visited {
 .span-page-numbering{
 	padding: 10px 10px;
 }
+
+.abc {
+	margin-top: 10px;
+}
+.customClass{
+	margin-bottom: 10px;
+}

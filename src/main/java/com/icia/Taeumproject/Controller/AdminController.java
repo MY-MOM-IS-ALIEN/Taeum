@@ -167,7 +167,7 @@ public String GetDriverImage(int M_ID, Model model) {
     log.info("nodeSelection()");
 
     List<Node> nodeList = maServ.selectNodeArea(address, selectDate);
-
+    System.out.println(nodeList);
     model.addAttribute("drID", drID);
     model.addAttribute("dr_AREA", address);
     // 날짜 모델에 추가되어야함
