@@ -6,7 +6,7 @@
   <insert id="insert" parameterType="Node">
     INSERT INTO NodeTbl
     VALUES (
-     null,#{Address},#{x},#{y},#{M_ID},null,#{kind},null,null,#{A_DATE},null,#{M_PHONE},#{M_NAME},#{A_NAME},#{A_CONTENTS} ,#{A_ID} 
+     null,#{Address},#{x},#{y},#{M_ID},null,#{kind},null,'0',#{A_DATE},null,#{M_PHONE},#{M_NAME},#{A_NAME},#{A_CONTENTS} ,#{A_ID} 
     )
   </insert>
   
@@ -81,7 +81,7 @@ FROM NodeTbl ORDER BY distance ASC;
     
     <delete id="cancelNode" parameterType="map">
     	DELETE FROM NodeTbl
-    	WHERE M_Id = #{m_Id} AND A_Date = #{a_Date}
+    	WHERE M_Id = #{m_Id} AND A_Date = #{a_Date} AND A_NAME = #{A_NAME}
 	</delete>
 	
 	<select id="selectNodeListToday" resultType="Node">

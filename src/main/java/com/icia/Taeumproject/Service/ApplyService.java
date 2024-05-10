@@ -124,7 +124,7 @@ public class ApplyService {
 
     try {
       // 중복 체크: 이미 해당 시간에 같은 탑승자의 신청이 있는지 확인
-      if (isDuplicateApply(apply.getM_ID(), apply.getA_DATE())) {
+      if (isDuplicateApply(apply.getM_ID() ,apply.getA_NAME(), apply.getA_DATE())) {
         msg = "이미 해당 시간에 같은 탑승자의 신청이 있습니다.";
         rttr.addFlashAttribute("msg", msg);
         view = "redirect:/";
@@ -189,11 +189,11 @@ public class ApplyService {
   }
 
   // 신청 중복 확인
-  private boolean isDuplicateApply(int M_ID, String a_DATE) {
+  private boolean isDuplicateApply(int M_ID,String A_NAME ,String a_DATE) {
 
     log.info("Formatted Date: {}", a_DATE);
     // DAO를 통해 변환된 문자열과 다른 파라미터들로 데이터베이스에서 중복 체크 수행
-    return aDao.sDuplicateApply(M_ID, a_DATE);
+    return aDao.sDuplicateApply(M_ID, A_NAME ,a_DATE);
   }
 
   public String getApply(int A_ID, Model model) {
@@ -204,10 +204,10 @@ public class ApplyService {
   }
 
   // 신청 삭제
-  public void cancelApply(int A_Id, int M_Id, String A_Date) {
+  public void cancelApply(int A_Id, int M_Id, String A_NAME ,String A_Date) {
     log.info("cancelApply");
     aDao.cancelApply(A_Id);
-    maDao.cancelNode(M_Id,A_Date);
+    maDao.cancelNode(M_Id,A_NAME,A_Date);
   
 
   }

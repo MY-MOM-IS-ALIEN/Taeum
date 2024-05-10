@@ -17,7 +17,7 @@ public interface ApplyDao {
 	ApplyDto selectApplyCnt(int a_ID);
 
 	// 중복 신청 체크
-	boolean sDuplicateApply(int m_ID, String formattedDate);
+	boolean sDuplicateApply(int m_ID,String A_NAME ,String formattedDate);
 
 	// 사용자 신청 내역 가져오기
 	List<ApplyDto> getApplyList(@Param("m_id") int m_id, @Param("offset") int offset, @Param("size") int size);

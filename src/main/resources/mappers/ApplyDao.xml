@@ -19,6 +19,8 @@
 		WHERE M_ID = #{m_ID}
 		AND
 		A_DATE = #{formattedDate}
+		AND
+		A_NAME = #{A_NAME}
 	</select>
 
 	<select id="getApplyList" parameterType="int"
