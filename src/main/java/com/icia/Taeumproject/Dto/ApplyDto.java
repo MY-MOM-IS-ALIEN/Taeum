@@ -31,3 +31,7 @@ public class ApplyDto {
   private Integer STATUS;
   
 }
+
+
+
+
