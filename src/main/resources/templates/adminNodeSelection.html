@@ -77,8 +77,10 @@
 		  <span type="text" class="fs-5 fw-semibold"  th:text="${dr_}"></span>
 		</div>
 			<div th:each="node, count : ${nodeList}" class="abc">
-			
-				<th:block th:if="${node.kind == 1 && (node.status == '0' || node.status == '2')}">
+
+				
+				<th:block th:if="${node.kind == 1 && (node.status == '2' || node.status == '0')}">
+
 				
        
 					<a href="#" id="bechaList"
