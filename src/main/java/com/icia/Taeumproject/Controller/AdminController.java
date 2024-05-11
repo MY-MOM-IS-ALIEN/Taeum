@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -117,10 +118,11 @@ public String GetDriverImage(int M_ID, Model model) {
 
 
 	  @PostMapping("updateDelivery")
+	  @ResponseBody
 	  public String updateDelivery(String ride , String node_id, Integer cycle, String dateTime, String selectedTime) {
 	    log.info("updateDeliveryPROC");
-	    int status = 0;
 	    String statusStr = "0";
+	    String msg = null;
 	    if (ride == null || node_id == null) {
 	      // ride 또는 m_id가 null인 경우에 대한 처리
 	      System.out.println("ride = " + ride);
@@ -135,30 +137,53 @@ public String GetDriverImage(int M_ID, Model model) {
 	      DispatchDto dto = new DispatchDto();
 	      System.out.println("dateTimedateTimedateTimedateTimedateTimedateTime = " + dateTime);
 	      
+	      dto.setCycle(0);
 	      dto.setD_SELECT(dateTime);
 	      dto.setD_STATUS(statusStr);
 	      dto.setDR_ID(ridding);
 	      dto.setD_DATE(selectedTime);
 	      maServ.isnertConfirm(dto);
-          
-	      long D_ID = dto.getD_ID();
-	      System.out.println("D_IDD_IDD_IDD_IDD_IDD_IDD_IDD_ID + " + D_ID);
-	   
 	      
-	      for (String num : numbersAsString) {
-	          Integer nodeId = Integer.parseInt(num);
-	          Integer riding = Integer.parseInt(ride);
-	          
-	          maServ.updateDelivery(riding, nodeId, cycle, statusStr, D_ID);
-	      }
+	      List<DispatchDto> getDispatchDtos = maServ.getUpdateDelivery(selectedTime, ridding);
+	    	      System.out.println("getDispatchDtosgetDispatchDtosgetDispatchDtos = " + getDispatchDtos);
+	    	      if(getDispatchDtos.size() == 1) {
+	    	        maServ.updateConfirm(ridding,selectedTime, cycle);
+	    	      }else {
+	        for(int i = 0; i<getDispatchDtos.size(); i++) {
+	          if(getDispatchDtos.get(i).getCycle() == 1) {
+	            System.out.println("cycle 1 번 통과");
+	            msg = "해당날짜에 이미 선정된 배차 상태가 존재합니다.";
+	            maServ.deleteConfirm(ridding,selectedTime, 0);
+	          }else if(getDispatchDtos.get(i).getCycle() == 2) {
+	             msg = "해당날짜에 이미 선정된 배차 상태가 존재합니다.";
+	            maServ.deleteConfirm(ridding,selectedTime, 0);
+	            System.out.println("cycle 2 번 통과");
+	          }else if(getDispatchDtos.get(i).getCycle() == 3) {
+	             msg = "해당날짜에 이미 선정된 배차 상태가 존재합니다.";
+	            maServ.deleteConfirm(ridding,selectedTime, 0);
+	            System.out.println("cycle 3 번 통과");
+	          }else {  
+	            System.out.println("else문 통과 통과");
+	            List<DispatchDto> getDispatchList = maServ.getUpdateDelivery(selectedTime, ridding);
+	           
+	            if(getDispatchDtos.size() == getDispatchList.size()) {
+	              maServ.updateConfirm(ridding,selectedTime, cycle);
+	              msg = "배차 선정 성공";
+	            long D_ID = dto.getD_ID();
+	            for (String num : numbersAsString) {
+	              Integer nodeId = Integer.parseInt(num);
+	              Integer riding = Integer.parseInt(ride);
+	              
+	            maServ.updateDelivery(riding, nodeId, cycle, statusStr, D_ID);
+	            }
+	            }
+	          }
+	        }
+	    	      }
+	     System.out.println(msg);
 	     
 	  }
-
- 
-    
-   
-
-  return "adminDriverList";
+  return msg;
 }
 
   @GetMapping("adminNodeSelection")

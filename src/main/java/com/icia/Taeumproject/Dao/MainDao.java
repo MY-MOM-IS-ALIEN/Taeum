@@ -69,6 +69,18 @@ public interface MainDao {
 
 
 
+  public List<DispatchDto> getUpdateDelivery(String selectedTime, int ride);
+
+
+
+  public void deleteConfirm(int ride, String selectedTime, int i);
+
+
+
+  public void updateConfirm(int ride, String selectedTime, Integer cycle);
+
+
+
 
 
 
