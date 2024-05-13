@@ -134,7 +134,7 @@ public class ApplyService {
 
         // 게시글 저장
         apply.setSTATUS(0); // 0 배차중, 1 수락, 2 거절
-     aDao.insertApply(apply);
+        aDao.insertApply(apply);
      
         // 발신자 정보 조회
         MemberDto user = mDao.findUserByEmail(username);

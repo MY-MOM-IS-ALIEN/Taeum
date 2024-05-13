@@ -74,7 +74,7 @@ public class ApplyController {
             
          }
          
-         return view;
+         return "redirect:/applyList";
      }
      
      @PostMapping("/cancelApply")
@@ -84,6 +84,7 @@ public class ApplyController {
     		 			@RequestParam("A_NAME") String A_NAME,
     		 				RedirectAttributes redirectAttributes) {
          log.info("cancelApply");
+
          aServ.cancelApply(A_Id,M_Id,A_NAME,A_Date);
          return "redirect:/"; // 홈으로 리다이렉트
      }

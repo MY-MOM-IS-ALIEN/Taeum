@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.icia.Taeumproject.Dto.MemberDto;
+import com.icia.Taeumproject.Dto.SecurityUserDTO;
 import com.icia.Taeumproject.Service.MemberService;
 
 import jakarta.servlet.http.HttpSession;
@@ -144,6 +145,29 @@ public class MemberController {
 	    
 	  return mServ.userUpdate(M_NAME,M_PHONE,principal,rttr,session);
   }
+  
+  @GetMapping("withDrawal")
+  	public String withDrawal(RedirectAttributes rttr,HttpSession session) {
+	  Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		Object principal = authentication.getPrincipal();
+		int m_id = ((SecurityUserDTO) principal).getM_ID();
+		log.info("m_id: {}", m_id);
+	  	mServ.withDrawal(m_id,rttr,session);
+	  
+	  return "redirect:/";
+  }
+  
+	/*
+	 * @GetMapping("deleteMember") public String deleteMember() { Authentication
+	 * authentication = SecurityContextHolder.getContext().getAuthentication();
+	 * 
+	 * // 로그인 시 정보 가져오기 Object principal = authentication.getPrincipal(); int m_id =
+	 * ((SecurityUserDTO) principal).getM_ID(); log.info("m_id: {}", m_id);
+	 * 
+	 * mServ.withDrawal(m_id,rttr,session); }
+	 */
+  
 
 }
 

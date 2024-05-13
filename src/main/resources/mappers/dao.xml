@@ -87,5 +87,10 @@ FROM NodeTbl ORDER BY distance ASC;
 	<select id="selectNodeListToday" resultType="Node">
 		select * from nodetbl where DR_ID=#{dR_ID} AND A_DATE LIKE CONCAT('%', #{formattedDate}, '%');
 	</select>
+	<!--  탈퇴 회원 노드 삭제 -->
+	 <delete id="withDrawal" parameterType="int">
+    	DELETE FROM NodeTbl
+    	WHERE M_Id = #{m_Id} 
+	</delete>
   
 </mapper>
