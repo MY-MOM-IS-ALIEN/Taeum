@@ -48,7 +48,9 @@
 								</div>
 								<div class="apply-info">
 									배차상태: <span 
+
 									th:text="${apply.STATUS == 0 ? '배차 중' : (apply.STATUS == 4 ? '배차 선정 중' : (apply.STATUS == 1 ? '배차 완료' : '배차 거절'))}"></span>
+
 								</div>
 							</div>
 							<!-- 취소 버튼 -->

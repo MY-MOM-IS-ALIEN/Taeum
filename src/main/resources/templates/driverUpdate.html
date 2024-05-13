@@ -42,8 +42,9 @@
 					<div class="filebox">
 						<!-- 새로운 파일 첨부 -->
 						<label for="file">업로드</label> <input type="file" id="file"
-							name="files" multiple> <input type="text"
-							class="upload-name" th:value="${driverImage}" readonly>
+							name="files" multiple> 
+							<input type="text"
+							class="upload-name" id="file" th:value="${driverImage}" readonly>
 					</div>
 				</div>
 
@@ -155,15 +156,25 @@ window.onload = function() {
 		}
 	}
 
-	// 퇴사시 기본정보로 들어가게끔 버튼처리
-	var DR_ID = /*[[${driver.DR_ID}]]*/null;
+	var DR_ID = /*[[${driver.DR_ID}]]*/ null;
 
 	document.getElementById('cleanbtn').addEventListener('click', function() {
-		// 성함과 연락처 입력 필드의 값을 변경
-		document.getElementById('M_NAME').value = '드라이버' + DR_ID;
-		document.getElementById('M_PHONE').value = 'null';
+	    files = null;
+	    // 성함과 연락처 입력 필드의 값을 변경
+	    document.getElementById('M_NAME').value = '드라이버' + DR_ID;
+	    document.getElementById('M_PHONE').value = 'null';
+	    document.getElementById('file').value = null;
+	     document.querySelector('.upload-name').value = null; // 프로필 사진 초기화 
+
 	});
 	
+
+	 window.onload = function() {
+		 var img = /*[[${driverImage}]]*/ null;
+	      console.log(img);
+	    };
+	 
+
 	
 </script>
 </html>

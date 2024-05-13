@@ -107,11 +107,10 @@
 		D_STATUS='2',D_CANCLE=now(), D_REASON=#{D_REASON} where DR_ID=#{DR_ID}
 		and D_ID=#{D_ID}
 	</update>
-	
 
 	<update id="updateNodeCancle" parameterType="DispatchDto">
 		update nodetbl set
-		STATUS='2' where DR_ID=#{DR_ID} and D_ID=#{D_ID}
+		STATUS='2', cycle='0' where DR_ID=#{DR_ID} and D_ID=#{D_ID}
 	</update>
 
 	<insert id="insertCommute" parameterType="Integer">

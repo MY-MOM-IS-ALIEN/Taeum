@@ -692,7 +692,7 @@ span.file-title {
 }
 
 /* 	background-color: #c82333; */
-/* } 
+ } 
 
 
 .btn-write-btn {
@@ -718,6 +718,9 @@ span.file-title {
 	border-color: #3F7EFC;
 	/* 	font-size: 1rem; */
 	text-align: center;
+	font-size: 15px;
+	color: #fff;
+	border-radius: 10px;
 }
 
 .btn-sub {
@@ -853,6 +856,7 @@ span.file-title {
 .btn-traffic.btn-write-btn {
 	display: block;
 	margin: 0 auto; /* 좌우 여백을 자동으로 조절하여 가운데 정렬 */
+	
 }
 
 fieldset.raceInfo {

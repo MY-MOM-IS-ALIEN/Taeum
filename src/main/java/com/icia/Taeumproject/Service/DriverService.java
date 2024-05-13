@@ -22,6 +22,7 @@ import com.icia.Taeumproject.Dto.DispatchDto;
 import com.icia.Taeumproject.Dto.DriverDto;
 import com.icia.Taeumproject.Dto.DriverFileDto;
 import com.icia.Taeumproject.Dto.Node;
+import com.icia.Taeumproject.Dto.SecurityUserDTO;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -97,7 +98,7 @@ public class DriverService {
 	private void fileUpload(List<MultipartFile> files, HttpSession session, int M_ID) throws Exception {
 //파일 저장 실패 시 데이터베이스 롤백작업이 이루어지도록 예외를 throws 할 것.
 		log.info("fileUpload()");
-
+		drDao.updateDriverProfile(M_ID);
 //파일 저장 위치 처리(session에서 저장 경로를 구함)
 		String realPath = session.getServletContext().getRealPath("/");
 		log.info("realPath : {}", realPath);
@@ -133,7 +134,7 @@ public class DriverService {
 	    log.info("driverUpdateProc()");
 	    TransactionStatus status = manager.getTransaction(definition);
 	    String msg = null;
-
+	    
 	    try {
 	        // 드라이버 정보 업데이트
 	        drDao.updateDriver(driver);
@@ -159,13 +160,12 @@ public class DriverService {
 	    }
 
 	    rttr.addFlashAttribute("msg", msg);
-	    return "redirect:driverModify";
+	    return "redirect:/driverModify";
 	}
 
 	public void updateDriverProfile(int mid) {
-
+		log.info("zzzzzzzzzzzzz");
 		drDao.updateDriverProfile(mid);
-
 	}
 
 	public void updateConfirm(List<Node> data, int DR_ID) {

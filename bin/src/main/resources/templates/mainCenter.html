@@ -156,7 +156,7 @@ function displayCurrentDate() {
     console.log("dateString = " + dateString);
     document.getElementById('DATE-TIME').innerText = dateString;
     
-    updateCount(dateString);
+    /* updateCount(dateString); */
 }
 
 // 달력에서 날짜가 변경될 때 호출되는 함수
@@ -281,27 +281,75 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-    var POLYLINE = null;
+var POLYLINE = null; // 빨간색 선
+var POLYLINE_WHITE = null; // 하얀색 선
+var linePath = [];
+var pathIndex = 0; // 경로를 그리는데 사용될 인덱스
+var delay = 50;
+
 function drawPath(pathPointList) {
-      if(pathPointList.length > 0) {
-        // 선을 구성하는 좌표 배열입니다. 이 좌표들을 이어서 선을 표시합니다
-        var linePath = [];
-        for(var point of pathPointList) {
-          linePath.push(new kakao.maps.LatLng(point.y, point.x));
-        }
-       
-        // 지도에 표시할 선을 생성합니다
-        POLYLINE = new kakao.maps.Polyline({
-            path: linePath, // 선을 구성하는 좌표배열 입니다
-            strokeWeight: 5, // 선의 두께 입니다
-            strokeColor: 'red', // 선의 색깔입니다
-            strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-            strokeStyle: 'solid' // 선의 스타일입니다
-        });
-        // 지도에 선을 표시합니다
-        POLYLINE.setMap(map);
-      }
+  if (pathPointList.length > 0) {
+    linePath = [];
+    for (var point of pathPointList) {
+      linePath.push(new kakao.maps.LatLng(point.y, point.x));
     }
+    // 초기화된 경로로 기존의 선을 제거합니다.
+    if (POLYLINE) POLYLINE.setMap(null);
+    if (POLYLINE_WHITE) POLYLINE_WHITE.setMap(null);
+    pathIndex = 0;
+    // 빨간색 선을 그립니다.
+    
+    drawRedLine();
+    
+  }
+}
+
+function drawRedLine() {
+  // 빨간색 선을 그립니다.
+  POLYLINE = new kakao.maps.Polyline({
+    path: linePath,
+    strokeWeight: 5, // 선의 두께입니다.
+    strokeColor: '#3F7EFC', // 선의 색깔입니다.
+    strokeOpacity: 1, // 선의 불투명도입니다.
+    strokeStyle: 'solid' // 선의 스타일입니다.
+  });
+  // 지도에 빨간색 선을 표시합니다.
+  POLYLINE.setMap(map);
+  // 하얀색 선을 그리기 시작합니다.
+  drawWhiteLine();
+}
+
+function drawWhiteLine() {
+	  var startIndex = pathIndex;
+	  var endIndex = Math.min(pathIndex + 5, linePath.length);
+	  var segment = linePath.slice(startIndex, endIndex);
+
+	  // 이전에 그렸던 하얀색 선이 있다면 삭제합니다.
+	  if (POLYLINE_WHITE) POLYLINE_WHITE.setMap(null);
+
+	  // 하얀색 선을 그립니다.
+	  POLYLINE_WHITE = new kakao.maps.Polyline({
+	    path: segment,
+	    strokeWeight: 3,
+	    strokeColor: '#FFFFFF',
+	    strokeOpacity: 1,
+	    strokeStyle: 'solid'
+	  });
+
+	  // 지도에 하얀색 선을 표시합니다.
+	  POLYLINE_WHITE.setMap(map);
+
+	  // 인덱스를 증가시킵니다.
+	  pathIndex += 1;
+
+	  // 만약 경로가 남아있다면 재귀적으로 다음 선을 그리거나, 최초지점으로 돌아갑니다.
+	  if (endIndex < linePath.length) {
+	    setTimeout(drawWhiteLine, delay);
+	  } else {
+	    pathIndex = 0;
+	    setTimeout(drawWhiteLine, 1000);
+	  }
+	}
 
 
 function toggleOnOff(innerList, isActive, idx) {
@@ -395,34 +443,41 @@ function toggleOnOff(innerList, isActive, idx) {
    var nodeList = /*[[${nodeList}]]*/ null;
     console.log("nodeList = ", nodeList);  
 
-   function findNodeById(nodeId) {
+    function findNodeById(nodeId) {
+        for (const node of nodeList) {
+     	
+            if (parseInt(node.node_id) === parseInt(nodeId)) {
+         	  
+                return node; // 해당하는 ID를 가진 노드를 찾으면 반환합니다.
+            }
+        }
+        return null; // 해당하는 ID를 가진 노드가 없으면 null을 반환합니다.
+    }
    
-       for (const node of nodeList) {
-          if (node.cycle == 1 ) {
-           if (parseInt(node.node_id) === parseInt(nodeId)) {        
-               return node; // 해당하는 ID를 가진 노드를 찾으면 반환합니다.
-           }
-          } else if(node.cycle == 2 ) {
-             if (parseInt(node.node_id) === parseInt(nodeId)) {             
-                   return node; // 해당하는 ID를 가진 노드를 찾으면 반환합니다.
-               }
-          } else {
-             if (parseInt(node.node_id) === parseInt(nodeId)) {           
-                   return node; // 해당하는 ID를 가진 노드를 찾으면 반환합니다.
-               }
-          }
-       }
-       
-       return null; // 해당하는 ID를 가진 노드가 없으면 null을 반환합니다.
-   }
-   
-   // 해당하는 노드의 마커를 추가하는 함수
+// 해당하는 노드의 마커를 추가하는 함수
    function addMarker(node) {
-      
        var markerPosition = new kakao.maps.LatLng(node.y, node.x); // 해당하는 노드의 위치
-       var marker = new kakao.maps.Marker({
-           position: markerPosition
-       });
+       var marker;
+
+       if (node.kind === 2) {
+           // node.kind가 2인 경우 이미지를 사용하여 마커 생성
+           var markerImage = new kakao.maps.MarkerImage(
+               'images/pngwing.png', // 사용할 이미지의 URL을 넣어주세요
+               new kakao.maps.Size(27, 42),
+               {offset: new kakao.maps.Point(15, 40)}
+           );
+
+           marker = new kakao.maps.Marker({
+               position: markerPosition,
+               image: markerImage // 사용자 지정 이미지를 마커에 설정
+           });
+       } else {
+           // node.kind가 1이거나 다른 경우 카카오 지도에서 제공하는 디폴트 마커 사용
+           marker = new kakao.maps.Marker({
+               position: markerPosition
+           });
+       }
+
        marker.setMap(map); // 마커를 지도에 추가합니다.
        markers[node.node_id] = marker; // 마커를 markers 객체에 저장합니다.
        NODE_MAP[node.node_id] = node;
@@ -443,21 +498,56 @@ function toggleOnOff(innerList, isActive, idx) {
        }
    }
    
-// 클릭된 항목의 'm_id'와 같은 kind가 2인 노드의 마커를 제거하는 함수
-   function removeConnectedMarker(nodeMId) {
-       // nodeList에서 'm_id'가 nodeMId이고 kind가 2인 노드들을 찾습니다.
+// 클릭된 항목의 'm_id'와 같은 kind가 2인 노드의 마커를 추가하는 함수
+   function addConnectedMarker(nodeMId, nodeId) {
+ 
+	   selectedMIds.push(nodeId); // 배열에 선택한 m_id를 추가합니다.
+       updateMIdInput(selectedMIds.join(', ')); 
+         
        
-       const connectedNodes = nodeList.filter(node => parseInt(node.m_ID) === parseInt(nodeMId)  && parseInt(node.kind) === 2);
-       console.log("node.m_id " +  parseInt(node.m_ID));
-       console.log("nodeMid " + nodeMId);
-       console.log("node.kind " + node.kind);
-       // 찾은 노드들의 마커를 제거합니다.
+        
+       // nodeList에서 'm_id'가 nodeMId인 노드들을 찾습니다.
+       const connectedNodes = nodeList.filter(node => parseInt(node.m_ID) === parseInt(nodeMId) && parseInt(node.kind) === 2
+    		   &&  parseInt(node.node_id) === parseInt(nodeId) + 1);
+       // 찾은 노드들의 마커를 추가합니다.
        connectedNodes.forEach(node => {
-          console.log("통과");
-           removeMarker(node);
+           console.log("addConnectedMarker 통과 = " + node);
+           addMarker(node); 
+           NODE_MAP[node.node_id] = node;
+           
+           selectedMIds.push(node.node_id); // 배열에 선택한 m_id를 추가합니다.
+           updateMIdInput(selectedMIds.join(', ')); 
        });
    }
+   
+   function addConnectedNodeId(nodeMId) {}
+   
+// 클릭된 항목의 'm_id'와 같은 kind가 2인 노드의 마커를 제거하는 함수
+   function removeConnectedMarker(nodeMId, nodeId) {
+       // nodeList에서 'm_id'가 nodeMId이고 kind가 2인 노드들을 찾습니다.
+       const connectedNodes = nodeList.filter(node => parseInt(node.m_ID) === parseInt(nodeMId)  && parseInt(node.kind) === 2
+    		   && parseInt(node.node_id) === parseInt(nodeId) + 1);
+       const id = connectedNodes.map(node => node.node_id); // 선택된 노드들의 id 배열
+       // 찾은 노드들의 마커를 제거합니다.
+       id.forEach(nodeId => {
+           const node = findNodeById(nodeId); // 노드 ID로 노드를 가져옵니다.
+           if (node) {
+               removeMarker(node); // 해당 노드의 마커를 제거합니다.
+           }
+       });
 
+       // 선택된 노드들의 ID를 selectedMIds 배열에서 제거합니다.
+       id.forEach(nodeId => {
+           const index = selectedMIds.indexOf(nodeId);
+           console.log("index = " + index);
+           if (index !== -1) {
+               selectedMIds.splice(index, 1);
+           }
+       });
+
+       // 인풋 태그에 선택된 m_id들을 업데이트합니다.
+       updateMIdInput(selectedMIds.join(', '));
+   }
   
    // 각 노드에 대한 마커를 저장하기 위한 객체
    var markers = {};
@@ -624,6 +714,15 @@ function secondsToHoursMinutes(seconds) {
          var index = $(button).closest('.btn-area').index('.btn-area') + 1;
          console.log('클릭된 버튼의 인덱스:', index);
          resultSpan.textContent = '(수락)';
+         var buttonDiv = button.parentNode;
+         button.remove();
+
+         // 거절 버튼도 제거
+         var rejectButton = buttonDiv.querySelector('.reject-btn');
+         if (rejectButton) {
+             rejectButton.remove();
+         }
+         
          // JSON.parse() 함수로 JSON 문자열을 객체로 변환
          var nodeAtIndex = JSON.parse(nodeListAcc);
          var nodeListRe = [];
@@ -655,6 +754,7 @@ function secondsToHoursMinutes(seconds) {
                  console.error('에러:', error);
              }
          });
+         button.remove();
 
          return false;
      }
@@ -712,6 +812,16 @@ function handleReject(button) {
         // input 태그가 없는 경우, 새로 생성하여 추가
         createRejectInput(buttonDiv, nodeListRe, index); // 수정된 부분
     }
+    var buttonDiv = button.parentNode;
+
+    // 버튼 제거
+    button.remove();
+
+    // 수락 버튼도 제거
+    var acceptButton = buttonDiv.querySelector('.accept-btn');
+    if (acceptButton) {
+        acceptButton.remove();
+    }
     return false;
 }
 
@@ -745,7 +855,6 @@ function createRejectInput(buttonDiv, nodeListRe, index) {
         input.remove(); // input 제거
         submitButton.remove(); // 버튼 제거
     });
-
     // 생성된 submitButton을 div에 추가
     buttonDiv.appendChild(submitButton);
     return false;
