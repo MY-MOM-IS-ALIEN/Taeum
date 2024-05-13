@@ -99,7 +99,7 @@ FROM NodeTbl ORDER BY distance ASC;
   
   <update id="updateConfirm">
   update dispatchtbl
-   set cycle = #{cycle} where DR_ID =#{ride} and D_DATE = #{selectedTime}
+   set cycle = #{cycle} where DR_ID =#{ride} and D_DATE = #{selectedTime} and cycle = 0
   </update>
   
   

@@ -63,8 +63,6 @@ public class AdminController {
   @Autowired
   private DriverService drServ;
   @Autowired
-  private NodeService nodeService;
-  @Autowired
   private NodeCostService nodeCostService;
 
   @GetMapping("adminMain")
@@ -136,38 +134,41 @@ public String GetDriverImage(int M_ID, Model model) {
 	   // DTO에 데이터를 넣고 insertConfirm 메서드 호출
 	      DispatchDto dto = new DispatchDto();
 	      System.out.println("dateTimedateTimedateTimedateTimedateTimedateTime = " + dateTime);
-	      
-	      dto.setCycle(0);
-	      dto.setD_SELECT(dateTime);
-	      dto.setD_STATUS(statusStr);
-	      dto.setDR_ID(ridding);
-	      dto.setD_DATE(selectedTime);
-	      maServ.isnertConfirm(dto);
-	      
+  
 	      List<DispatchDto> getDispatchDtos = maServ.getUpdateDelivery(selectedTime, ridding);
 	    	      System.out.println("getDispatchDtosgetDispatchDtosgetDispatchDtos = " + getDispatchDtos);
-	    	      if(getDispatchDtos.size() == 1) {
-	    	        maServ.updateConfirm(ridding,selectedTime, cycle);
-	    	      }else {
+	    	 if(getDispatchDtos == null) {
+	    	   dto.setCycle(cycle); 
+           dto.setD_SELECT(dateTime); 
+           dto.setD_STATUS(statusStr);
+           dto.setDR_ID(ridding); 
+           dto.setD_DATE(selectedTime);
+           maServ.isnertConfirm(dto);
+           
+          
+	    	 }else {
+	    	   boolean isExistingCycle = false;
 	        for(int i = 0; i<getDispatchDtos.size(); i++) {
-	          if(getDispatchDtos.get(i).getCycle() == 1) {
-	            System.out.println("cycle 1 번 통과");
-	            msg = "해당날짜에 이미 선정된 배차 상태가 존재합니다.";
-	            maServ.deleteConfirm(ridding,selectedTime, 0);
-	          }else if(getDispatchDtos.get(i).getCycle() == 2) {
-	             msg = "해당날짜에 이미 선정된 배차 상태가 존재합니다.";
-	            maServ.deleteConfirm(ridding,selectedTime, 0);
-	            System.out.println("cycle 2 번 통과");
-	          }else if(getDispatchDtos.get(i).getCycle() == 3) {
-	             msg = "해당날짜에 이미 선정된 배차 상태가 존재합니다.";
-	            maServ.deleteConfirm(ridding,selectedTime, 0);
-	            System.out.println("cycle 3 번 통과");
+	          DispatchDto currentDto = getDispatchDtos.get(i);
+	          if (currentDto.getCycle() == cycle) {
+	            isExistingCycle = true; // 디비에 해당 cycle 값이 이미 존재함
+	            break;
+	        }
+	    }          
+	            if(isExistingCycle) {
+	              System.out.println("cycle1 통과");
+	              msg = "해당날짜에 이미 선정된 배차 상태가 존재합니다.";
 	          }else {  
 	            System.out.println("else문 통과 통과");
 	            List<DispatchDto> getDispatchList = maServ.getUpdateDelivery(selectedTime, ridding);
-	           
 	            if(getDispatchDtos.size() == getDispatchList.size()) {
-	              maServ.updateConfirm(ridding,selectedTime, cycle);
+	             // maServ.updateConfirm(ridding,selectedTime, cycle);
+	              dto.setCycle(cycle); 
+	              dto.setD_SELECT(dateTime); 
+	              dto.setD_STATUS(statusStr);
+	              dto.setDR_ID(ridding); 
+	              dto.setD_DATE(selectedTime);
+	              maServ.isnertConfirm(dto);
 	              msg = "배차 선정 성공";
 	            long D_ID = dto.getD_ID();
 	            for (String num : numbersAsString) {
@@ -179,10 +180,10 @@ public String GetDriverImage(int M_ID, Model model) {
 	            }
 	          }
 	        }
-	    	      }
-	     System.out.println(msg);
+	    	 }   
+	     System.out.println("msgmsgmsgmsgmsgmsg = " + msg);
 	     
-	  }
+	  
   return msg;
 }
 
