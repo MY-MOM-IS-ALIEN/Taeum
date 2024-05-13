@@ -81,7 +81,7 @@ FROM NodeTbl ORDER BY distance ASC;
     
     <delete id="cancelNode" parameterType="map">
     	DELETE FROM NodeTbl
-    	WHERE M_Id = #{m_Id} AND A_Date = #{a_Date}
+    	WHERE M_Id = #{m_Id} AND A_Date = #{a_Date} AND A_NAME = #{A_NAME}
 	</delete>
 	
 	<select id="selectNodeListToday" resultType="Node">

@@ -52,9 +52,10 @@
 							<!-- 취소 버튼 -->
 							<div th:if="${apply.STATUS == 0}" class="cancel-button">
 								<form action="/cancelApply" method="post">
-									<input type="hidden" name="A_Id" th:value="${apply.A_ID}" /> <input
-										type="hidden" name="M_Id" th:value="${apply.M_ID}" /> <input
-										type="hidden" name="A_Date" th:value="${apply.A_DATE}" />
+									<input type="hidden" name="A_Id" th:value="${apply.A_ID}" /> 
+									<input type="hidden" name="M_Id" th:value="${apply.M_ID}" /> 
+									<input type="hidden" name="A_Date" th:value="${apply.A_DATE}" />
+									<input type="hidden" name="A_NAME" th:value="${apply.A_NAME}" />
 									<button type="submit" onclick="return confirm('정말로 취소하시겠습니까?')">취소</button>
 								</form>
 							</div>

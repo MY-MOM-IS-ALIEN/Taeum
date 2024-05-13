@@ -81,9 +81,10 @@ public class ApplyController {
      public String cancelApply(@RequestParam("A_Id") int A_Id,
     		 		@RequestParam("M_Id") int M_Id,
     		 			@RequestParam("A_Date") String A_Date,
+    		 			@RequestParam("A_NAME") String A_NAME,
     		 				RedirectAttributes redirectAttributes) {
          log.info("cancelApply");
-         aServ.cancelApply(A_Id,M_Id,A_Date);
+         aServ.cancelApply(A_Id,M_Id,A_NAME,A_Date);
          return "redirect:/"; // 홈으로 리다이렉트
      }
      

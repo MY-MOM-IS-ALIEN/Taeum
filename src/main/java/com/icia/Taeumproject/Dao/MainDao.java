@@ -63,7 +63,7 @@ public interface MainDao {
 
 
   // 신청 내역 취소 시 Node도 삭제
-  public void cancelNode(int m_Id, String a_Date);
+  public void cancelNode(int m_Id, String A_NAME, String a_Date);
 
   public List<Node> selectNodeListToday(int dR_ID, String formattedDate);
 
