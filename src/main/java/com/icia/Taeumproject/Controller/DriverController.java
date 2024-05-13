@@ -86,6 +86,7 @@ public class DriverController {
 		log.info("m_id: {}", m_id);
 
 		drServ.getDriverInfo(m_id, model);
+		drServ.getDriverImage(m_id, model);
 		System.out.println(model);
 
 		return "driverUpdate";
@@ -96,7 +97,7 @@ public class DriverController {
 	        HttpSession session, Principal principal) {
 	    log.info("driverUpdateProc()");
 	    String view = null;
-
+	    System.out.println("files = " + files);
 	    MemberDto member = new MemberDto();
 	    int mid = driver.getM_ID();
 	    String m_name = driver.getM_NAME();
@@ -104,15 +105,18 @@ public class DriverController {
 	    member.setM_ID(mid);
 	    member.setM_NAME(m_name);
 	    member.setM_PHONE(m_phone);
-
 	    // 기사 정보 업데이트
 	    mServ.DriveMemberUpdate(member);
-
-	    // 프로필 이미지 업데이트
-	    drServ.updateDriverProfile(mid);
-
-	    // 그 외 업데이트 처리
-	    view = drServ.driverUpdateProc(files, driver, rttr, session, principal);
+	    System.out.println(files.size());
+	    	if(!files.isEmpty()) {
+	    		// 그 외 업데이트 처리
+		    	view = drServ.driverUpdateProc(files, driver, rttr, session, principal);
+	    	} else if(!files.isEmpty()) {
+	    		// 프로필 이미지 업데이트
+		    	drServ.updateDriverProfile(mid);
+		    	System.out.println("3e2434324234");
+		    	view = "redirect:/driverModify";
+	    	} 
 
 	    return view;
 	}
