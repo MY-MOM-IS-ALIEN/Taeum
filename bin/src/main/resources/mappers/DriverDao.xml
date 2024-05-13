@@ -107,6 +107,7 @@
 		D_STATUS='2',D_CANCLE=now(), D_REASON=#{D_REASON} where DR_ID=#{DR_ID}
 		and D_ID=#{D_ID}
 	</update>
+	
 
 	<update id="updateNodeCancle" parameterType="DispatchDto">
 		update nodetbl set

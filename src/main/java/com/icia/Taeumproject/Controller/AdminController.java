@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -61,8 +62,6 @@ public class AdminController {
   private MainService maServ;
   @Autowired
   private DriverService drServ;
-  @Autowired
-  private NodeService nodeService;
   @Autowired
   private NodeCostService nodeCostService;
 
@@ -117,10 +116,11 @@ public String GetDriverImage(int M_ID, Model model) {
 
 
 	  @PostMapping("updateDelivery")
+	  @ResponseBody
 	  public String updateDelivery(String ride , String node_id, Integer cycle, String dateTime, String selectedTime) {
 	    log.info("updateDeliveryPROC");
-	    int status = 0;
 	    String statusStr = "0";
+	    String msg = null;
 	    if (ride == null || node_id == null) {
 	      // ride 또는 m_id가 null인 경우에 대한 처리
 	      System.out.println("ride = " + ride);
@@ -134,31 +134,57 @@ public String GetDriverImage(int M_ID, Model model) {
 	   // DTO에 데이터를 넣고 insertConfirm 메서드 호출
 	      DispatchDto dto = new DispatchDto();
 	      System.out.println("dateTimedateTimedateTimedateTimedateTimedateTime = " + dateTime);
-	      
-	      dto.setD_SELECT(dateTime);
-	      dto.setD_STATUS(statusStr);
-	      dto.setDR_ID(ridding);
-	      dto.setD_DATE(selectedTime);
-	      maServ.isnertConfirm(dto);
+  
+	      List<DispatchDto> getDispatchDtos = maServ.getUpdateDelivery(selectedTime, ridding);
+	    	      System.out.println("getDispatchDtosgetDispatchDtosgetDispatchDtos = " + getDispatchDtos);
+	    	 if(getDispatchDtos == null) {
+	    	   dto.setCycle(cycle); 
+           dto.setD_SELECT(dateTime); 
+           dto.setD_STATUS(statusStr);
+           dto.setDR_ID(ridding); 
+           dto.setD_DATE(selectedTime);
+           maServ.isnertConfirm(dto);
+           
           
-	      long D_ID = dto.getD_ID();
-	      System.out.println("D_IDD_IDD_IDD_IDD_IDD_IDD_IDD_ID + " + D_ID);
-	   
-	      
-	      for (String num : numbersAsString) {
-	          Integer nodeId = Integer.parseInt(num);
-	          Integer riding = Integer.parseInt(ride);
-	          
-	          maServ.updateDelivery(riding, nodeId, cycle, statusStr, D_ID);
-	      }
+	    	 }else {
+	    	   boolean isExistingCycle = false;
+	        for(int i = 0; i<getDispatchDtos.size(); i++) {
+	          DispatchDto currentDto = getDispatchDtos.get(i);
+	          if (currentDto.getCycle() == cycle) {
+	            isExistingCycle = true; // 디비에 해당 cycle 값이 이미 존재함
+	            break;
+	        }
+	    }          
+	            if(isExistingCycle) {
+	              System.out.println("cycle1 통과");
+	              msg = "해당날짜에 이미 선정된 배차 상태가 존재합니다.";
+	          }else {  
+	            System.out.println("else문 통과 통과");
+	            List<DispatchDto> getDispatchList = maServ.getUpdateDelivery(selectedTime, ridding);
+	            if(getDispatchDtos.size() == getDispatchList.size()) {
+	             // maServ.updateConfirm(ridding,selectedTime, cycle);
+	              dto.setCycle(cycle); 
+	              dto.setD_SELECT(dateTime); 
+	              dto.setD_STATUS(statusStr);
+	              dto.setDR_ID(ridding); 
+	              dto.setD_DATE(selectedTime);
+	              maServ.isnertConfirm(dto);
+	              msg = "배차 선정 성공";
+	            long D_ID = dto.getD_ID();
+	            for (String num : numbersAsString) {
+	              Integer nodeId = Integer.parseInt(num);
+	              Integer riding = Integer.parseInt(ride);
+	              
+	            maServ.updateDelivery(riding, nodeId, cycle, statusStr, D_ID);
+	            }
+	            }
+	          }
+	        }
+	    	 }   
+	     System.out.println("msgmsgmsgmsgmsgmsg = " + msg);
 	     
-	  }
-
- 
-    
-   
-
-  return "adminDriverList";
+	  
+  return msg;
 }
 
   @GetMapping("adminNodeSelection")

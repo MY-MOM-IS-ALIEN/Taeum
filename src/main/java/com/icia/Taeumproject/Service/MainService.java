@@ -24,7 +24,7 @@ public class MainService {
   
 
   public void updateDelivery(Integer ride, Integer nodeId, Integer cycle, String status, long D_ID){
-    
+ 
     
     Node node = new Node();
     node.setDR_ID(ride);
@@ -152,6 +152,23 @@ public List<Node> selectNodeListToday(int dR_ID, String formattedDate) {
 	List<Node> nodeList = mDao.selectNodeListToday(dR_ID,formattedDate);
 	System.out.println(formattedDate);
 	return nodeList;
+}
+
+
+public List<DispatchDto> getUpdateDelivery(String selectedTime, int ride) {
+  List<DispatchDto> getUpdateDelivery = mDao.getUpdateDelivery(selectedTime, ride);
+  return getUpdateDelivery;
+}
+
+
+public void deleteConfirm(int ride, String selectedTime, int i) {
+  mDao.deleteConfirm(ride, selectedTime, i);
+}
+
+
+public void updateConfirm(int ride, String selectedTime, Integer cycle) {
+  mDao.updateConfirm(ride, selectedTime, cycle);
+  
 }
 
 

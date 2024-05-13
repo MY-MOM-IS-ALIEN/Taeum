@@ -28,5 +28,8 @@ public interface ApplyDao {
 	List<ApplyDto> selectAllMember();
 
 	int selectAplCnt(SearchDto sdto);
+	
+	// 회원 탈퇴 신청 삭제
+	void withDrawal(int m_Id);
 
 }

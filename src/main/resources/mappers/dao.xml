@@ -6,7 +6,7 @@
   <insert id="insert" parameterType="Node">
     INSERT INTO NodeTbl
     VALUES (
-     null,#{Address},#{x},#{y},#{M_ID},null,#{kind},null,'0',#{A_DATE},null,#{M_PHONE},#{M_NAME},#{A_NAME},#{A_CONTENTS} ,#{A_ID} 
+     null,#{Address},#{x},#{y},#{M_ID},null,#{kind},null,null,#{A_DATE},null,#{M_PHONE},#{M_NAME},#{A_NAME},#{A_CONTENTS} ,#{A_ID} 
     )
   </insert>
   
@@ -23,7 +23,7 @@ FROM NodeTbl ORDER BY distance ASC;
   </update>
   
     <select id="selectRideList" resultType="Node">
-    select * FROM NodeTbl WHERE DR_ID=#{ride}
+    select * FROM NodeTbl WHERE DR_ID=#{ride} and status='0'
   </select>
   
   <select id="selectLocaldate" resultType="Node">
@@ -45,8 +45,8 @@ FROM NodeTbl ORDER BY distance ASC;
 
 <insert id="insertDispatch" parameterType="dispatchDto">
     <!-- 데이터 삽입 -->
-    INSERT INTO dispatchtbl (D_SELECT, D_STATUS, DR_ID, D_DATE)
-    VALUES (#{D_SELECT}, #{D_STATUS}, #{DR_ID}, #{D_DATE})
+    INSERT INTO dispatchtbl (D_SELECT, D_STATUS, DR_ID, D_DATE, cycle)
+    VALUES (#{D_SELECT}, #{D_STATUS}, #{DR_ID}, #{D_DATE}, #{cycle})
     
     <!-- 자동 생성된 키 값을 DTO의 D_ID 필드에 매핑하는 selectKey -->
     <selectKey keyProperty="D_ID" order="AFTER" resultType="java.lang.Long">
@@ -87,5 +87,28 @@ FROM NodeTbl ORDER BY distance ASC;
 	<select id="selectNodeListToday" resultType="Node">
 		select * from nodetbl where DR_ID=#{dR_ID} AND A_DATE LIKE CONCAT('%', #{formattedDate}, '%');
 	</select>
+
+	
+	<select id="getUpdateDelivery" resultType="dispatchDto">
+	 select * from dispatchtbl where D_DATE = #{selectedTime} AND DR_ID = #{ride}
+	</select>
+	
+	<delete id="deleteConfirm" >
+	 DELETE FROM dispatchtbl
+	 WHERE DR_ID =#{ride} and D_DATE = #{selectedTime} and cycle = #{i}
+	</delete>
+  
+  <update id="updateConfirm">
+  update dispatchtbl
+   set cycle = #{cycle} where DR_ID =#{ride} and D_DATE = #{selectedTime} and cycle = 0
+  </update>
+  
+
+	<!--  탈퇴 회원 노드 삭제 -->
+	 <delete id="withDrawal" parameterType="int">
+    	DELETE FROM NodeTbl
+    	WHERE M_Id = #{m_Id} 
+	</delete>
+
   
 </mapper>
