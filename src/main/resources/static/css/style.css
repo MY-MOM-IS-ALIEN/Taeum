@@ -29,6 +29,13 @@ section {
 	margin-left: auto;
 }
 
+.redCircle{
+	width: 13px; 
+	height: 13px; 
+	margin-left: -20px; 
+	margin-top : 8px;
+}
+
 .check-btn {
 	width: 70px;
 	height: 20px;

@@ -58,6 +58,21 @@
 	<th:block th:insert="~{fragments::footer}" />
 </body>
 <script th:inline="javascript">
+window.onload = function() {
+    
+    var nList = /*[[${nList}]]*/ null;
+
+      //redCircle 이미지 요소 가져오기
+      var redCircle = document.getElementById('redCircle');
+
+      // nList 값이 존재하면 redCircle 이미지 표시
+      if (nList && nList.length > 0) {
+          redCircle.style.display = 'inline'; // redCircle 이미지 표시
+      } else {
+          redCircle.style.display = 'none'; // redCircle 이미지 숨김
+      }
+};
+
 	//파일명 처리용 함수
 	$("#file").on("change", function() {
 		//파일 선택창에서 업로드할 파일을 선택한 다음
@@ -148,6 +163,8 @@
 		document.getElementById('M_NAME').value = '드라이버' + DR_ID;
 		document.getElementById('M_PHONE').value = 'null';
 	});
+	
+	
 </script>
 </html>
 

@@ -28,7 +28,6 @@
 	<title>노드 할당</title>
 	<link rel="stylesheet" href="css/style.css">
 
-	 <th:block th:insert="~{fragments :: header}" />
 <script type="text/javascript">
 $(function() {
     const msg = /*[[${msg}]]*/null;
@@ -38,10 +37,11 @@ $(function() {
     }
   });
   </script>
+	 <th:block th:insert="~{fragments :: header}"  style = "z-index : 9999"/>
 	</head>
 	<body>
 
-<main class="d-flex flex-nowrap">
+<main class="d-flex flex-nowrap" ;>
 	<div
 		class="d-flex flex-column align-items-stretch flex-shrink-0 bg-body-tertiary border border-r-1"
 		style="width: 380px;">
@@ -79,15 +79,14 @@ $(function() {
 		<div>
 		<span class = "fs-5 fw-semibold" > 할당 지역 :</span>
 		  <span type="text" class="fs-5 fw-semibold"  th:text="${dr_AREA}"></span>
-		  <span type="text" class="fs-5 fw-semibold"  th:text="${dr_}"></span>
+		  <br>
+		  <span class = "fs-5 fw-semibold" > 선택 날짜 :</span>
+		  <span type="text" class="fs-5 fw-semibold"  th:text="${d_DATE}"></span>
 		</div>
+		<div th:if="${!nodeList.isEmpty()}">
 			<div th:each="node, count : ${nodeList}" class="abc">
 
-				
 				<th:block th:if="${node.kind == 1 && (node.status == '2' || node.status == null)}">
-
-				
-       
 					<a href="#" id="bechaList"
 						class="list-group-item list-group-item-action py-3 lh-sm mt-3 border rounded-2">
 						<div
@@ -147,7 +146,7 @@ $(function() {
 					</a>
 				</th:block>
 		
-				
+				</div>
 			</div>
 		</div>
 <div class="d-flex align-items-center justify-content-center p-3">
@@ -207,6 +206,20 @@ mapOption = {
    level: 8 // 지도의 확대 레벨
 };
 var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+window.onload = function() {
+	var nList = /*[[${nList}]]*/ null;
+
+	//redCircle 이미지 요소 가져오기
+	var redCircle = document.getElementById('redCircle');
+
+	// nList 값이 존재하면 redCircle 이미지 표시
+	if (nList && nList.length > 0) {
+	    redCircle.style.display = 'inline'; // redCircle 이미지 표시
+	} else {
+	    redCircle.style.display = 'none'; // redCircle 이미지 숨김
+	}
+	 };
 
 
 
@@ -542,57 +555,6 @@ function displayData(data) {
 }
 
 
-
-$(document).ready(function() {
-    // 페이지 로딩 시 탑승 여부 표시
-    $('.ride').each(function() {
-        var rideValue = $(this).text().trim(); // 각각의 ride 요소에 있는 텍스트 가져오기
-        if (rideValue === '1') {
-            $(this).text("탑승완료");
-        } else if (rideValue === 'null') {
-            $(this).text("탑승여부");
-        }
-    });
-});
-
-
-function rideButton(button){
-	console.log("click성공");
-	 // 버튼의 부모 요소에서 탑승 여부를 찾아서 변경합니다.
-    $(button).parent().find('#ride').html("탑승완료");
-	 
-	 var ride = 1
-	   var node_id = $(button).closest('.list-group-item').find('#node_id').val();
-	 console.log("node_id = " + node_id);
-	 
-	   spinOn();
-	 
-	 $.ajax({
-	        url: '/ride',
-	        data: {
-	          ride : ride,
-	          id : node_id
-	        },
-
-	        success: function (result) { 
-	          if (result.code != 'SUCC') {
-	        	
-	            return;
-	          }
-	          const data = result.data;
-	          
-	          displayData(data);
-	  
-	          
-	        },
-	        error: function () {
-	           
-	          alert("탑승성공 실패.....................");
-	        }
-	      });
-	 
-
-}
 function secondsToHoursMinutes(seconds) {
      // 시간으로 변환
      const hours = Math.floor(seconds / 3600);

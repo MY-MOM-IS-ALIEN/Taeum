@@ -17,10 +17,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.icia.Taeumproject.Dao.NotificationDao;
 import com.icia.Taeumproject.Dto.DispatchDto;
 import com.icia.Taeumproject.Dto.DriverDto;
 import com.icia.Taeumproject.Dto.MemberDto;
 import com.icia.Taeumproject.Dto.Node;
+import com.icia.Taeumproject.Dto.NotificationDto;
+import com.icia.Taeumproject.Dto.SearchDto;
 import com.icia.Taeumproject.Dto.SecurityUserDTO;
 import com.icia.Taeumproject.Service.DriverService;
 import com.icia.Taeumproject.Service.MainService;
@@ -41,10 +44,13 @@ public class DriverController {
 
 	@Autowired
 	private MainService maServ;
+	
+	@Autowired
+	private NotificationDao nDao;
 
 	// 로그인 후 출력될 기사 메인 화면 이동 및 기사 개인정보 가져오기
 	@GetMapping("driverModify")
-	public String driverModify(Model model) {
+	public String driverModify(Model model, SearchDto sdto) {
 		log.info("driverModify()");
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -55,7 +61,8 @@ public class DriverController {
 		log.info("m_id: {}", m_id);
 		
 		drServ.getDriverInfo(m_id, model);
-
+		 List<NotificationDto> nList = nDao.selectNotificationList(sdto);
+     model.addAttribute("nList", nList);
 		return "driverModify";
 	}
 
@@ -76,7 +83,7 @@ public class DriverController {
 	}
 
 	@GetMapping("driverUpdate")
-	public String driverUpdate(Model model) {
+	public String driverUpdate(Model model, SearchDto sdto) {
 		log.info("driverUpdate()");
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -88,6 +95,9 @@ public class DriverController {
 		drServ.getDriverInfo(m_id, model);
 		System.out.println(model);
 
+		List<NotificationDto> nList = nDao.selectNotificationList(sdto);
+    model.addAttribute("nList", nList);
+		
 		return "driverUpdate";
 	}
 
@@ -147,7 +157,7 @@ public class DriverController {
 	}
 
 	@GetMapping("/mainCenter")
-  public String test(Model model) {
+  public String test(Model model, SearchDto sdto) {
 
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -184,6 +194,10 @@ public class DriverController {
     // model.addAttribute("innerList1", innerList1);
     model.addAttribute("nodeList", nodeList);
 
+    
+    List<NotificationDto> nList = nDao.selectNotificationList(sdto);
+    model.addAttribute("nList", nList);
+    
     return "mainCenter"; // 뷰 이름 반환
   }
 	

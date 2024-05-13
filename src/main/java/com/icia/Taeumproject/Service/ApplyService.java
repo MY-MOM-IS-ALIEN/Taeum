@@ -227,7 +227,7 @@ public class ApplyService {
 
     // 알림 목록 가져오기
     List<NotificationDto> nList = nDao.selectNotificationList(sdto);
-
+   
     // 모델에 알림 목록 추가
     model.addAttribute("nList", nList);
 

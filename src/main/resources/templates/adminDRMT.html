@@ -286,6 +286,19 @@ document.getElementById('undoButton').addEventListener('click', function() {
 });
   
     window.onload = function() {
+    	
+    	   var nList = /*[[${nList}]]*/ null;
+
+           //redCircle 이미지 요소 가져오기
+           var redCircle = document.getElementById('redCircle');
+
+           // nList 값이 존재하면 redCircle 이미지 표시
+           if (nList && nList.length > 0) {
+               redCircle.style.display = 'inline'; // redCircle 이미지 표시
+           } else {
+               redCircle.style.display = 'none'; // redCircle 이미지 숨김
+           }
+    	
         // 부트스트랩 달력 초기화
         $('#datePickerButton').datepicker({
             format: 'yyyy-mm-dd',
@@ -303,6 +316,12 @@ document.getElementById('undoButton').addEventListener('click', function() {
         var day = today.getDate().toString().padStart(2, '0'); // 한 자릿수일 때 앞에 0을 붙임
         var dateString = year + '-' + month + '-' + day;
         document.getElementById('DATE-TIME').innerText = dateString;
+        
+        
+       
+       
+        	 
+        
     };
     
  // 주어진 날짜 객체를 yyyy-mm-dd 형식의 문자열로 변환하는 함수

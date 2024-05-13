@@ -21,12 +21,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.icia.Taeumproject.Dao.NotificationDao;
 import com.icia.Taeumproject.Dto.ApplyDto;
 import com.icia.Taeumproject.Dto.DispatchDto;
 import com.icia.Taeumproject.Dto.DriverDto;
 import com.icia.Taeumproject.Dto.DrivermanagementDto;
 import com.icia.Taeumproject.Dto.Node;
 import com.icia.Taeumproject.Dto.NodeCost;
+import com.icia.Taeumproject.Dto.NotificationDto;
+import com.icia.Taeumproject.Dto.SearchDto;
 import com.icia.Taeumproject.Dto.TourActivity;
 import com.icia.Taeumproject.Service.ApplyService;
 import com.icia.Taeumproject.Service.DriverService;
@@ -48,6 +51,7 @@ import com.icia.Taeumproject.vrp.VrpResult;
 import com.icia.Taeumproject.vrp.VrpService;
 import com.icia.Taeumproject.vrp.VrpVehicleRoute;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -64,9 +68,13 @@ public class AdminController {
   private DriverService drServ;
   @Autowired
   private NodeCostService nodeCostService;
+  
+  @Autowired
+  private NotificationDao nDao;
+  
 
   @GetMapping("adminMain")
-  public String adminPage(Model model) {
+  public String adminPage(Model model, SearchDto sdto) {
     log.info("adminPage()");
     // 현재 날짜를 가져오기
     LocalDate currentDate = LocalDate.now();
@@ -76,14 +84,19 @@ public class AdminController {
     List<Node> nodeList = maServ.selectLocaldate(currentDateStr);
     log.info(currentDateStr);
     model.addAttribute("nodeList", nodeList);
+    
+    List<NotificationDto> nList = nDao.selectNotificationList(sdto);
+    model.addAttribute("nList", nList);
+    System.out.println(nList);
     return "adminMain";
 
   }
 
   @GetMapping("adminDriverList")
-  public String adminDriverList() {
+  public String adminDriverList(SearchDto sdto, Model model) {
     log.info("adminDriverList()");
-
+    List<NotificationDto> nList = nDao.selectNotificationList(sdto);
+    model.addAttribute("nList", nList);
 
   return "adminDriverList";
 }
@@ -119,7 +132,7 @@ public String GetDriverImage(int M_ID, Model model) {
 	  @ResponseBody
 	  public String updateDelivery(String ride , String node_id, Integer cycle, String dateTime, String selectedTime) {
 	    log.info("updateDeliveryPROC");
-	    String statusStr = "0";
+	    String statusStr = "4";
 	    String msg = null;
 	    if (ride == null || node_id == null) {
 	      // ride 또는 m_id가 null인 경우에 대한 처리
@@ -160,8 +173,6 @@ public String GetDriverImage(int M_ID, Model model) {
 	              msg = "해당날짜에 이미 선정된 배차 상태가 존재합니다.";
 	          }else {  
 	            System.out.println("else문 통과 통과");
-	            List<DispatchDto> getDispatchList = maServ.getUpdateDelivery(selectedTime, ridding);
-	            if(getDispatchDtos.size() == getDispatchList.size()) {
 	             // maServ.updateConfirm(ridding,selectedTime, cycle);
 	              dto.setCycle(cycle); 
 	              dto.setD_SELECT(dateTime); 
@@ -177,7 +188,7 @@ public String GetDriverImage(int M_ID, Model model) {
 	              
 	            maServ.updateDelivery(riding, nodeId, cycle, statusStr, D_ID);
 	            }
-	            }
+	            
 	          }
 	        }
 	    	 }   
@@ -189,18 +200,23 @@ public String GetDriverImage(int M_ID, Model model) {
 
   @GetMapping("adminNodeSelection")
   public String nodeSelection(@RequestParam("drID") String drID, @RequestParam("selectedLocal") String address,
-      @RequestParam("selectDate") String selectDate, Model model) {
+      @RequestParam("selectDate") String selectDate, Model model, SearchDto sdto) {
     log.info("nodeSelection()");
 
     List<Node> nodeList = maServ.selectNodeArea(address, selectDate);
     System.out.println(nodeList);
     model.addAttribute("drID", drID);
     model.addAttribute("dr_AREA", address);
+    model.addAttribute("d_DATE", selectDate);
     // 날짜 모델에 추가되어야함
     model.addAttribute("nodeList", nodeList);
 
       List<ApplyDto> memberList = aServ.selectAllMember();
     model.addAttribute("memberList", memberList);
+    
+    
+    List<NotificationDto> nList = nDao.selectNotificationList(sdto);
+    model.addAttribute("nList", nList);
     return "adminNodeSelection";
   }
 
@@ -541,7 +557,7 @@ public String GetDriverImage(int M_ID, Model model) {
 }
   
   @GetMapping("adminDRMT")
-  public String adminDRMT(Model model) {
+  public String adminDRMT(Model model, SearchDto sdto) {
    // 현재 날짜를 가져오기
        LocalDate currentDate = LocalDate.now();
        // 날짜를 yyyy-MM-dd 형식의 문자열로 변환
@@ -613,6 +629,9 @@ public String GetDriverImage(int M_ID, Model model) {
        model.addAttribute("dispatchPrevListSize2", dispatchPrevListSize2);
        model.addAttribute("dispatchTwoListSize2", dispatchTwoListSize2);
     
+       
+       List<NotificationDto> nList = nDao.selectNotificationList(sdto);
+       model.addAttribute("nList", nList);
     
     return "adminDRMT";
   }
