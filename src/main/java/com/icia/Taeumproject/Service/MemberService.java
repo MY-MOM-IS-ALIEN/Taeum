@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.icia.Taeumproject.Dao.ApplyDao;
+import com.icia.Taeumproject.Dao.BoardDao;
+import com.icia.Taeumproject.Dao.MainDao;
 import com.icia.Taeumproject.Dao.MemberDao;
 import com.icia.Taeumproject.Dto.MemberDto;
 
@@ -26,6 +29,12 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberService {
 	@Autowired
 	private MemberDao mDao;
+	@Autowired
+	private ApplyDao aDao;
+	@Autowired
+	private BoardDao bDao;
+	@Autowired
+	private MainDao maDao;
 	@Autowired
 	private CustomUserDetailsService customUserDetailsService;
 	// 비밀번호 암호와 인코더
@@ -39,7 +48,7 @@ public class MemberService {
 		log.info("loginProc()");
 		String view = null;
 		String msg = null;
-		
+
 		// 사용자 입력 이메일로 UserDetails 가져오기
 		UserDetails userDetails;
 		try {
@@ -54,13 +63,13 @@ public class MemberService {
 		if (passwordEncoder.matches(member.getPassword(), userDetails.getPassword())) {
 			// 인증 성공
 			Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
-			userDetails.getAuthorities());
+					userDetails.getAuthorities());
 			SecurityContextHolder.getContext().setAuthentication(authentication); // Spring Security에 인증 정보 저장
 			msg = "로그인에 성공했습니다.";
-			if(member.getRole() == "ADMIN") {
-			view = "redirect:/adminMain";
+			if (member.getRole() == "ADMIN") {
+				view = "redirect:/adminMain";
 			} else {
-			view = "redirect:/driverModify"; // 로그인 성공 시 홈페이지로 리다이렉트
+				view = "redirect:/driverModify"; // 로그인 성공 시 홈페이지로 리다이렉트
 			}
 		} else {
 			// 비밀번호가 일치하지 않음
@@ -96,7 +105,7 @@ public class MemberService {
 			mDao.insertMember(member);
 			MemberDto adminMember = mDao.selectMember(member.getUsername());
 			System.out.println(adminMember);
-			if(adminMember.getM_ID() == 1) {
+			if (adminMember.getM_ID() == 1) {
 				int m_id = adminMember.getM_ID();
 				mDao.updateAdmin(m_id);
 				view = "redirect:/";
@@ -158,46 +167,61 @@ public class MemberService {
 		mDao.updateDriveMemberUpdate(member);
 	}
 
-	public String userUpdate(String m_NAME, String m_PHONE, Principal principal, RedirectAttributes rttr, HttpSession session) {
-	    String view;
-	    String msg;
+	public String userUpdate(String m_NAME, String m_PHONE, Principal principal, RedirectAttributes rttr,
+			HttpSession session) {
+		String view;
+		String msg;
 
-	    // Principal 객체를 Authentication으로 형변환
-	    Authentication authentication = (Authentication) principal;
-	    String username = authentication.getName();
+		// Principal 객체를 Authentication으로 형변환
+		Authentication authentication = (Authentication) principal;
+		String username = authentication.getName();
 
-	    try {
-	        // 사용자 정보 업데이트
-	        mDao.UserUpdate(username, m_NAME, m_PHONE);
+		try {
+			// 사용자 정보 업데이트
+			mDao.UserUpdate(username, m_NAME, m_PHONE);
 
-	        // 업데이트된 사용자 정보를 가져와서 UserDetails 객체 생성
-	        UserDetails updatedUserDetails = customUserDetailsService.loadUserByUsername(username);
+			// 업데이트된 사용자 정보를 가져와서 UserDetails 객체 생성
+			UserDetails updatedUserDetails = customUserDetailsService.loadUserByUsername(username);
 
-	        // 인증 객체 업데이트
-	        Authentication updatedAuth = new UsernamePasswordAuthenticationToken(updatedUserDetails, authentication.getCredentials(), updatedUserDetails.getAuthorities());
-	        SecurityContextHolder.getContext().setAuthentication(updatedAuth);
+			// 인증 객체 업데이트
+			Authentication updatedAuth = new UsernamePasswordAuthenticationToken(updatedUserDetails,
+					authentication.getCredentials(), updatedUserDetails.getAuthorities());
+			SecurityContextHolder.getContext().setAuthentication(updatedAuth);
 
-	        // 세션 갱신하지 않음
+			// 세션 갱신하지 않음
 
-	        msg = "수정 완료";
-	        view = "redirect:/"; // 로그인 상태를 유지하고 리다이렉트
+			msg = "수정 완료";
+			view = "redirect:/"; // 로그인 상태를 유지하고 리다이렉트
 
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        msg = "수정 실패";
-	        view = "redirect:UserUpdate";
-	    }
+		} catch (Exception e) {
+			e.printStackTrace();
+			msg = "수정 실패";
+			view = "redirect:UserUpdate";
+		}
 
-	    rttr.addFlashAttribute("msg", msg);
-	    return view;
+		rttr.addFlashAttribute("msg", msg);
+		return view;
 	}
-  
-  public void updateRole(int m_id) {
-    log.info("updateRole()");
-    
-    mDao.updateRole(m_id);
-  }
 
-  
+	public void updateRole(int m_id) {
+		log.info("updateRole()");
+
+		mDao.updateRole(m_id);
+	}
+
+	public void withDrawal(int m_id, RedirectAttributes rttr, HttpSession session) {
+		String msg = null;
+		//maDao.withDrawal(m_id); // 회원 노드 삭제
+		//aDao.withDrawal(m_id); // 회원 탈퇴 신청 삭제
+		//bDao.withDrawal(m_id);// 회원 게시글 삭제
+		mDao.withDrawal(m_id); // 회원 탈퇴
+		session.invalidate(); 
+		msg = "회원 탈퇴 완료";
+		
+		rttr.addFlashAttribute("msg",msg);
+	}
 	
 }
+
+
+

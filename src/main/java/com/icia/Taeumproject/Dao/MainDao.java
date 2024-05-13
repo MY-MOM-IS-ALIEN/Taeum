@@ -68,6 +68,10 @@ public interface MainDao {
   public List<Node> selectNodeListToday(int dR_ID, String formattedDate);
 
 
+  // 탈퇴 회원 노드 삭제
+  public void withDrawal(int m_Id);
+
+
 
   public List<DispatchDto> getUpdateDelivery(String selectedTime, int ride);
 

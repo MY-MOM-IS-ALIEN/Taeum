@@ -40,4 +40,6 @@ public interface MemberDao {
 
 	void updateAdmin(int m_id);
 
+	void withDrawal(int m_id);
+
 }
