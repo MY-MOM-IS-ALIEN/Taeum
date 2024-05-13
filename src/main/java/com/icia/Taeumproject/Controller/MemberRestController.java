@@ -1,16 +1,20 @@
 package com.icia.Taeumproject.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.icia.Taeumproject.Service.ApplyService;
 import com.icia.Taeumproject.Service.MailService;
 import com.icia.Taeumproject.Service.MemberService;
 import com.icia.Taeumproject.Dto.MemberDto;
+import com.icia.Taeumproject.Dto.SearchDto;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.websocket.Session;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -23,6 +27,9 @@ public class MemberRestController {
   
   @Autowired
   MailService mailServ;
+  
+  @Autowired
+  ApplyService aServ;
 
   @GetMapping("emailCheck")
 
@@ -47,5 +54,6 @@ public class MemberRestController {
     String res = mailServ.codeAuth(v_code, session);
     return res;
   }
+  
   
 }

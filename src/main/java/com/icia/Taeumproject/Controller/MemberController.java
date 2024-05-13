@@ -2,6 +2,7 @@ package com.icia.Taeumproject.Controller;
 
 
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -13,7 +14,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.icia.Taeumproject.Dao.NotificationDao;
 import com.icia.Taeumproject.Dto.MemberDto;
+import com.icia.Taeumproject.Dto.NotificationDto;
+import com.icia.Taeumproject.Dto.SearchDto;
 import com.icia.Taeumproject.Dto.SecurityUserDTO;
 import com.icia.Taeumproject.Service.MemberService;
 
@@ -27,11 +31,18 @@ public class MemberController {
 
   @Autowired
   MemberService mServ; 
+  
+  @Autowired
+  NotificationDao nDao;
 
   @GetMapping("/")
-  public String home() {
+  public String home(Model model, SearchDto sdto) {
     log.info("/");
    
+    List<NotificationDto> nList = nDao.selectNotificationList(sdto);
+    model.addAttribute("nList", nList);
+ 
+    
     return "home";
   }
 

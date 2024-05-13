@@ -57,7 +57,9 @@
     parameterType="com.icia.Taeumproject.Dto.MemberDto">
     UPDATE membertbl SET m_name =#{m_NAME}, m_phone =#{m_PHONE} WHERE username=#{username};
   </update>
-
+	 <delete id="withDrawal" parameterType="int">
+        DELETE FROM membertbl WHERE M_ID = #{m_id}
+    </delete>
 
 
 </mapper>

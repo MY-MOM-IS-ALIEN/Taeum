@@ -110,12 +110,23 @@ var markers = [];
 
 
 
-
 //nodeList를 사용하여 마커와 클러스터러를 추가합니다.
 var nodeList = /*[[${nodeList}]]*/ null;
 //console.log("nodeList = ", nodeList);
 
+ window.onload = function() {
+var nList = /*[[${nList}]]*/ null;
 
+//redCircle 이미지 요소 가져오기
+var redCircle = document.getElementById('redCircle');
+
+// nList 값이 존재하면 redCircle 이미지 표시
+if (nList && nList.length > 0) {
+    redCircle.style.display = 'inline'; // redCircle 이미지 표시
+} else {
+    redCircle.style.display = 'none'; // redCircle 이미지 숨김
+}
+ };
 
 // 노드 리스트를 반복하면서 각 노드에 대해 마커를 생성하고 markers 배열에 추가합니다.
 for (const node of nodeList) {
