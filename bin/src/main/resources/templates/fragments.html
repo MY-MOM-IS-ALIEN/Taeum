@@ -65,18 +65,13 @@
 					<li sec:authorize="isAnonymous()"><a href="/joinForm">Join</a>
 					</li>
 					<!-- 로그인된 사용자에게만 표시 -->
-					
-					<li id="applyLink" sec:authorize="hasRole('USER')"><a
-						th:href="@{/ApplyForm}">Apply</a></li>
-					<!-- 로그인 및 관리자일때만 -->
 
 					<!-- 세션에 저장된 사용자 이름 표시 -->
 					<li sec:authorize="isAuthenticated()">
 					<th:block sec:authorize="hasRole('ADMIN')">
 						<div class="top-right">
 
-
-							<a href="/Popup"
+							<a href="/popup"
 								onclick="window.open(this.href, '_blank', 'width=500, height=600'); return false;">
 								<img src="/images/notification.png" alt="로고"
 								class="top-left logo">
@@ -89,7 +84,7 @@
 							<span class="dropbtn"
 								th:text="${#authentication.principal.M_NAME + '님 환영합니다'}"></span>
 							<div class="dropdown-content" sec:authorize="hasRole('USER')">
-								<a href="/UserUpdate">내 정보 수정</a> <a href="applyList">신청 내역</a>
+								<a href="/userUpdate">내 정보 수정</a> <a href="applyList">신청 내역</a>
 								<a href="/board">공지 및 문의사항</a>
 							</div>
 					

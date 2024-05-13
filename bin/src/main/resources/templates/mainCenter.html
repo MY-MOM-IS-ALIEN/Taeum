@@ -75,9 +75,9 @@
     </div>
 <div class="list-group scrollarea px-3 flex-grow-1">
 
-    <div th:each="nodeList, index : ${rideNodeList}" class="abc" style="z-index:9998" id="seonghun">
+    <div th:each="nodeList, index : ${rideNodeList}" class="abc" style="z-index:9998" >
     <!-- 각 rideNodeList 요소에 대한 div -->
-    <a href="#" class="list-group-item list-group-item-action py-3 lh-sm mt-3 border rounded-2">
+    <a href="#" class="list-group-item list-group-item-action py-3 lh-sm mt-3 border rounded-2 customClass" onclick="toggleOnOff(this, true, ${index.index})">
         <div class="d-flex w-100 align-items-center justify-content-start mb-1">
             <!-- 각 요소 안에 있는 노드들의 정보를 출력 -->
             <div th:each="node : ${nodeList}" class="def">
@@ -87,7 +87,8 @@
                 </th:block>
             </div>
         </div>
-        <span type="text" id="onOff">off</span>
+        <span type="text">[[${index.index+1}]]차 배정</span><span type="text" id="result"></span></span><span type="text" id="onOff" style="display:none;">off</span>
+         <!-- style="display: none; visibility: hidden; -->
     </a>
     <!-- 인덱스 번호를 버튼 텍스트에 추가 -->
     <div class="btn-area">
@@ -111,13 +112,14 @@
   </div>
 
 
-  <div id="map" class="w-100" style="z-index: 0;"></div>
-
+  <div id="map" class="w-100" style="z-index: 0;">
   <div class="w-100 h-100 fixed-top justify-content-center align-items-center bg-opacity-10 bg-success" id="spin" style="display: none;">
     <div class="spinner-border" role="status">
       <span class="visually-hidden">Loading...</span>
     </div>
   </div>
+  </div>
+
 </main>
 </body>
 <script th:inline="javascript">
@@ -139,6 +141,7 @@ window.onload = function () {
         document.getElementById('DATE-TIME').innerText = selectedDate;
     });
     displayCurrentDate();
+ 
    
 };
 
@@ -152,39 +155,37 @@ function displayCurrentDate() {
     const dateString = `${year}-${month}-${day}`;
     console.log("dateString = " + dateString);
     document.getElementById('DATE-TIME').innerText = dateString;
+    
+    updateCount(dateString);
 }
 
 // 달력에서 날짜가 변경될 때 호출되는 함수
 function onDateChange(e) {
+
     const selectedDate = e.format();
-    console.log("selectedDate = " + selectedDate);
+    console.log("변경 = " + selectedDate);
     document.getElementById('DATE-TIME').innerText = selectedDate;
-  
-   
-  /*   // AJAX 요청 보내기
-    sendDateToServer(selectedDate); */
+    
+    var nodeList = /*[[${nodeList}]]*/ null; // nodeList를 적절한 선택자로 가져옵니다.
+   	var count = 0;
+
+ 	  console.log(selectedDate);
+    	 nodeList.forEach(function(node) {
+    		 var [a_date, newDate] = node.a_DATE.split(' ');
+    			console.log("a_date = " + a_date);
+    	        console.log("count = " + count);
+    	        console.log(selectedDate)
+    		 if(a_date === selectedDate){
+    			 
+    	        count++;
+    	    } else {
+    	    	count = 0;
+    	    }
+       //  console.log(nodeList.length);
+       
+     });
+         document.getElementById('Count').innerText = count; // #Count 업데이트
 }
-
-/* function sendDateToServer(date) {
-    // 원하는 형식으로 날짜를 포맷팅
-    const formattedDate = date.split('/').join('-'); // "/"를 "-"로 변경
-
-    $.ajax({
-        url: 'newNodeList',
-        type: 'POST',
-        data: { selectedDate: formattedDate }, // 포맷팅된 날짜를 전송
-        success: function(response) {
-            console.log('AJAX 요청 성공:');
-            nodeListDiv.innerHTML = response;
-
-           
-        },
-        error: function(xhr, status, error) {
-            console.error('AJAX 요청 에러:', error);
-            // 에러 발생 시 처리할 내용
-        }
-    });
-} */
 
 // 페이지가 로드될 때 이벤트 핸들러를 설정하여 초기화
 $(document).ready(function() {
@@ -193,13 +194,29 @@ $(document).ready(function() {
         autoclose: true,
         todayHighlight: true
     }).on('changeDate', onDateChange); // 달력의 날짜가 변경될 때 이벤트 핸들러 등록
-
-    // 페이지가 로드될 때 기본값으로 현재 날짜 표시
-    displayCurrentDate();
 });
+
 // -----------------------------------------------------------------
+//#Count 업데이트 함수
+     function updateCount(selectedDate) {
+     var nodeList = /*[[${nodeList}]]*/ null; // nodeList를 적절한 선택자로 가져옵니다.
+   	var count = 0;
 
-
+ 	  console.log(selectedDate);
+    	 nodeList.forEach(function(node) {
+    		 var [a_date, newDate] = node.a_DATE.split(' ');
+    			console.log(a_date);
+    		 if(a_date === selectedDate){
+    			 
+    	        count++;
+    	    } else {
+    	    	count = 0;
+    	    }
+       //  console.log(nodeList.length);
+         document.getElementById('Count').innerText = count; // #Count 업데이트
+       
+     });
+}
 
 
 function spinOn() {
@@ -290,10 +307,13 @@ function drawPath(pathPointList) {
 function toggleOnOff(innerList, isActive, idx) {
     var nodeList = innerList.querySelectorAll('.def'); 
     var onOffElement = innerList.querySelector('#onOff');
+    var abcDivs = document.querySelectorAll('.customClass');
     var dateTime = document.getElementById('DATE-TIME').innerText;
     
     if (isActive) {
         onOffElement.textContent = 'on';
+        abcDivs[idx].style.backgroundColor = '#3F7EFC'; // 해당 인덱스의 div 색상 변경
+
         nodeList.forEach(function(nodeElement) {
             var nodeId = nodeElement.querySelector('.badge.text-bg-secondary').value;
             var node = findNodeById(nodeId); 
@@ -315,6 +335,8 @@ function toggleOnOff(innerList, isActive, idx) {
         innerList.classList.add('active');
     } else {
         onOffElement.textContent = 'off';
+        abcDivs[idx].style.backgroundColor = ''; // 해당 인덱스의 div 색상 초기화
+
         nodeList.forEach(function(nodeElement) {
             var nodeId = nodeElement.querySelector('.badge.text-bg-secondary').value;
             var marker = markers[nodeId];
@@ -323,7 +345,7 @@ function toggleOnOff(innerList, isActive, idx) {
                 delete markers[nodeId];
                 delete NODE_MAP[nodeId];
                 if(POLYLINE){
-                POLYLINE.setMap(null);
+                    POLYLINE.setMap(null);
                 }
             }
         });
@@ -371,7 +393,7 @@ function toggleOnOff(innerList, isActive, idx) {
    }
  
    var nodeList = /*[[${nodeList}]]*/ null;
-    //console.log("nodeList = ", nodeList);  
+    console.log("nodeList = ", nodeList);  
 
    function findNodeById(nodeId) {
    
@@ -584,30 +606,24 @@ function secondsToHoursMinutes(seconds) {
          updateCount();// 마커를 markers 배열에 추가합니다.
      }
      
-   //#Count 업데이트 함수
-     function updateCount() {
-         var count = nodeList.length; // nodeList의 길이가 접수 현황의 개수입니다.
-       //  console.log(nodeList.length);
-         document.getElementById('Count').innerText = count; // #Count 업데이트
-     }
-     
      
 
      /*<![CDATA[*/
      function handleAccept(button) {
+    	 const resultSpan = button.closest('.abc').querySelector('#result');
          // 기본 동작 막기
          event.preventDefault();
          event.stopPropagation();
-
+		
          console.log("수락클릭");
          // JSON.stringify() 함수를 사용하여 객체를 JSON 문자열로 변환
          var nodeListAcc = JSON.stringify([[${nodeList}]]); 
          console.log(nodeListAcc);
-
+		
          // 클릭된 버튼의 부모 요소인 btn-area를 찾아서 그 안에서 수락 버튼의 인덱스 값을 가져옴
          var index = $(button).closest('.btn-area').index('.btn-area') + 1;
          console.log('클릭된 버튼의 인덱스:', index);
-
+         resultSpan.textContent = '(수락)';
          // JSON.parse() 함수로 JSON 문자열을 객체로 변환
          var nodeAtIndex = JSON.parse(nodeListAcc);
          var nodeListRe = [];
@@ -648,6 +664,8 @@ function secondsToHoursMinutes(seconds) {
 
      // 거절 버튼을 클릭할 때 실행되는 함수
 function handleReject(button) {
+	const resultSpan = button.closest('.abc').querySelector('#result');
+	 resultSpan.textContent = '(거절)';
     event.preventDefault();
     event.stopPropagation();
     console.log("거절클릭");
@@ -735,6 +753,8 @@ function createRejectInput(buttonDiv, nodeListRe, index) {
 
 //전송 버튼을 클릭할 때 실행되는 함수
 function submitRejectReason(input, nodeListRe, index) {
+	
+
     event.preventDefault();
     event.stopPropagation();
     console.log("전송클릭");

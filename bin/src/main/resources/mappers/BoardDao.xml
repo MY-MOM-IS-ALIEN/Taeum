@@ -23,8 +23,19 @@
 		 INSERT INTO commentTbl
 		  VALUES(#{C_ID},#{B_ID},#{C_CONTENTS},DEFAULT,#{M_ID})
 	</insert>
+	<!-- 댓글 삭제 -->
 	<delete id="cancelComment" parameterType="int" >
         DELETE FROM commentTbl WHERE C_ID = #{c_ID}
     </delete>
+    <!-- 게시글 삭제 -->
+    <delete id="cacelBoard" parameterType="int" >
+        DELETE FROM boardtbl WHERE B_ID = #{b_ID}
+    </delete>
+   	<!-- 게시글에 대한 모든 댓글 삭제 -->
+    <delete id="cancelCommentAll" parameterType="int" >
+        DELETE FROM commentTbl WHERE B_ID = #{b_ID}
+    </delete>
 	
 </mapper>
+
+
