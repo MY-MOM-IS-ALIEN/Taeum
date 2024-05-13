@@ -23,7 +23,7 @@ FROM NodeTbl ORDER BY distance ASC;
   </update>
   
     <select id="selectRideList" resultType="Node">
-    select * FROM NodeTbl WHERE DR_ID=#{ride}
+    select * FROM NodeTbl WHERE DR_ID=#{ride} and status='0'
   </select>
   
   <select id="selectLocaldate" resultType="Node">

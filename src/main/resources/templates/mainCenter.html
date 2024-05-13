@@ -156,7 +156,7 @@ function displayCurrentDate() {
     console.log("dateString = " + dateString);
     document.getElementById('DATE-TIME').innerText = dateString;
     
-    updateCount(dateString);
+    /* updateCount(dateString); */
 }
 
 // 달력에서 날짜가 변경될 때 호출되는 함수
@@ -714,6 +714,15 @@ function secondsToHoursMinutes(seconds) {
          var index = $(button).closest('.btn-area').index('.btn-area') + 1;
          console.log('클릭된 버튼의 인덱스:', index);
          resultSpan.textContent = '(수락)';
+         var buttonDiv = button.parentNode;
+         button.remove();
+
+         // 거절 버튼도 제거
+         var rejectButton = buttonDiv.querySelector('.reject-btn');
+         if (rejectButton) {
+             rejectButton.remove();
+         }
+         
          // JSON.parse() 함수로 JSON 문자열을 객체로 변환
          var nodeAtIndex = JSON.parse(nodeListAcc);
          var nodeListRe = [];
@@ -745,6 +754,7 @@ function secondsToHoursMinutes(seconds) {
                  console.error('에러:', error);
              }
          });
+         button.remove();
 
          return false;
      }
@@ -802,6 +812,16 @@ function handleReject(button) {
         // input 태그가 없는 경우, 새로 생성하여 추가
         createRejectInput(buttonDiv, nodeListRe, index); // 수정된 부분
     }
+    var buttonDiv = button.parentNode;
+
+    // 버튼 제거
+    button.remove();
+
+    // 수락 버튼도 제거
+    var acceptButton = buttonDiv.querySelector('.accept-btn');
+    if (acceptButton) {
+        acceptButton.remove();
+    }
     return false;
 }
 
@@ -835,7 +855,6 @@ function createRejectInput(buttonDiv, nodeListRe, index) {
         input.remove(); // input 제거
         submitButton.remove(); // 버튼 제거
     });
-
     // 생성된 submitButton을 div에 추가
     buttonDiv.appendChild(submitButton);
     return false;
