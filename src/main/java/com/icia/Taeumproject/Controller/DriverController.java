@@ -1,5 +1,6 @@
 package com.icia.Taeumproject.Controller;
 
+import java.io.File;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,7 @@ import com.icia.Taeumproject.Service.DriverService;
 import com.icia.Taeumproject.Service.MainService;
 import com.icia.Taeumproject.Service.MemberService;
 
+import ch.qos.logback.core.util.FileUtil;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
@@ -131,7 +133,31 @@ public class DriverController {
 	    return view;
 	}
 
+	  @PostMapping("deleteDriverImage")
+	  @ResponseBody
+	  public void deleteDriverImage(Integer M_ID, String imageNum) {
+	    drServ.deleteDriverImage(M_ID, imageNum);
+	    FileUtil.deleteFile("webapp/upload/" + imageNum);
 
+	    
+	  }
+	  // 파일 삭제 메소드
+	  private class FileUtil {
+	    public static void deleteFile(String filePath) {
+	      File file = new File(filePath);
+	      if (file.exists()) {
+	        if (file.delete()) {
+	          System.out.println("파일이 삭제되었습니다: " + filePath);
+	        } else {
+	          System.out.println("파일 삭제에 실패했습니다: " + filePath);
+	        }
+	      } else {
+	        System.out.println("파일이 존재하지 않습니다: " + filePath);
+	      }
+	    }
+	  }
+	
+	
 // 출퇴근 버튼 클릭 시 값 전송
 	@PostMapping("driverCommute")
 	@ResponseBody

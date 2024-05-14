@@ -53,6 +53,8 @@ public interface DriverDao {
 
 	void updateCommute(int dr_id);
 
+  void deleteDriverImage(Integer m_ID, String imageNum);
+
 
 
 
