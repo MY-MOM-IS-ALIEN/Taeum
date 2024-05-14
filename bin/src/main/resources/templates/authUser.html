@@ -57,14 +57,18 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
         		}
         		
         		let cobj = {"v_code": vcode};
-        		
+        		var userEmail = $('#username').val();
         		$.ajax({
         			url: "/codeAuth",
         			type: "post",
-        			data: cobj,
+        			data: 
+        				cobj,
+        		
         			success: (res) => {
         				if(res == "ok"){
-        					location.href="/pwdChange";
+        					
+        					
+        					location.href="/pwdChange?" + userEmail;
         				}
         				else {
         					alert("코드가 맞지 않습니다.");
@@ -87,7 +91,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	        <div class="login-form">
 	            <h2 class="login-header">메일 인증</h2>
 	            <input type="text" class = "login-input" id="M_NAME"
-	                   placeholder="이름"  >
+	                   placeholder="이름">
 	            <input type="email" class="login-input" id="username" 
 	            	   placeholder="이메일">
 	            <button type="button" class="login-btn" id="sbtn">인증코드전송</button>
@@ -100,3 +104,4 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	     <th:block th:insert="~{fragments::footer}" />
 </body>
 </html>
+

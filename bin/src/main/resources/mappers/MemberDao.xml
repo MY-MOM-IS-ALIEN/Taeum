@@ -60,6 +60,10 @@
 	 <delete id="withDrawal" parameterType="int">
         DELETE FROM membertbl WHERE M_ID = #{m_id}
     </delete>
+    <update id="pwdChangeProc" parameterType="com.icia.Taeumproject.Dto.MemberDto">
+    update membertbl set
+    password=#{pass} where username=#{userName}
+  </update>
 
 
 </mapper>

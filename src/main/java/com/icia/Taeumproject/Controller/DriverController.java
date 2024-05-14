@@ -114,11 +114,18 @@ public class DriverController {
 	    int mid = driver.getM_ID();
 	    String m_name = driver.getM_NAME();
 	    String m_phone = driver.getM_PHONE();
+	    System.out.println(m_phone);
 	    member.setM_ID(mid);
 	    member.setM_NAME(m_name);
 	    member.setM_PHONE(m_phone);
 	    // 기사 정보 업데이트
 	    mServ.DriveMemberUpdate(member);
+	    if(m_phone.equals("null")) {
+	    	System.out.println("여기서 걸림");
+	    	int dr_id = (mid-1);
+	    	drServ.deleteDispatch(dr_id);
+	    	drServ.deleteCommute(dr_id);
+	    }
 	    System.out.println(files.size());
 	    	if(!files.isEmpty()) {
 	    		// 그 외 업데이트 처리
@@ -126,7 +133,6 @@ public class DriverController {
 	    	} else if(!files.isEmpty()) {
 	    		// 프로필 이미지 업데이트
 		    	drServ.updateDriverProfile(mid);
-		    	System.out.println("3e2434324234");
 		    	view = "redirect:/driverModify";
 	    	} 
 
