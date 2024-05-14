@@ -78,6 +78,7 @@ public class SecurityConfig{
       .requestMatchers("/findById").permitAll()
       .requestMatchers("/findEmail").permitAll()
       .requestMatchers("/pwdChange").permitAll()
+      .requestMatchers("/pwdChangeProc").permitAll()
       .requestMatchers("/authUser").permitAll()
       .requestMatchers("/createCode").permitAll()
       .requestMatchers("/createEmailForm").permitAll()

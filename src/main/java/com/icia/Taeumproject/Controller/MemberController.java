@@ -2,7 +2,6 @@ package com.icia.Taeumproject.Controller;
 
 
 import java.security.Principal;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -14,10 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.icia.Taeumproject.Dao.NotificationDao;
 import com.icia.Taeumproject.Dto.MemberDto;
-import com.icia.Taeumproject.Dto.NotificationDto;
-import com.icia.Taeumproject.Dto.SearchDto;
 import com.icia.Taeumproject.Dto.SecurityUserDTO;
 import com.icia.Taeumproject.Service.MemberService;
 
@@ -31,18 +27,11 @@ public class MemberController {
 
   @Autowired
   MemberService mServ; 
-  
-  @Autowired
-  NotificationDao nDao;
 
   @GetMapping("/")
-  public String home(Model model, SearchDto sdto) {
+  public String home() {
     log.info("/");
    
-    List<NotificationDto> nList = nDao.selectNotificationList(sdto);
-    model.addAttribute("nList", nList);
- 
-    
     return "home";
   }
 
@@ -115,10 +104,19 @@ public class MemberController {
     log.info("authUser()");
     return "authUser";
   }
+  // 비밀번호 변경
   @GetMapping("pwdChange")
   public String pwdChange() {
     log.info("pwdChange()");
     return "pwdChange";
+  }
+  
+  @PostMapping("pwdChangeProc")
+  public String pwdChangeProc(RedirectAttributes rttr,String password, String userName) {
+	 log.info("pwdChangeProc()");
+	 mServ.pwdChangeProc(rttr,password,userName);
+	 
+	 return "redirect:/loginForm";
   }
   
   @GetMapping("findEmail")
@@ -144,6 +142,7 @@ public class MemberController {
 	  return "/userUpdate";
   }
   
+  // 사용자 정보수정
   @PostMapping("UserUpdateProc")
   public String UserUpdateProc(@RequestParam("M_NAME") String M_NAME,
 		  		@RequestParam("M_PHONE") String M_PHONE, Principal principal,Model model,RedirectAttributes rttr,HttpSession session) {
@@ -156,7 +155,7 @@ public class MemberController {
 	    
 	  return mServ.userUpdate(M_NAME,M_PHONE,principal,rttr,session);
   }
-  
+  // 탈퇴
   @GetMapping("withDrawal")
   	public String withDrawal(RedirectAttributes rttr,HttpSession session) {
 	  Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -181,7 +180,6 @@ public class MemberController {
   
 
 }
-
 
 
 

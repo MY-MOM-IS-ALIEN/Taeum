@@ -37,9 +37,11 @@ public interface MemberDao {
 
 	List<MemberDto> getAllUsers();
 
-
+	
 	void updateAdmin(int m_id);
-
+	// 회원 탈퇴
 	void withDrawal(int m_id);
+    // 비밀번호 변경
+	void pwdChangeProc(String userName, String pass);
 
 }
