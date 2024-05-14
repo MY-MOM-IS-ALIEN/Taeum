@@ -49,7 +49,7 @@
 	</select>
 	<delete id="withDrawal" parameterType="int">
 		DELETE FROM applytbl
-		WHERE M_ID = #{m_Id}
+		WHERE M_ID = #{m_id}
 	</delete>
 
 

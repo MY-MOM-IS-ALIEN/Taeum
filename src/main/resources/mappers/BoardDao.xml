@@ -37,7 +37,7 @@
     </delete>
     	<!-- 회원 탈퇴 게시글 삭제 -->
     <delete id="withDrawal" parameterType="int" >
-        DELETE FROM boardtbl WHERE M_ID = #{m_Id}
+        DELETE FROM boardtbl WHERE M_ID = #{m_id}
     </delete>
 	
 </mapper>
