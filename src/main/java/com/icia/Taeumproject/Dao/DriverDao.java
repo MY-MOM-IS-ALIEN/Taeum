@@ -55,6 +55,10 @@ public interface DriverDao {
 
   void deleteDriverImage(Integer m_ID, String imageNum);
 
+  void deleteDispatch(int dr_id);
+
+  void deleteCommute(int dr_id);
+
 
 
 

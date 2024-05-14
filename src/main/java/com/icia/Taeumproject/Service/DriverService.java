@@ -164,7 +164,7 @@ public class DriverService {
 	}
 
 	public void updateDriverProfile(int mid) {
-		log.info("zzzzzzzzzzzzz");
+		log.info("updateDriverProfile()");
 		drDao.updateDriverProfile(mid);
 	}
 
@@ -211,6 +211,16 @@ public class DriverService {
   public void deleteDriverImage(Integer m_ID, String imageNum) {
    drDao.deleteDriverImage(m_ID, imageNum);
   }
+
+
+  public void deleteDispatch(int dr_id) {
+	  drDao.deleteDispatch(dr_id);
+ }
+
+
+  public void deleteCommute(int dr_id) {
+	  drDao.deleteCommute(dr_id);
+}
 
 
 }
