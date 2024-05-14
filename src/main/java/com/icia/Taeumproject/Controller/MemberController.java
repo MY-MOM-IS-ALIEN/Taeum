@@ -61,8 +61,12 @@ public class MemberController {
      return mServ.loginProc(model,rttr, member);
   }
   @GetMapping("loginChange")
-  public String loginChange() {
+  public String loginChange(Model model, SearchDto sdto) {
 	  log.info("loginChange()");
+	  
+	   List<NotificationDto> nList = nDao.selectNotificationList(sdto);
+	    model.addAttribute("nList", nList);
+	  
 	  return "loginChange";
   }
   

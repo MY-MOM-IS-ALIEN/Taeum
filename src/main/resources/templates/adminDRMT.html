@@ -245,30 +245,32 @@
 
    </div>
    </div>
-     <div style="display: flex; align-items: flex-start; margin-top: 3%; margin-left: 3%; width: 100%; " >
-    <img src="images/noimage.png" style="width: 300px; height: auto;" id="driverImage">
-    <div style="margin-left: 3%;"> <!-- 여백 조정 -->
+     <div style="display: flex; align-items: flex-start; margin-top: 3%; margin-left: 3%; width: 100%; " id="driverInfomation" >
+     <img  src='images/noimage.png'; style="width: 300px; height: auto;" id="driverImageDiv">
+    <div style="margin-left: 3%;">
       
             <ul style="font-weight: bold; font-size: 27px;">
-                <li id="driverName">이름 : </li>
+                <li id="driverName"> </li>
               
                  <br>
-                <li id="driverPhone">전화번호  : </li>
+                <li id="driverPhone"></li>
                 
                 <br>
-                <li id="driverLocal">주 운행지 : </li>
+                <li id="driverLocal"></li>
               
                  <br>
-                <li id="driverCarnum">차량 번호 : </li>
+                <li id="driverCarnum"></li>
        
                 <li style="display:none;" id="driverId"></li>
             </ul>
 
-    </div>
+    </div> 
     <div class="chart-container" >
     <div id="tableContainer"></div>
     </div>
 </div>
+
+
 <div class="chart-container">
          <canvas id="myChart" ></canvas>
     </div>
@@ -299,6 +301,13 @@ document.getElementById('undoButton').addEventListener('click', function() {
                redCircle.style.display = 'none'; // redCircle 이미지 숨김
            }
     	
+           
+           
+          $('#driverInfomation').hide();
+          
+           
+           
+           
         // 부트스트랩 달력 초기화
         $('#datePickerButton').datepicker({
             format: 'yyyy-mm-dd',
@@ -370,7 +379,9 @@ document.getElementById('undoButton').addEventListener('click', function() {
 
             // 각 드라이버에 대한 정보를 출력
             driverData.forEach(function(driver) {
+  	
                 var driverItem = $('<a href="#" class="list-group-item list-group-item-action py-3 lh-sm mt-3 border rounded-2"></a>');
+                driverItem.append('<img src="images/noimage.png" style="width: 300px; height: auto;" id="driverImage">')
                 driverItem.append('<div class="d-flex w-100 align-items-center justify-content-start mb-1"></div>');
                 driverItem.append('<div class="ma-1"></div>');
                 driverItem.append('<div class="ma-2"></div>');
@@ -384,6 +395,39 @@ document.getElementById('undoButton').addEventListener('click', function() {
                 // 링크를 클릭했을 때 이벤트 처리
                 // 클릭 이벤트 핸들러를 설정하는 코드
                 $('#driverList').append(driverItem);
+                
+                var memberID = $('#m_ID').val();
+                
+                $.ajax({
+                    url: 'GetDriverImage', // 컨트롤러의 URL
+                    method: 'POST',
+                    data: {
+                        M_ID : memberID
+                    }, // 선택된 값 전송
+                    success: function(response) {
+                        // 성공적으로 서버로부터 응답을 받았을 때 수행할 작업
+                      
+                      
+                    console.log("GetDriverImage  = "+response);
+                        
+                       if (response) {
+                           // 서버에서 이미지가 반환되었을 때
+                           $('#driverImage').attr('src', '/upload/' + response);
+                           $('#driverImageDiv').attr('src', '/upload/' + response);
+                       } else {
+                           // 서버에서 이미지가 null이거나 비어있을 때
+                           $('#driverImage').attr('src', 'images/noimage.png');
+                           $('#driverImageDiv').attr('src', '/upload/' + response);
+                       }
+                        
+                    },
+                    error: function(xhr, status, error) {
+                        // Ajax 요청이 실패했을 때 수행할 작업
+                        console.error('AJAX 요청이 실패하였습니다:', error);
+                       
+                    }
+                });
+                
             });
             
         let myChart;
@@ -406,9 +450,11 @@ document.getElementById('undoButton').addEventListener('click', function() {
                if (response) {
                    // 서버에서 이미지가 반환되었을 때
                    $('#driverImage').attr('src', '/upload/' + response);
+                   $('#driverImageDiv').attr('src', '/upload/' + response);
                } else {
                    // 서버에서 이미지가 null이거나 비어있을 때
                    $('#driverImage').attr('src', 'images/noimage.png');
+                   $('#driverImageDiv').attr('src', '/upload/' + response);
                }
                 
             },
@@ -614,9 +660,13 @@ document.getElementById('undoButton').addEventListener('click', function() {
         }
      // 드라이버 정보를 화면에 출력하는 함수
         function displayDriverInfo(driverInfo) {
+    	 
+        	 $('#driverInfomation').show();
+    	 
+    	 
             $('#driverName').text('이름 : ' + driverInfo.m_NAME);
             $('#driverPhone').text('전화번호 : ' + driverInfo.m_PHONE);
-         
+          
             $('#driverLocal').text('주 운행지 : ' + driverInfo.dr_AREA);
             $('#driverCarnum').text('차량 번호 : ' + driverInfo.dr_CARNUM);
             $('#driverId').text(driverInfo.dr_ID);
