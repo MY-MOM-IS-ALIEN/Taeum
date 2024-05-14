@@ -27,7 +27,7 @@ public interface BoardDao {
 	// 게시글에 대한 모든 댓글 삭제
 	void cancelCommentAll(int b_ID);
 	// 회원 탈퇴 게시글 삭제
-	void withDrawal(int m_Id);
+	void withDrawal(int m_id);
 	
 	
 }

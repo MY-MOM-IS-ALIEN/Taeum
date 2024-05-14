@@ -69,7 +69,7 @@ public interface MainDao {
 
 
   // 탈퇴 회원 노드 삭제
-  public void withDrawal(int m_Id);
+  public void withDrawal(int m_id);
 
 
 
