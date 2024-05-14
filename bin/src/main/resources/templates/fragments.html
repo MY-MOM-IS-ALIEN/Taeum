@@ -70,13 +70,13 @@
 					<li sec:authorize="isAuthenticated()">
 					<th:block sec:authorize="hasRole('ADMIN')">
 						<div class="top-right">
-
 							<a href="/popup"
 								onclick="window.open(this.href, '_blank', 'width=500, height=600'); return false;">
+								 
+                  <img id="redCircle" class="redCircle" src="/images/redCircle.png" alt="알림" style="vertical-align:top !important">				
 								<img src="/images/notification.png" alt="로고"
 								class="top-left logo">
 							</a>
-
 						</div>
 
 					</th:block>
@@ -121,4 +121,7 @@
 	</div>
 
 </body>
+<script>
+
+</script>
 </html>

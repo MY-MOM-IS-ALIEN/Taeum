@@ -212,9 +212,9 @@ public class MemberService {
 
 	public void withDrawal(int m_id, RedirectAttributes rttr, HttpSession session) {
 		String msg = null;
-		//maDao.withDrawal(m_id); // 회원 노드 삭제
-		//aDao.withDrawal(m_id); // 회원 탈퇴 신청 삭제
-		//bDao.withDrawal(m_id);// 회원 게시글 삭제
+		maDao.withDrawal(m_id); // 회원 노드 삭제
+		aDao.withDrawal(m_id); // 회원 탈퇴 신청 삭제
+		bDao.withDrawal(m_id);// 회원 게시글 삭제
 		mDao.withDrawal(m_id); // 회원 탈퇴
 		session.invalidate(); 
 		msg = "회원 탈퇴 완료";

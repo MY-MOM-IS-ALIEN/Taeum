@@ -101,16 +101,12 @@
                     </select>
                 </div>
                
-    
+                <br>
                 <div class="border-start border-2 h-50"></div>
-                             <div class="d-flex flex-column align-items-center">
-                             
+                 <div class="d-flex flex-column align-items-center">
                     <span class="fs-5 fw-semibold">날짜 선택 : </span>
                 </div>
                 <div class="d-flex flex-column align-items-center" >
-                  
-
-    
                 </div>
         <span id="DATE-TIME"> </span>
          <button type="button" class="btn btn-secondary p-0" id="datePickerButton" >
@@ -132,7 +128,7 @@
         </div>
         <div style="width: 100%; height: 100%;"> 
        <div style="display: flex; align-items: flex-start; margin-top: 3%; margin-left: 3%; width: 100%; " >
-    <img src="images/noimage.png" style="width: 300px; height: auto;" id="driverImage">
+    <img src="images/noimage.png" style="width: 300px; height: auto;" id="driverImageDiv">
     <div style="margin-left: 3%;"> <!-- 여백 조정 -->
       
             <ul style="font-weight: bold; font-size: 25px;">
@@ -167,6 +163,19 @@
     <script th:inline="javascript">
    
     window.onload = function() {
+    	
+    	   var nList = /*[[${nList}]]*/ null;
+
+           //redCircle 이미지 요소 가져오기
+           var redCircle = document.getElementById('redCircle');
+
+           // nList 값이 존재하면 redCircle 이미지 표시
+           if (nList && nList.length > 0) {
+               redCircle.style.display = 'inline'; // redCircle 이미지 표시
+           } else {
+               redCircle.style.display = 'none'; // redCircle 이미지 숨김
+           }
+    	
         // 부트스트랩 달력 초기화
         $('#datePickerButton').datepicker({
             format: 'yyyy-mm-dd',
@@ -247,6 +256,7 @@
             // 각 드라이버에 대한 정보를 출력
             driverData.forEach(function(driver) {
                 var driverItem = $('<a href="#" class="list-group-item list-group-item-action py-3 lh-sm mt-3 border rounded-2"></a>');
+                driverItem.append('<img src="images/noimage.png" style="width: 300px; height: auto;" id="driverImage">')
                 driverItem.append('<div class="d-flex w-100 align-items-center justify-content-start mb-1"></div>');
                 driverItem.append('<div class="ma-1"></div>');
                 driverItem.append('<div class="ma-2"></div>');
@@ -258,6 +268,37 @@
                 driverItem.find('.ma-2').append('<span type="text"> 차량번호 : '+ driver.dr_CARNUM +'</span>');
                 
                 // 링크를 클릭했을 때 이벤트 처리
+                var memberID = $('#m_ID').val();
+                
+                 $.ajax({
+                    url: 'GetDriverImage', // 컨트롤러의 URL
+                    method: 'POST',
+                    data: {
+                        M_ID : memberID
+                    }, // 선택된 값 전송
+                    success: function(response) {
+                        // 성공적으로 서버로부터 응답을 받았을 때 수행할 작업
+                      
+                      
+                    console.log("GetDriverImage  = "+response);
+                        
+                       if (response) {
+                           // 서버에서 이미지가 반환되었을 때
+                           $('#driverImage').attr('src', '/upload/' + response);
+                       
+                       } else {
+                           // 서버에서 이미지가 null이거나 비어있을 때
+                           $('#driverImage').attr('src', 'images/noimage.png');
+                          
+                       }
+                        
+                    },
+                    error: function(xhr, status, error) {
+                        // Ajax 요청이 실패했을 때 수행할 작업
+                        console.error('AJAX 요청이 실패하였습니다:', error);
+                       
+                    }
+                });
                 
  
                 // 클릭 이벤트 핸들러를 설정하는 코드
@@ -291,6 +332,14 @@
             $('#driverLocal').text('주 운행지 : ' + driverInfo.dr_AREA);
             $('#driverCarnum').text('차량 번호 : ' + driverInfo.dr_CARNUM);
             $('#driverId').text(driverInfo.dr_ID);
+            
+            
+            
+            
+            
+            
+            
+            
         }
      //2024-04-29 진행중-------------------------------------------------------------------------
      
@@ -335,9 +384,11 @@
            if (response) {
                // 서버에서 이미지가 반환되었을 때
                $('#driverImage').attr('src', '/upload/' + response);
+               $('#driverImageDiv').attr('src', '/upload/' + response);
            } else {
                // 서버에서 이미지가 null이거나 비어있을 때
-               $('#driverImage').attr('src', 'images/nullprofile.png');
+               $('#driverImage').attr('src', 'images/noimage.png');
+               $('#driverImageDiv').attr('src', '/upload/' + response);
            }
             
         },
@@ -362,9 +413,11 @@
 
                 // 테이블 헤더 생성
                 var headerRow = $('<tr></tr>');
-                headerRow.append('<th style="width: 33%; height: 50px; border: 2px solid #000; text-align: center; background-color: #3F7EFC; color : white; ">최초 선정 시간</th>');
-                headerRow.append('<th style="width: 33%; height: 50px; border: 2px solid #000; text-align: center;  background-color: #3F7EFC; color : white;"> 배차 컨펌 시간</th>')
-                headerRow.append('<th style="width: 33%; height: 50px; border: 2px solid #000; text-align: center;  background-color: #3F7EFC; color : white;">선정 상태</th>');
+                headerRow.append('<th style="width: 20%; height: 50px; border: 2px solid #000; text-align: center; background-color: #3F7EFC; color : white; ">최초 선정 시간</th>');
+                headerRow.append('<th style="width: 20%; height: 50px; border: 2px solid #000; text-align: center;  background-color: #3F7EFC; color : white;"> 배차 컨펌 시간</th>');
+                headerRow.append('<th style="width: 15%; height: 50px; border: 2px solid #000; text-align: center;  background-color: #3F7EFC; color : white;"> 탑슴 날짜</th>');
+                headerRow.append('<th style="width: 5%; height: 50px; border: 2px solid #000; text-align: center;  background-color: #3F7EFC; color : white;"> 배차(cycle)</th>');
+                headerRow.append('<th style="width: 20%; height: 50px; border: 2px solid #000; text-align: center;  background-color: #3F7EFC; color : white;">선정 상태</th>');
                 table.append(headerRow);
 
                 // 드라이버 정보를 테이블에 추가
@@ -374,33 +427,37 @@
                     // 배차 컨펌 시간 추가
                     
                     // 선정 시간 추가
-                    row.append('<td style="width: 33%; height: 17.9px; border: 2px solid #000; ">' + driver.d_SELECT + '</td>');
+                    row.append('<td style="width: 20%; height: 17.9px; border: 2px solid #000; ">' + driver.d_SELECT + '</td>');
 
                     if (driver.d_CANCLE == null && driver.d_CONFIRM != null) {
-                        row.append('<td style="width: 33%; height: 17.9px; border: 2px solid #000;">' + driver.d_CONFIRM + '</td>');
+                        row.append('<td style="width: 20%; height: 17.9px; border: 2px solid #000;">' + driver.d_CONFIRM + '</td>');
                     } else if(driver.d_CANCLE != null && driver.d_CONFIRM == null ) {
-                        row.append('<td style="width: 33%; height: 17.9px; border: 2px solid #000;">' + driver.d_CANCLE + '</td>'); // 배차 컨펌 시간이 null이면 빈칸으로 처리
+                        row.append('<td style="width: 20%; height: 17.9px; border: 2px solid #000;">' + driver.d_CANCLE + '</td>'); // 배차 컨펌 시간이 null이면 빈칸으로 처리
                     }else {
-                    	row.append('<td style="width: 33%; height: 17.9px; border: 2px solid #000;"></td>'); 
+                    	row.append('<td style="width: 20%; height: 17.9px; border: 2px solid #000;"></td>'); 
                     }
+                    row.append('<td style="width: 15%; height: 17.9px; border: 2px solid #000; ">' + driver.d_DATE + '</td>');
+                    row.append('<td style="width: 5%; height: 17.9px; border: 2px solid #000; ">' + driver.cycle + ' '+'차'+'</td>');
+                    
+                    
                     // 선정 상태 추가
                     var statusText = "";
                    
-                    if (driver.d_STATUS === '0') {
+                    if (driver.d_STATUS === '4') {
                         statusText = "선정중";
                         
-                        row.append('<td style="width: 33%; height: 17.9px; border: 2px solid #000;">' + '<div class="circle" style="background-color: orange"></div>' + statusText + '</td>');
+                        row.append('<td style="width: 20%; height: 17.9px; border: 2px solid #000;">' + '<div class="circle" style="background-color: orange"></div>' + statusText + '</td>');
                     } else if (driver.d_STATUS === '1') {
                         statusText = "선정완료";
                         
-                        row.append('<td style="width: 33%; height: 17.9px; border: 2px solid #000;">' + '<div class="circle" style="background-color: green"></div>' + statusText + '</td>');
+                        row.append('<td style="width: 20%; height: 17.9px; border: 2px solid #000;">' + '<div class="circle" style="background-color: green"></div>' + statusText + '</td>');
                     } else if (driver.d_STATUS === '2') {
                         statusText = "거절" 
                         if(driver.d_REASON != null){
-                        	statusText = "거절 / ( " + driver.d_REASON + " ) ";
+                        	statusText = "거절 / 사유 : ( " + driver.d_REASON + " ) ";
                         }
                         
-                        row.append('<td style="width: 33%; height: 17.9px; border: 2px solid #000;">' + '<div class="circle" style="background-color: red"></div>' + statusText + '</td>');
+                        row.append('<td style="width: 20%; height: 17.9px; border: 2px solid #000;">' + '<div class="circle" style="background-color: red"></div>' + statusText + '</td>');
                     }
 
                     // 테이블에 행 추가

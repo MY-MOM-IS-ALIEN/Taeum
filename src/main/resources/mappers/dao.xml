@@ -107,7 +107,7 @@ FROM NodeTbl ORDER BY distance ASC;
 	<!--  탈퇴 회원 노드 삭제 -->
 	 <delete id="withDrawal" parameterType="int">
     	DELETE FROM NodeTbl
-    	WHERE M_Id = #{m_Id} 
+    	WHERE M_ID = #{m_id} 
 	</delete>
 
   
