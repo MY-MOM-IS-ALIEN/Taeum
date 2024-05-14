@@ -15,6 +15,7 @@
         <div class="content">
             <form class="login-form" th:action="@{/pwdChangeProc}" method="post">
                 <h2 class="login-header">비밀번호 변경</h2>
+                <input type="hidden" id="userName" name="userName"/>
                 <input type="password" class="login-input" name="password" placeholder="비밀번호">
                 <button type="submit" class="login-btn" id="sbtn">변경</button>
             </form>
@@ -22,4 +23,19 @@
     </section>
     <th:block th:insert="~{fragments::footer}" />
 </body>
+
+<script th:inline="javascript">
+
+$(document).ready(function() {
+	  var url = window.location.href;
+	    var email = url.match(/pwdChange\?(.+)/)[1];
+
+	   $('#userName').val(email);
+	   
+		var test = $('#userName').val();
+
+    console.log(test);
+   
+});
+</script>
 </html>

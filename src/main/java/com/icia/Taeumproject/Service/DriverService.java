@@ -208,4 +208,9 @@ public class DriverService {
 	}
 
 
+  public void deleteDriverImage(Integer m_ID, String imageNum) {
+   drDao.deleteDriverImage(m_ID, imageNum);
+  }
+
+
 }

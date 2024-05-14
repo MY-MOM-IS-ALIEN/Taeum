@@ -20,6 +20,7 @@ import com.icia.Taeumproject.Dao.BoardDao;
 import com.icia.Taeumproject.Dao.MainDao;
 import com.icia.Taeumproject.Dao.MemberDao;
 import com.icia.Taeumproject.Dto.MemberDto;
+import com.icia.Taeumproject.Dto.SecurityUserDTO;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -220,8 +221,13 @@ public class MemberService {
 		
 		rttr.addFlashAttribute("msg",msg);
 	}
+	// 비밀번호 변경
+	public void pwdChangeProc(RedirectAttributes rttr, String password, String userName) {
+		String pass = pEncoder.encode(password);
+		mDao.pwdChangeProc(userName,pass);
+		
+	}
 	
 }
-
 
 
