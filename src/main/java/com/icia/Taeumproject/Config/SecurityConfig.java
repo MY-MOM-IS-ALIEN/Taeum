@@ -135,6 +135,7 @@ public class SecurityConfig{
       
       
       
+      
    
       // WebSocket 핸들러에 대한 접근 권한 설정
       .requestMatchers("/ws").permitAll()
