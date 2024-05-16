@@ -50,6 +50,20 @@ section {
 	padding-top: 2.5px;
 }
 
+.close-btn{
+	width: 80px;
+	height: 30px;
+	font-weight: bold;
+	font-family: 'Open Sans', sans-serif; /* Open Sans 글꼴 사용 */
+	border: none; /* 윤곽선 제거 */
+	border-radius: 6px; /* 모서리를 둥글게 만듦 */
+	background-color: #3F7EFC; /* 버튼 배경색을 흰색으로 설정 */
+	color: #fff; /* 글자색을 3F7EFC로 설정 */
+	text-align: center;
+	margin-top:250px;
+	margin-left: 400px
+}
+
 .withdrawalLink{
 	text-align: center;
 }
@@ -901,7 +915,7 @@ fieldset.profile {
 .board {
 	border: 1px #a39485 solid;
 	font-size: .9em;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, .25);
+	box-shargb(255, 255, 255) 0 2px 5px rgba(0, 0, 0, .25);
 	width: 80%;
 	border-collapse: collapse;
 	border-radius: 5px;
@@ -913,25 +927,58 @@ fieldset.profile {
 .min-board{
  	min-height: 60%;
 }
-.board-btn-primary {
-	background-color: #dc3545;
-	color: #fff;
-	border: none;
+
+.board-btn-box{
+	width:300px;
+	height:150px;
+	margin-left:75%;
+	white-space: nowrap;
+	margin-top:80px;
+}
+
+.board-btn-primary1 {
+	background-color: #fff;
+	color: #dc3545;
+	border: 2px solid #dc3545;
 	padding: 10px 20px;
 	border-radius: 5px;
 	cursor: pointer;
 	transition: background-color 0.3s ease;
-	margin-top: 10px;
-	margin-left: 80%;
-	display: inline-block;
+	margin-left:10px;
 	text-decoration: none;
 	width: 80px; /* 자동으로 내용에 맞게 너비 조절 */
 	box-sizing: border-box; /* 패딩과 테두리를 포함한 전체 너비를 설정 */
 }
 
-.board-btn-primary:hover {
-	background-color: #c82333;
+.board-btn-primary1.backbtn {
+	background-color: #fff;
+	color: #3F7EFC;
+	border: 2px solid #3F7EFC; /* 속성을 합쳐서 border로 설정합니다 */
+	padding: 10px 20px;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+	margin-left: 10px;
+	text-decoration: none;
+	width: 80px; /* 너비를 설정해요 */
+	box-sizing: border-box; /* 패딩과 테두리를 포함한 전체 너비를 설정 */
 }
+
+.board-btn-primary1:hover {
+	background-color: #fff;
+}
+
+.board-btn-primary1.backbtn:hover {
+	background-color: #fff;
+}
+
+.board-btn-primary1:visited {
+    color: #dc3545; /* 방문한 링크의 색상도 원래 색상으로 설정합니다 */
+  }
+  
+  .board-btn-primary1.backbtn:visited {
+    color: #3F7EFC; /* 방문한 링크의 색상도 원래 색상으로 설정합니다 */
+  }
 
 .board-btn-primary:focus {
 	outline: none; /* 포커스 효과 제거 */

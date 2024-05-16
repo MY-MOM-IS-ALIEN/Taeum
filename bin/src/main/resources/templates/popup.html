@@ -42,13 +42,24 @@
                     </div>
                 </div>
             </div>
+            <div >
+   <button class="close-btn" type="submit">종료</button>
+   </div>
         </div>
-   
 </section>
 <footer>
     <th:block th:insert="~{fragments::footer}" />
 </footer>
 </body>
+<script th:inline="javascript">
+const closeButton = document.querySelector('.close-btn');
+
+//버튼에 클릭 이벤트를 추가합니다.
+closeButton.addEventListener('click', function() {
+// 팝업창을 닫습니다.
+window.close();
+});
+</script>
 <style>
   html, body {overflow:hidden;}
 </style>
