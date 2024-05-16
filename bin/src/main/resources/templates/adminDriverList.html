@@ -437,8 +437,16 @@
                     	row.append('<td style="width: 20%; height: 17.9px; border: 2px solid #000;"></td>'); 
                     }
                     row.append('<td style="width: 15%; height: 17.9px; border: 2px solid #000; ">' + driver.d_DATE + '</td>');
-                    row.append('<td style="width: 5%; height: 17.9px; border: 2px solid #000; ">' + driver.cycle + ' '+'차'+'</td>');
-                    
+                    // row.append('<td style="width: 5%; height: 17.9px; border: 2px solid #000; ">' + driver.cycle + ' '+'차'+'</td>');
+                    if(driver.cycle === 0){
+                    	row.append('<td style="width: 15%; height: 17.9px; border: 2px solid #000; ">' +'거절 배차'+ '</td>')
+                    }else if(driver.cycle === 1){
+                    	row.append('<td style="width: 15%; height: 17.9px; border: 2px solid #000; ">' + driver.cycle + ''+'차'+ '</td>')
+                    }else if(driver.cycle === 2){
+                    	row.append('<td style="width: 15%; height: 17.9px; border: 2px solid #000; ">' + driver.cycle + ''+'차'+  '</td>')
+                    }else if(driver.cycle === 3){
+                    	row.append('<td style="width: 15%; height: 17.9px; border: 2px solid #000; ">' + driver.cycle + ''+'차'+  '</td>')
+                    }
                     
                     // 선정 상태 추가
                     var statusText = "";
