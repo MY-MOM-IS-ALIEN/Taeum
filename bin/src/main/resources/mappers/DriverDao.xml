@@ -130,4 +130,14 @@
 	   DELETE FROM driverprofile
 	   WHERE M_ID = #{m_ID} and DP_SYSNAME = #{imageNum}
 	</delete>
+	
+	<delete id="deleteDispatch" parameterType="Integer">
+	   DELETE FROM dispatchtbl
+	   WHERE DR_ID = #{dr_id}
+	</delete>
+	
+	<delete id="deleteCommute" parameterType="Integer">
+	   DELETE FROM drivermanagement
+	   WHERE DR_ID = #{dr_id}
+	</delete>
 </mapper>

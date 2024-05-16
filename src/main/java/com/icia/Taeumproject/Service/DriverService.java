@@ -191,6 +191,7 @@ public class DriverService {
 			dispatch.setD_ID(D_ID);
 			dispatch.setDR_ID(DR_ID);
 			dispatch.setD_REASON(D_REASON);
+			dispatch.setCycle(0);
 			
 			drDao.updateCancle(dispatch);
 			drDao.updateNodeCancle(dispatch);
