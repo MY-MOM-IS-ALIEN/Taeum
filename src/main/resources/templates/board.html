@@ -18,9 +18,10 @@
 </head>
 
 <body>
-
-	<a href="/boardWrite" class="board-btn-primary"> Write</a>
-
+	<div class="board-btn-box">
+	<a href="/boardWrite" class="board-btn-primary1"> Write</a>
+	<a href="/adminMain" class="board-btn-primary1 backbtn"> back</a>
+	</div>
 	<h2 class="board-title">공지사항</h2>
 	<!-- applyList가 비어 있는 경우 -->
 	<div th:if="${boardList.isEmpty()}">
