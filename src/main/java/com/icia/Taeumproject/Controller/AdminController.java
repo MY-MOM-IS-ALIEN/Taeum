@@ -161,16 +161,17 @@ public String GetDriverImage(int M_ID, Model model) {
           
 	    	 }else {
 	    	   boolean isExistingCycle = false;
+	    	   DispatchDto currentDto = null;
 	        for(int i = 0; i<getDispatchDtos.size(); i++) {
-	          DispatchDto currentDto = getDispatchDtos.get(i);
+	         currentDto = getDispatchDtos.get(i);
 	          if (currentDto.getCycle() == cycle) {
 	            isExistingCycle = true; // 디비에 해당 cycle 값이 이미 존재함
 	            break;
 	        }
 	    }          
 	            if(isExistingCycle) {
-	              System.out.println("cycle1 통과");
-	              msg = "해당날짜에 이미 선정된 배차 상태가 존재합니다.";
+	            		System.out.println("cycle1 통과");
+	            		msg = "해당날짜에 이미 선정된 배차 상태가 존재합니다.";
 	          }else {  
 	            System.out.println("else문 통과 통과");
 	             // maServ.updateConfirm(ridding,selectedTime, cycle);
