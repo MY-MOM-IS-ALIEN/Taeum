@@ -19,8 +19,13 @@
 
 <body>
 	<div class="board-btn-box">
-	<a href="/boardWrite" class="board-btn-primary1"> Write</a>
-	<a href="/adminMain" class="board-btn-primary1 backbtn"> back</a>
+	<a href="/boardWrite" class="board-btn-primary1"> 글쓰기</a>
+	<th:block sec:authorize="hasRole('USER') or isAnonymous()">
+	<a href="/" class="board-btn-primary1 backbtn">나가기</a>
+	</th:block>
+	<th:block sec:authorize="hasRole('ADMIN') or isAnonymous()">
+	<a href="/adminMain" class="board-btn-primary1 backbtn">나가기</a>
+	</th:block>
 	</div>
 	<h2 class="board-title">공지사항</h2>
 	<!-- applyList가 비어 있는 경우 -->
