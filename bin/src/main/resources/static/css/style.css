@@ -936,6 +936,14 @@ fieldset.profile {
 	margin-top:80px;
 }
 
+.board-btn-box-write{
+	width:300px;
+	height:150px;
+	margin-left:75%;
+	white-space: nowrap;
+	padding-top: 30px;
+}
+
 .board-btn-primary1 {
 	background-color: #fff;
 	color: #dc3545;
@@ -949,6 +957,7 @@ fieldset.profile {
 	width: 80px; /* 자동으로 내용에 맞게 너비 조절 */
 	box-sizing: border-box; /* 패딩과 테두리를 포함한 전체 너비를 설정 */
 }
+
 
 .board-btn-primary1.backbtn {
 	background-color: #fff;
@@ -1065,10 +1074,9 @@ fieldset.profile {
 /* board write */
 .bw-h1 {
 	text-align: center;
-	padding: 10px 10px;
-	padding-bottom: 30px;
 	border-bottom: 1px solid #848484;
-	margin-top: 5%;
+	margin-top: 50px;
+	padding-bottom: 15px;
 }
 
 .b-write {
@@ -1099,9 +1107,11 @@ fieldset.profile {
 	font-size: 30px;
 	background-color: #f5f6f7;
 	outline: none;
+	margin-top: 50px;
 }
 
 .b-write-2 {
+	height:350px;
 	margin-top: 30px;
 	font-size: 20px;
 	border: none;
