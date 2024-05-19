@@ -29,11 +29,11 @@ section {
 	margin-left: auto;
 }
 
-.redCircle{
-	width: 13px; 
-	height: 13px; 
-	margin-left: -20px; 
-	margin-top : 8px;
+.redCircle {
+	width: 13px;
+	height: 13px;
+	margin-left: -20px;
+	margin-top: 8px;
 }
 
 .check-btn {
@@ -50,7 +50,7 @@ section {
 	padding-top: 2.5px;
 }
 
-.close-btn{
+.close-btn {
 	width: 80px;
 	height: 30px;
 	font-weight: bold;
@@ -60,15 +60,15 @@ section {
 	background-color: #3F7EFC; /* 버튼 배경색을 흰색으로 설정 */
 	color: #fff; /* 글자색을 3F7EFC로 설정 */
 	text-align: center;
-	margin-top:250px;
+	margin-top: 250px;
 	margin-left: 400px
 }
 
-.withdrawalLink{
+.withdrawalLink {
 	text-align: center;
 }
 
-.withdrawalLink a{
+.withdrawalLink a {
 	text-decoration: none;
 	color: black;
 }
@@ -318,6 +318,11 @@ section {
 	color: black;
 	text-decoration: none;
 	color: inherit; /* 링크 색을 부모 요소의 색으로 상속 */
+}
+
+.findInfo a {
+	text-decoration: none;
+	color: ingerit;
 }
 
 .join-form-container {
@@ -694,10 +699,11 @@ span.file-title {
 	margin-top: 10px;
 	text-align: center;
 }
-.btn-write-del{
-	position:relative;
-	margin-left:30%;
-	color: rgb(32, 32, 32)545;
+
+.btn-write-del {
+	position: relative;
+	margin-left: 30%;
+	color: rgb(32, 32, 32) 545;
 	font-weight: bold;
 	text-decoration: underline;
 	border-radius: 4px;
@@ -706,9 +712,6 @@ span.file-title {
 }
 
 /* 	background-color: #c82333; */
- } 
-
-
 .btn-write-btn {
 	width: 100px;
 	padding: 10px 16px;
@@ -725,7 +728,7 @@ span.file-title {
 	background-color: #fff;;
 	border-color: #fff;
 	color: #3F7EFC;
-	}
+}
 
 .btn-traffic[type="button"] {
 	background-color: #3F7EFC;
@@ -870,7 +873,6 @@ span.file-title {
 .btn-traffic.btn-write-btn {
 	display: block;
 	margin: 0 auto; /* 좌우 여백을 자동으로 조절하여 가운데 정렬 */
-	
 }
 
 fieldset.raceInfo {
@@ -914,8 +916,8 @@ fieldset.profile {
 
 .board {
 	border: 1px #a39485 solid;
-	font-size: .9em;
-	box-shargb(255, 255, 255) 0 2px 5px rgba(0, 0, 0, .25);
+	font-size: .9em; box-shargb (255, 255, 255) 0 2px 5px rgba(0, 0, 0,
+	.25);
 	width: 80%;
 	border-collapse: collapse;
 	border-radius: 5px;
@@ -924,22 +926,23 @@ fieldset.profile {
 	margin-left: auto;
 	margin-right: auto;
 }
-.min-board{
- 	min-height: 60%;
+
+.min-board {
+	min-height: 60%;
 }
 
-.board-btn-box{
-	width:300px;
-	height:150px;
-	margin-left:75%;
+.board-btn-box {
+	width: 300px;
+	height: 150px;
+	margin-left: 75%;
 	white-space: nowrap;
-	margin-top:80px;
+	margin-top: 80px;
 }
 
-.board-btn-box-write{
-	width:300px;
-	height:150px;
-	margin-left:75%;
+.board-btn-box-write {
+	width: 300px;
+	height: 150px;
+	margin-left: 75%;
 	white-space: nowrap;
 	padding-top: 30px;
 }
@@ -952,12 +955,11 @@ fieldset.profile {
 	border-radius: 5px;
 	cursor: pointer;
 	transition: background-color 0.3s ease;
-	margin-left:10px;
+	margin-left: 10px;
 	text-decoration: none;
 	width: 80px; /* 자동으로 내용에 맞게 너비 조절 */
 	box-sizing: border-box; /* 패딩과 테두리를 포함한 전체 너비를 설정 */
 }
-
 
 .board-btn-primary1.backbtn {
 	background-color: #fff;
@@ -982,12 +984,12 @@ fieldset.profile {
 }
 
 .board-btn-primary1:visited {
-    color: #dc3545; /* 방문한 링크의 색상도 원래 색상으로 설정합니다 */
-  }
-  
-  .board-btn-primary1.backbtn:visited {
-    color: #3F7EFC; /* 방문한 링크의 색상도 원래 색상으로 설정합니다 */
-  }
+	color: #dc3545; /* 방문한 링크의 색상도 원래 색상으로 설정합니다 */
+}
+
+.board-btn-primary1.backbtn:visited {
+	color: #3F7EFC; /* 방문한 링크의 색상도 원래 색상으로 설정합니다 */
+}
 
 .board-btn-primary:focus {
 	outline: none; /* 포커스 효과 제거 */
@@ -1111,7 +1113,7 @@ fieldset.profile {
 }
 
 .b-write-2 {
-	height:350px;
+	height: 350px;
 	margin-top: 30px;
 	font-size: 20px;
 	border: none;
@@ -1467,6 +1469,7 @@ a:visited {
 .span-page-numbering {
 	padding: 10px 10px;
 }
+
 .abc {
 	margin-top: 10px;
 }
@@ -1474,6 +1477,16 @@ a:visited {
 .customClass {
 	margin-bottom: 10px;
 }
-.driverInfo span{
+
+.driverInfo span {
 	padding: 5px 0px;
+}
+
+.page-font {
+	font-weight: 900;
+}
+
+.btn-area a {
+	text-decoration: none;
+	color: white;
 }
