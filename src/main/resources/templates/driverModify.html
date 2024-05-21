@@ -29,6 +29,7 @@
 					<br> <span th:text="${driver.M_NAME}"></span> <br> <span
 						th:text="${driver.M_PHONE}"></span> <br> <span
 						th:text="${driver.DR_CARNUM}"></span>
+						<span th:text="${driver.M_ID}" id="m_id" hidden></span>
 				</div>
 				<br> <input class="btn-traffic btn-write-btn" type="button"
 					id="moveToModify" value="정보 수정">
@@ -62,6 +63,16 @@
 	<th:block th:insert="~{fragments::footer}" />
 </body>
 <script th:inline="javascript">
+	$(document).ready(function() {
+    var Drmd = /*[[${Drmd}]]*/null;
+    let btn = document.getElementById('management')
+    if (Drmd == null) {
+    	btn.value = "출근";
+    } else {
+    	btn.value = "퇴근";
+    }
+		});
+
 	// 파일 제목 처리
 	$("#file").on("change", function() {
 		let files = $("#file")[0].files;
@@ -93,31 +104,57 @@
 	function changeButton() {
 		let btn = document.getElementById('management');
 		let status = btn.value;
-
+		let m_id = $('#m_id').text();
+		
 		$.ajax({
 			type : "post",
-			url : "driverCommute",
+			url : "driverManage",
 			data : {
-				status : status
+				m_id : m_id
 			},
 			success : function(response) {
-				// 성공 시 버튼 텍스트 변경
-				if (btn.value === "출근") {
-					alert("출근이 완료되었습니다.");
-					btn.value = "퇴근";
-					// 로컬 스토리지에 출퇴근 상태 저장
-					localStorage.setItem('commuteStatus', '퇴근');
-				} else if (btn.value === "퇴근") {
-					alert("퇴근이 완료되었습니다.");
-					btn.value = "출근";
-					// 로컬 스토리지에 출퇴근 상태 저장
-					localStorage.setItem('commuteStatus', '출근');
+			
+				if(response != "") {
+					alert("해당 날짜의 출/퇴근 기록이 있습니다.")
+				}else{
+					$.ajax({
+						type : "post",
+						url : "driverCommute",
+						data : {
+							status : status
+						},
+						success : function(response) {
+							
+							
+							// 성공 시 버튼 텍스트 변경
+							if (btn.value === "출근") {
+								alert("출근이 완료되었습니다.");
+								btn.value = "퇴근";
+								// 로컬 스토리지에 출퇴근 상태 저장
+								localStorage.setItem('commuteStatus', '퇴근');
+							} else if (btn.value === "퇴근") {
+								alert("퇴근이 완료되었습니다.");
+								btn.value = "출근";
+								// 로컬 스토리지에 출퇴근 상태 저장
+								localStorage.setItem('commuteStatus', '출근');
+							}
+								
+						},
+						error : function(xhr, status, error) {
+							console.log("error:(");
+						}
+					}); // ajax end
 				}
+				
 			},
 			error : function(xhr, status, error) {
 				console.log("error:(");
 			}
-		}); // ajax end
+		});
+			
+		
+		
+		
 	}
 
 	document.addEventListener("DOMContentLoaded", function() {

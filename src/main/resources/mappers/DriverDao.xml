@@ -120,10 +120,10 @@
 		values (#{dr_id}, NOW());
 	</insert>
 
-	<update id="updateCommute" parameterType="Integer">
+	<update id="updateCommute">
 		UPDATE drivermanagement
 		SET DM_ENDWORK = NOW()
-		WHERE DR_ID = #{dr_id};
+		WHERE DR_ID = #{dr_id} AND DM_STWORK LIKE CONCAT('%', #{currentDateStr}, '%')
 	</update>
 	
 	<delete id="deleteDriverImage">
@@ -140,4 +140,8 @@
 	   DELETE FROM drivermanagement
 	   WHERE DR_ID = #{dr_id}
 	</delete>
+	
+	<select id="getDRMD" resultType="DrivermanagementDto">
+		SELECT * FROM drivermanagement WHERE DR_ID=#{dr_id} AND DM_STWORK LIKE CONCAT('%', #{currentDateStr}, '%') AND DM_ENDWORK LIKE CONCAT('%', #{currentDateStr}, '%')
+	</select>
 </mapper>
