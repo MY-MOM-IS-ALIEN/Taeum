@@ -2,6 +2,8 @@ package com.icia.Taeumproject.Controller;
 
 import java.io.File;
 import java.security.Principal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.icia.Taeumproject.Dao.NotificationDao;
 import com.icia.Taeumproject.Dto.DispatchDto;
 import com.icia.Taeumproject.Dto.DriverDto;
+import com.icia.Taeumproject.Dto.DrivermanagementDto;
 import com.icia.Taeumproject.Dto.MemberDto;
 import com.icia.Taeumproject.Dto.Node;
 import com.icia.Taeumproject.Dto.NotificationDto;
@@ -64,6 +67,17 @@ public class DriverController {
 		drServ.getDriverInfo(m_id, model);
 		 List<NotificationDto> nList = nDao.selectNotificationList(sdto);
      model.addAttribute("nList", nList);
+     
+     int dr_id = m_id - 1;
+     
+  // 현재 날짜를 가져오기
+  		LocalDate currentDate = LocalDate.now();
+  		// 날짜를 yyyy-MM-dd 형식의 문자열로 변환
+  		String currentDateStr = currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+  		DrivermanagementDto Drmd = drServ.getDRMD(dr_id, currentDateStr);
+  		
+  		model.addAttribute("Drmd", Drmd);
+     
 		return "driverModify";
 	}
 
@@ -161,34 +175,70 @@ public class DriverController {
 	      }
 	    }
 	  }
-	
+	@PostMapping("driverManage")
+	@ResponseBody
+	public String driverManage(String m_id) {
+		log.info("driverManage()");
+		String msg = null;
+		int dr_id = Integer.parseInt(m_id) - 1;
+		// 현재 날짜를 가져오기
+		LocalDate currentDate = LocalDate.now();
+		// 날짜를 yyyy-MM-dd 형식의 문자열로 변환
+		String currentDateStr = currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		
+		DrivermanagementDto Drmd = drServ.getDRMD(dr_id, currentDateStr);
+		if(Drmd != null) {
+			msg = "해당 날짜의 출/퇴근 기록이 있습니다.";
+			return msg;
+		} else {
+			return null;
+		}
+		
+	}
+	  
+	  
+	  
 	
 // 출퇴근 버튼 클릭 시 값 전송
 	@PostMapping("driverCommute")
 	@ResponseBody
-	public String driverCommute(@RequestParam("status") String status) {
+	public String driverCommute(@RequestParam("status") String status, Model model) {
 		log.info("driverCommute()");
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
+		// 현재 날짜를 가져오기
+		LocalDate currentDate = LocalDate.now();
+		// 날짜를 yyyy-MM-dd 형식의 문자열로 변환
+		String currentDateStr = currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		
+		
 		Object principal = authentication.getPrincipal();
 		int m_id = ((SecurityUserDTO) principal).getM_ID();
 		log.info("m_id: {}", m_id);
 
 		int dr_id = (m_id - 1);
 		log.info("dr_id: {}", dr_id);
-
-		if (status.equals("출근")) {
+		
+		// 현재 날짜의 기사가 출/퇴근 정보 가져오기
+		DrivermanagementDto Drmd = drServ.getDRMD(dr_id, currentDateStr);
+		System.out.println("Drmd = " + Drmd);
+		if(Drmd == null) {
 			
-			drServ.insertCommute(m_id, dr_id);
-			
-		} else if (status.equals("퇴근")) {
-			
-			drServ.updateCommute(dr_id);
-			
+			if (status.equals("출근")) {
+				
+				drServ.insertCommute(m_id, dr_id);
+				
+			} else if (status.equals("퇴근")) {
+				drServ.updateCommute(dr_id, currentDateStr);
+				
+			}
+		}else {
+			String msg = "해당 날짜의 출/퇴근 기록이 있습니다.";
+			model.addAttribute("msg", msg);
+			return null;
 		}
-
 		return "redirect:driverModify";
+		
 	}
 
 	@GetMapping("/mainCenter")

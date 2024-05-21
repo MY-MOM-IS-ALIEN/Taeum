@@ -47,7 +47,7 @@
                 <input type="text" class="write-input" id="A_ENDADRESS" name="A_ENDADRESS" placeholder="하차지 주소"><br>
                 <input type="text" class="write-input" id="A_ENDDADRESS" name="A_ENDDADRESS" placeholder="행정구" readonly>
                 <input type="text" class="write-input" id="A_ENDRADRESS" name="A_ENDRADRESS" placeholder="참고항목">
-                탑승일 <input type="datetime-local" class="write-input" name="A_DATE">
+                탑승일 <input type="datetime-local" class="write-input" name="A_DATE" id="A_DATE">
                 <textarea rows="15" name="A_CONTENTS" placeholder="특이사항을 적어주세요." class="write-input ta"></textarea>
             </div>
 
@@ -166,6 +166,24 @@
 
         document.getElementById("datetime").min = dateTime;
     }
+    
+    // 현재 날짜와 시간을 가져와 datetime-local의 min 속성에 설정하는 함수
+    function setMinDateTime() {
+        var now = new Date();
+        var year = now.getFullYear();
+        var month = (now.getMonth() + 1).toString().padStart(2, '0');
+        var day = now.getDate().toString().padStart(2, '0');
+        var hours = now.getHours().toString().padStart(2, '0');
+        var minutes = now.getMinutes().toString().padStart(2, '0');
+        var dateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+
+        document.getElementById("A_DATE").min = dateTime;
+    }
+
+    // 페이지 로드 시 setMinDateTime 함수 호출
+    $(document).ready(function() {
+        setMinDateTime();
+    });
 </script>
 </body>
 </html>

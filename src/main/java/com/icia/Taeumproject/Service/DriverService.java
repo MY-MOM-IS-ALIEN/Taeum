@@ -21,6 +21,7 @@ import com.icia.Taeumproject.Dao.DriverDao;
 import com.icia.Taeumproject.Dto.DispatchDto;
 import com.icia.Taeumproject.Dto.DriverDto;
 import com.icia.Taeumproject.Dto.DriverFileDto;
+import com.icia.Taeumproject.Dto.DrivermanagementDto;
 import com.icia.Taeumproject.Dto.Node;
 import com.icia.Taeumproject.Dto.SecurityUserDTO;
 
@@ -203,9 +204,9 @@ public class DriverService {
 		drDao.insertCommute(m_id, dr_id);
 	}
 
-	public void updateCommute(int dr_id) {
+	public void updateCommute(int dr_id, String currentDateStr) {
 		
-		drDao.updateCommute(dr_id);
+		drDao.updateCommute(dr_id, currentDateStr);
 	}
 
 
@@ -221,6 +222,12 @@ public class DriverService {
 
   public void deleteCommute(int dr_id) {
 	  drDao.deleteCommute(dr_id);
+}
+
+//현재 날짜의 기사가 출/퇴근 정보 가져오기
+public DrivermanagementDto getDRMD(int dr_id, String currentDateStr) {
+	DrivermanagementDto Drmd = drDao.getDRMD(dr_id, currentDateStr);
+	return Drmd;
 }
 
 

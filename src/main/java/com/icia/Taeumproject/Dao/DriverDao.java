@@ -9,6 +9,7 @@ import com.icia.Taeumproject.Dto.ApplyDto;
 import com.icia.Taeumproject.Dto.DispatchDto;
 import com.icia.Taeumproject.Dto.DriverDto;
 import com.icia.Taeumproject.Dto.DriverFileDto;
+import com.icia.Taeumproject.Dto.DrivermanagementDto;
 
 @Mapper
 public interface DriverDao {
@@ -51,13 +52,15 @@ public interface DriverDao {
 
 	void insertCommute(int m_id, int dr_id);
 
-	void updateCommute(int dr_id);
+	void updateCommute(int dr_id, String currentDateStr);
 
   void deleteDriverImage(Integer m_ID, String imageNum);
 
   void deleteDispatch(int dr_id);
 
   void deleteCommute(int dr_id);
+
+DrivermanagementDto getDRMD(int dr_id, String currentDateStr);
 
 
 
