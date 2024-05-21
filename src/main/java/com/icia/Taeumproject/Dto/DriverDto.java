@@ -9,11 +9,10 @@ import lombok.ToString;
 @ToString
 public class DriverDto {
 
-	private int dr_id;
-	private String m_name;
-	private String m_phone;
-	private String dr_address;
-	private String dr_carNum;
-	private String dr_area;
+	private int DR_ID;
+	private String M_NAME;
+	private String M_PHONE;
+	private String DR_CARNUM;
+	private String DR_AREA;
 	private int M_ID;
 }

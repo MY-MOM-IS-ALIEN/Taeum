@@ -1,16 +1,16 @@
 package com.icia.Taeumproject.Dto;
 
-
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 public class ApplyDto {
-  private int M_ID;
   private String M_NAME;
   private String M_PHONE;
   private int A_ID;
@@ -24,8 +24,14 @@ public class ApplyDto {
   private String A_ENDADRESS;
   private String A_ENDDADRESS;
   private String A_ENDRADRESS;
-  private LocalDateTime A_DATE;
+  private String A_DATE;
   private Timestamp A_LOCALDATE;
   private String A_CONTENTS;
+  private int M_ID;
+  private Integer STATUS;
   
 }
+
+
+
+

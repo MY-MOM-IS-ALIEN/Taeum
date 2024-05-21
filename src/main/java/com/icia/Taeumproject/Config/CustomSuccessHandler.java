@@ -1,16 +1,17 @@
 package com.icia.Taeumproject.Config;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class CustomSuccessHandler implements AuthenticationSuccessHandler {
@@ -18,7 +19,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
     private static final Map<String, String> ROLE_URL_MAP = new HashMap<>() {{
         put("ROLE_USER", "/");
         put("ROLE_ADMIN", "/adminMain");
-        put("ROLE_DRIVER", "/driverMain");
+        put("ROLE_DRIVER", "/driverModify");
        
     }};
 
@@ -39,15 +40,16 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
             if (role.equals("ROLE_ADMIN")) {
                 log.warn("*****SUPER ADMIN LOGGED IN*****");
             }
-            msg = "로그인 성공";
         } else {
           msg = "로그인 실패";
         }
 
-        request.getSession().setAttribute("msg", msg);
+        request.getSession().setAttribute(redirectUrl, msg);
 
         response.sendRedirect(redirectUrl);
     }
+    
+
 }
 
 
