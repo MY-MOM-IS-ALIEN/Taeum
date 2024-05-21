@@ -42,12 +42,14 @@ public class BoardService {
 	    
 	    // 게시글 작성자 설정
 	    board.setUsername(username);
+	    System.out.println("@@@"+username);
 	    
 	    // 추출한 권한 정보를 문자열로 변환하여 게시글의 권한 설정
 	    board.setRole(String.join(",", roles));
 	    
 	    // 게시글 저장
 	    try {
+	    	System.out.println("########"+board);
 	        bDao.insertBoard(board);
 	        rttr.addFlashAttribute("msg", "작성 완료");
 	    } catch (Exception e) {

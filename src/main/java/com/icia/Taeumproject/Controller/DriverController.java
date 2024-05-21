@@ -98,7 +98,7 @@ public class DriverController {
 		System.out.println(model);
 
 		List<NotificationDto> nList = nDao.selectNotificationList(sdto);
-    model.addAttribute("nList", nList);
+		model.addAttribute("nList", nList);
 		
 		return "driverUpdate";
 	}

@@ -124,6 +124,7 @@ public class MainService {
 
   public List<Node> selectNodeArea(String address, String currentDate) {
      List<Node> selectNodeArea = mDao.selectNodeArea(address, currentDate);
+     System.out.println("써비스"+selectNodeArea);
     return selectNodeArea;
   }
 

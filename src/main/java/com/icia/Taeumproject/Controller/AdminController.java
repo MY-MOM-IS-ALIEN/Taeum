@@ -205,7 +205,7 @@ public String GetDriverImage(int M_ID, Model model) {
     log.info("nodeSelection()");
 
     List<Node> nodeList = maServ.selectNodeArea(address, selectDate);
-    System.out.println(nodeList);
+    System.out.println("@@@@@@@@"+nodeList);
     model.addAttribute("drID", drID);
     model.addAttribute("dr_AREA", address);
     model.addAttribute("d_DATE", selectDate);

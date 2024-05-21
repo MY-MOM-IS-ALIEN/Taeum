@@ -40,7 +40,7 @@ FROM NodeTbl ORDER BY distance ASC;
   
    <select id="selectNodeArea" resultType="Node">
   select * from nodetbl WHERE address LIKE CONCAT('%', #{address}, '%')AND A_DATE LIKE CONCAT('%', #{A_DATE}, '%');
-</select>
+	</select>
 
 
 <insert id="insertDispatch" parameterType="dispatchDto">

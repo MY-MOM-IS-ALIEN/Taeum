@@ -19,7 +19,7 @@
 	<section>
 		<div class="a-content">
 
-               
+
 			<!-- applyList가 비어 있는 경우 -->
 			<div th:if="${applyList.isEmpty()}">
 				<div class="apply-list-empty">신청 내역이 없습니다.</div>
@@ -47,29 +47,29 @@
 									하차지: <span th:text="${apply.A_ENDADRESS}"></span>
 								</div>
 								<div class="apply-info">
-									배차상태: <span 
-
-									th:text="${apply.STATUS == 0 ? '배차 중' : (apply.STATUS == 4 ? '배차 선정 중' : (apply.STATUS == 1 ? '배차 완료' : '배차 거절'))}"></span>
+									배차상태: <span
+										th:text="${apply.STATUS == 0 ? '배차 중' : (apply.STATUS == 4 ? '배차 선정 중' : (apply.STATUS == 1 ? '배차 완료' : '배차 거절'))}"></span>
 
 								</div>
 							</div>
 							<!-- 취소 버튼 -->
 							<div th:if="${apply.STATUS == 0}" class="cancel-button">
 								<form action="/cancelApply" method="post">
-									<input type="hidden" name="A_Id" th:value="${apply.A_ID}" /> 
-									<input type="hidden" name="M_Id" th:value="${apply.M_ID}" /> 
-									<input type="hidden" name="A_Date" th:value="${apply.A_DATE}" />
-									<input type="hidden" name="A_NAME" th:value="${apply.A_NAME}" />
+									<input type="hidden" name="A_Id" th:value="${apply.A_ID}" /> <input
+										type="hidden" name="M_Id" th:value="${apply.M_ID}" /> <input
+										type="hidden" name="A_Date" th:value="${apply.A_DATE}" /> <input
+										type="hidden" name="A_NAME" th:value="${apply.A_NAME}" />
 									<button type="submit" onclick="return confirm('정말로 취소하시겠습니까?')">취소</button>
 								</form>
 							</div>
 							<!-- 취소 버튼 end -->
 						</div>
-					</div>   
+					</div>
 				</div>
 			</div>
 			<br>
 			<!-- applyList end -->
+
 			<div class="pagination">
 				<div class="page-button1">
 					<!-- 이전 페이지로 이동하는 링크 -->
@@ -80,7 +80,10 @@
 
 				<div class="page-numbering">
 					<!-- 페이지 번호를 표시하는 링크 -->
-					<span class="span-page-numbering" th:each="pageNum : ${#numbers.sequence(1, totalPages)}"
+					<span class="span-page-numbering"
+						th:each="pageNum : ${#numbers.sequence(startPage, endPage)}"
+						th:if="${pageNum <= endPage}" 
+						th:classappend="${pageNum == currentPage} ? 'page-font' : ''"
 						th:text="${pageNum}"></span>
 				</div>
 
@@ -92,9 +95,12 @@
 				</div>
 			</div>
 
-       <!-- 추가신청 버튼 -->
-<a href="applyForm" style="display: inline-block; margin-left: 45%; margin-top : 20px; padding: 10px 20px; font-size: 20px; color: white; text-decoration: none; background-color: #3F7EFC; border: 2px solid #3F7EFC; border-radius: 5px;">추가신청하러가기</a>
-<!-- 추가신청 버튼 end-->
+
+
+			<!-- 추가신청 버튼 -->
+			<a href="applyForm"
+				style="display: inline-block; margin-left: 45%; margin-top: 20px; padding: 10px 20px; font-size: 20px; color: white; text-decoration: none; background-color: #3F7EFC; border: 2px solid #3F7EFC; border-radius: 5px;">추가신청하러가기</a>
+			<!-- 추가신청 버튼 end-->
 		</div>
 	</section>
 	<th:block th:insert="~{fragments :: footer}" />
