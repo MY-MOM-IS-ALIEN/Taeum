@@ -127,7 +127,7 @@ public class DriverController {
 	    int mid = driver.getM_ID();
 	    String m_name = driver.getM_NAME();
 	    String m_phone = driver.getM_PHONE();
-	    System.out.println(m_phone);
+	    System.out.println(m_phone); 
 	    member.setM_ID(mid);
 	    member.setM_NAME(m_name);
 	    member.setM_PHONE(m_phone);
